@@ -10,7 +10,7 @@
 @tailwind components;
 @tailwind utilities;
 
- .register-background {
+ /* .register-background {
     background-image: url('/background.jpg');
     background-size: cover;
     background-position: center;
@@ -23,6 +23,10 @@
     color: white;
     text-align: center;
     padding: 0 1rem;
+} */
+
+.register-background {
+    @apply bg-cover bg-center bg-no-repeat h-screen flex justify-center items-center flex-col text-white text-center px-4;
 }
 
 .inputRegister {

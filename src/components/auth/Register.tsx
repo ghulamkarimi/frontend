@@ -3,12 +3,14 @@ import { IoReturnDownBack } from "react-icons/io5";
 
 const Register = () => {
     return (
-        <div className="register-background">
+        <div className="register-background"
+            style={{ backgroundImage: "url('/background.jpg')" }}
+        >
             <div>
                 <div className="flex justify-between">
                     <h1 className="text-3xl font-bold mb-4">Register</h1>
                     <Link href="/login" className="flex items-center ">
-                        <IoReturnDownBack className="text-3xl"/>
+                        <IoReturnDownBack className="text-3xl" />
                     </Link>
                 </div>
                 <form className="flex flex-col">
