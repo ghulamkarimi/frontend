@@ -7,10 +7,18 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    
+    fontFamily: {
+      FONT_VIGA: ["Viga", "sans-serif"],
+      FONT_ROBOTO: ["Roboto", "sans-serif"],
+      FONT_SALSA: ["Salsa", "cursive"],
+      ANTON: ["Anton", "sans-serif"],
+      FONT_INTO: ["Shadows Into Light", "cursive"]
+    },
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        BACKGROUND:"#10111a",
+        PRIMARY: "#212624",
       },
     },
   },
