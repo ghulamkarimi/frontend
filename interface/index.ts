@@ -8,11 +8,22 @@ export interface IUser {
     confirmPassword: string;
     isAdmin: boolean;
     phone: string;
-    accessToken: string;
-    refreshToken: string;
+    token : string;
+    accessToken: string | null;
+    refreshToken: string | null;
     verificationCode: string;
     isAccountVerified: boolean;
 }
 
+export interface IUserInfo {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    isAdmin: boolean;
+    exp: number;
+    iat: number;
+}
 export type TUser = Partial<IUser>;
+
 

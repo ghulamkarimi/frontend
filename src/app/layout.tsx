@@ -1,8 +1,12 @@
 // src/app/layout.tsx
 import { Metadata } from "next";
-import ReduxProvider from "../../feature/provider/ReduxProvider"; // Überprüfe den Pfad
-import Navbar from "@/components/menu/Navbar"; // Überprüfe den Pfad
-import "./globals.css"; // Überprüfe den Pfad
+import ReduxProvider from "../../feature/provider/ReduxProvider";
+import Navbar from "@/components/menu/Navbar";
+import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../feature/store/store";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps) {
+
   return (
     <ReduxProvider>
       <html lang="de">
@@ -23,8 +28,8 @@ export default function RootLayout({ children }: LayoutProps) {
           </header>
           <main>{children}</main>
           <footer>
-            {/* Footer-Inhalt */}
           </footer>
+          <ToastContainer />
         </body>
       </html>
     </ReduxProvider>

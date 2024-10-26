@@ -1,4 +1,6 @@
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const NotificationService = {
   success(message: string) {
     toast.success(message, {
@@ -23,3 +25,6 @@ export const NotificationService = {
     });
   },
 };
+
+
+ 
