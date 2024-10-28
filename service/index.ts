@@ -3,12 +3,12 @@ import { TUser } from '../interface';
 
 
 
-const SERVER_URL = "http://localhost:5000";
+const SERVER_URL = "http://localhost:7001";
 
 axios.defaults.withCredentials = true;
 
 export const axiosJwt = axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: "http://localhost:7001",
     withCredentials: true,
 });
 axiosJwt.interceptors.request.use;

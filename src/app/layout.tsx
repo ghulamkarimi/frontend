@@ -26,12 +26,12 @@ export default function RootLayout({ children }: LayoutProps) {
   return (
     <ReduxProvider>
       <html lang="de">
-        <body>
+        <body className="bg-gray-200">
           <header>
             <Navbar />
           </header>
           <main>{children}</main>
-          <footer className="">
+          <footer>
             <Footer />
           </footer>
           <ToastContainer />

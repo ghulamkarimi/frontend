@@ -1,7 +1,13 @@
+import SearchWithCategory from "@/components/carSell/SearchWithCategorie";
+
+
 const page = () => {
     return (
         <div>
-            fahrzeugkaufen
+            <div className=" pt-10">
+            <SearchWithCategory />
+            </div>
+        
         </div>
     );
 }
