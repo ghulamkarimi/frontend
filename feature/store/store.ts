@@ -1,8 +1,8 @@
-// src/feature/store/store.ts
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userReducer, { setToken } from "../reducers/userSlice"; // Überprüfe den Pfad
-import appReducer from "../reducers/appSlice"; // Überprüfe den Pfad
-import { axiosJwt , refreshToken} from "../../service";
+
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer, { fetchUsers, setToken } from "../reducers/userSlice"; 
+import appReducer from "../reducers/appSlice"; 
+import { refreshToken} from "../../service";
 import { axiosJWT } from "../../service/axiosJwt";
 
 
@@ -28,7 +28,6 @@ axiosJWT.interceptors.request.use(
         const response = await refreshToken();
         config.headers.Authorization = `Bearer ${response.data.refreshToken}`;
         store.dispatch(setToken(response.data.refreshToken));
-        // store.dispatch(setUserInfoRefresh(response.data.userInfo_refresh));
       }
       return config;
     },
@@ -36,6 +35,7 @@ axiosJWT.interceptors.request.use(
       return Promise.reject(error);
     }
   );
+  store.dispatch(fetchUsers());
   
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

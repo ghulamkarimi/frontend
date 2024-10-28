@@ -1,9 +1,12 @@
 "use client"
-import Navbar from "@/components/menu/Navbar"; // Überprüfe den Pfad
-import "./globals.css"; // Überprüfe den Pfad
+import "./globals.css";
 import ReduxProvider from "../feature/provider/ReduxProvider";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+
+
+
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,18 +14,13 @@ interface LayoutProps {
 
 export default function SpecificPageLayout({ children }: LayoutProps) {
   return (
-    <ReduxProvider>
-      <header>
-        <Navbar />
-      </header>
-      <main>
+    <ReduxProvider >
+      
+      <main className="">
         {children}
         <ToastContainer />
-        </main>
-      <footer>
-        {/* Footer-Inhalt für diese spezifische Seite */}
-      </footer>
-        
+      </main>
+
     </ReduxProvider>
   );
 }

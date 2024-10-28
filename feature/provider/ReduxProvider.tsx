@@ -1,8 +1,8 @@
-// src/feature/provider/ReduxProvider.tsx
+
 "use client";
 
 import { Provider } from "react-redux";
-import { store } from "../store/store"; // Überprüfe den Pfad
+import { store } from "../store/store"; 
 
 interface IReduxProvider {
     children: React.ReactNode;

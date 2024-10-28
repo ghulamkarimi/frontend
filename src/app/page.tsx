@@ -1,9 +1,33 @@
-
+import HeroCards from "@/components/cards/HeroCards";
+import HomeCarouselHero from "@/components/carousel/HomeCarouselHero";
 
 export default function Home() {
   return (
-    <div>
-       
+    <div className="w-full flex flex-col items-center">
+
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center h-3/4"
+        style={{ backgroundImage: "url('/homeBackground.jpg')" }}
+      ></div>
+
+      <div className="relative z-10 flex flex-col items-center pt-16 ">
+
+        <h1 className="text-xl text-orange-500 lg:text-4xl font-bold text-center">
+          <span>Herzlich willkommen</span>
+          <br />
+          <span>bei Ihrem Partner rund ums Auto</span>
+          <br />
+          <span>A & O</span>
+        </h1>
+
+        <div className="relative flex justify-center">
+          <HeroCards />
+        </div>
+      </div>
+      <div className="relative z-10 w-full ">
+        <HomeCarouselHero />
+      </div>
+
     </div>
   );
 }

@@ -5,17 +5,27 @@ import { TUser } from '../interface';
 
 const SERVER_URL = "http://localhost:5000";
 
-export const axiosJwt = axios.create();
+axios.defaults.withCredentials = true;
+
+export const axiosJwt = axios.create({
+    baseURL: "http://localhost:5000",
+    withCredentials: true,
+});
 axiosJwt.interceptors.request.use;
 
-export const userRegister = (user:TUser) => {
+export const userRegister = (user: TUser) => {
     const url = `${SERVER_URL}/user/register`;
     return axios.post(url, user);
 }
 
-export const userLogin = (user:TUser) => {
+export const userLogin = (user: TUser) => {
     const url = `${SERVER_URL}/user/login`;
-    return axios.post(url, user);
+    return axiosJwt.post(url, user);
+}
+
+export const getAllUsers = () => {
+    const url = `${SERVER_URL}/user/allUsers`;
+    return axios.get(url);
 }
 
 export const refreshToken = () => {

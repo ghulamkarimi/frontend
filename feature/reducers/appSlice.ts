@@ -1,4 +1,4 @@
-// src/feature/reducers/appSlice.ts
+
 import { createSlice } from "@reduxjs/toolkit";
 
 interface IAppState {

@@ -15,7 +15,7 @@ const Login = () => {
     const formSchema = Yup.object({
         email: Yup.string().email('Invalid email address')
             .required('Required'),
-           
+
 
         password: Yup.string()
             .required('Required')
@@ -37,7 +37,7 @@ const Login = () => {
                 localStorage.setItem("exp", response.userInfo.exp)
                 setTimeout(() => {
                     window.location.href = "/";
-                }, 6000)
+                }, 4000)
             } catch (error: any) {
                 NotificationService.error(error.message);
             }
@@ -51,10 +51,11 @@ const Login = () => {
         >
             <div>
                 <div className="flex justify-between">
-                    <h1 className="text-3xl font-bold mb-4">Login</h1>
-                    <Link href="/register" className="flex items-center ">
+                    <h3 className="text-3xl font-bold mb-4">Login</h3>
+                    <Link href="/register" className="flex items-center">
                         <IoReturnDownBack className="text-3xl" />
                     </Link>
+
                 </div>
                 <form className="flex flex-col" onSubmit={formik.handleSubmit}>
                     <input type="email"

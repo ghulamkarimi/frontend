@@ -51,9 +51,9 @@ const Register = () => {
             try {
                 const response = await dispatch(userRegisterApi(values)).unwrap();
                 NotificationService.success(response.message || "Registration successful");
-                setTimeout(() => {
-                    window.location.href = "/login";
-                }, 3000);
+                 setTimeout(() => {
+                     window.location.href = "/login";
+                }, 4000);
             } catch (error: any) {
                 NotificationService.error(error.message);
             }
@@ -66,7 +66,7 @@ const Register = () => {
         >
             <div>
                 <div className="flex justify-between">
-                    <h1 className="text-3xl font-bold mb-4">Register</h1>
+                    <h3 className="text-3xl font-bold mb-4">Register</h3>
                     <Link href="/login" className="flex items-center ">
                         <IoReturnDownBack className="text-3xl" />
                     </Link>
