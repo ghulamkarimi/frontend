@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { TUser } from '../interface';
+import { TBuy } from '../interface/index';
 
 
 
@@ -31,4 +32,19 @@ export const getAllUsers = () => {
 export const refreshToken = () => {
     const url = `${SERVER_URL}/user/refreshToken`;
     return axios.post(url);
+}
+
+export const userLogout = () => {
+    const url = `${SERVER_URL}/user/logout`;
+    return axios.post(url);
+}
+
+export const getCarBuys = ()=> {
+    const url = `${SERVER_URL}/buy/allBuys`;
+    return axios.get(url)
+}
+
+export const getCarBuysById = (buyCar:TBuy) => {
+    const url = `${SERVER_URL}/buy/carBuy`;
+    return axios.get(url, { params: buyCar });
 }
