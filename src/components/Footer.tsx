@@ -54,10 +54,10 @@ function useMediaQuery(query: string) {
                         </div>
 
                         <div className="flex flex-col">
-                            <a href="tel:+4915158124394" className="my-2 text-gray-800 cursor-pointer underline">
+                            <a href="tel:+4915158124394" className="my-2 text-gray-800 cursor-pointer">
                                 +49 151 58124394
                             </a>
-                            <a href="mailto:autoservice.aundo@gmail.com" className="mb-2 text-gray-800 cursor-pointer underline">
+                            <a href="mailto:autoservice.aundo@gmail.com" className="mb-2 text-gray-800 cursor-pointer ">
                                 autoservice.aundo@gmail.com
                             </a>
                         </div>
@@ -66,7 +66,7 @@ function useMediaQuery(query: string) {
                         <Link
                             href="https://www.google.com/maps/search/?api=1&query=Badenheimer+Str.+6,+55576+Sprendlingen,+Deutschland"
                             target="_blank"
-                            className="text-gray-800 cursor-pointer underline flex flex-col gap-1"
+                            className="text-gray-800 cursor-pointer flex flex-col gap-1"
                         >
                             <span>Badenheimer Str. 6,</span>
                             <span>55576 Sprendlingen,</span>

@@ -17,6 +17,9 @@ const MenuItems = () => {
         { title: 'Fahrzeug kaufen', url: '/fahrzeugkaufen' },
         { title: 'Werkstatt-Service', url: '/werkstatt-Service' },
         { title: 'Kontakt', url: '/kontakt' },
+        { title: 'Impressum', url: '/impressum' },
+        { title: 'Datenschutz', url: '/datenschutz' },
+
     ];
 
     if (!isLoggedIn) {

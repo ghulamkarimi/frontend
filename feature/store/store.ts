@@ -2,6 +2,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer, { fetchUsers, setToken } from "../reducers/userSlice"; 
 import appReducer from "../reducers/appSlice"; 
+import carBuyReducer, { fetchCarBuys } from "../reducers/carBuySlice";
 import { refreshToken} from "../../service";
 import { axiosJWT } from "../../service/axiosJwt";
 
@@ -11,6 +12,7 @@ export const store = configureStore({
     reducer :{
         users: userReducer,
         app: appReducer,
+        carBuys: carBuyReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
@@ -36,6 +38,7 @@ axiosJWT.interceptors.request.use(
     }
   );
   store.dispatch(fetchUsers());
+  store.dispatch(fetchCarBuys());
   
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

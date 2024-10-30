@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { TUser } from '../interface';
+import { TBuy } from '../interface/index';
 
 
 
-const SERVER_URL = "http://localhost:5000";
+const SERVER_URL = "http://localhost:7001";
 
 axios.defaults.withCredentials = true;
 
 export const axiosJwt = axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: "http://localhost:7001",
     withCredentials: true,
 });
 axiosJwt.interceptors.request.use;
@@ -31,4 +32,19 @@ export const getAllUsers = () => {
 export const refreshToken = () => {
     const url = `${SERVER_URL}/user/refreshToken`;
     return axios.post(url);
+}
+
+export const userLogout = () => {
+    const url = `${SERVER_URL}/user/logout`;
+    return axios.post(url);
+}
+
+export const getCarBuys = ()=> {
+    const url = `${SERVER_URL}/buy/allBuys`;
+    return axios.get(url)
+}
+
+export const getCarBuysById = (buyCar:TBuy) => {
+    const url = `${SERVER_URL}/buy/carBuy`;
+    return axios.get(url, { params: buyCar });
 }

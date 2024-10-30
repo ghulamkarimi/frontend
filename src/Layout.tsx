@@ -3,6 +3,7 @@ import "./globals.css";
 import ReduxProvider from "../feature/provider/ReduxProvider";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import CookieBanner from "@/components/cookie/CookieBanner";
 
 
 
@@ -17,7 +18,9 @@ export default function SpecificPageLayout({ children }: LayoutProps) {
     <ReduxProvider >
       
       <main className="">
+        
         {children}
+        <CookieBanner />
         <ToastContainer />
       </main>
 
