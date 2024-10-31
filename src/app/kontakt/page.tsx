@@ -1,13 +1,8 @@
-
 import Link from "next/link";
 
-
 export default function Contact() {
-
-
-
     return (
-        <div className="bg-cover bg-center bg-no-repeat h-screen flex justify-center items-center flex-col text-white text-center px-4"
+        <div className="bg-cover bg-center bg-no-repeat min-h-screen flex justify-center items-center flex-col text-white text-center px-4 py-2"
             style={{ backgroundImage: "url('/hintergrund.webp')" }}
         >
             <div className="bg-gray-100 shadow-md rounded-lg max-w-md w-full p-8">
@@ -55,8 +50,17 @@ export default function Contact() {
                 </form>
 
                 <div className="text-center mt-8 text-gray-500">
-                    <p>Oder rufen Sie uns direkt an:</p>
-                    <p className="font-semibold text-gray-700 mt-1">+49 151 58124394</p>
+                    <p className="pb-2">Oder rufen Sie uns direkt an:</p>
+                    <p className="font-semibold text-gray-700">
+                        <a href="tel:+493012345678" className="text-gray-700 hover:underline">
+                            +49 30 12345678
+                        </a>
+                    </p>
+                    <p className="font-semibold text-gray-700 mt-1">
+                        <a href="tel:+4915158124394" className="text-gray-700 hover:underline">
+                            +49 151 58124394
+                        </a>
+                    </p>
                 </div>
 
                 <div className="text-center mt-6">
