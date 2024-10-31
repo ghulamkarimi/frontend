@@ -44,6 +44,7 @@ export const refreshToken = () => {
 export const getCarRent = ()=>{
     const url = `${SERVER_URL}/rent/getRents`
     return axios.get(url)
+}
 
 export const userLogout = () => {
     const url = `${SERVER_URL}/user/logout`;
