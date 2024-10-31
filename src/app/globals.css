@@ -14,6 +14,72 @@
 
 
 
+
+/* Auswahl des Containers, der die beiden Monate enthält */
+.react-datepicker__month-container {
+  margin-right: 3rem; /* Abstand zwischen den Monaten */
+}
+
+/* CalendarStyles.css */
+
+.react-datepicker {
+  font-size: 1rem; /* Vergrößert die allgemeine Schriftgröße im Kalender */
+  width: 100%;       /* Passt die Breite an */
+}
+
+.react-datepicker__month-container {
+  width: 300px;      /* Breite jedes Monats anpassen */
+}
+@media (min-width: 768px) { /* Ab md-Bildschirmgröße */
+  .react-datepicker__month-container {
+    width: 300px; /* Größere Breite für mittlere Bildschirme */
+  }
+}
+@media (min-width: 1055px) { /* Ab lg-Bildschirmgröße */
+  .react-datepicker__month-container {
+    width: 285px; /* Noch größere Breite für große Bildschirme */
+  }
+  .react-datepicker {
+    font-size: 1rem; /* Vergrößert die allgemeine Schriftgröße im Kalender */
+    width: 100%;       /* Passt die Breite an */
+  }
+}
+
+@media (min-width: 1364px) { /* Ab lg-Bildschirmgröße */
+  .react-datepicker__month-container {
+    width: 250px; /* Noch größere Breite für große Bildschirme */
+  }
+  .react-datepicker {
+    font-size: 1rem; /* Vergrößert die allgemeine Schriftgröße im Kalender */
+    width: 72%;       /* Passt die Breite an */
+  }
+  .react-datepicker__month-container {
+    margin-right: 4rem; /* Abstand zwischen den Monaten */
+  }
+}
+
+.react-datepicker__day,
+.react-datepicker__day-name {
+  width: 3rem;
+  height: 3rem;      /* Höhe und Breite der Tage anpassen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.5rem; /* Schriftgröße des Monatsnamens */
+}
+
+.react-datepicker__header {
+  padding: 1rem;     /* Abstand im Header */
+}
+
+.react-datepicker__navigation {
+  top: 1.5rem;       /* Anpassung der Navigation-Icons */
+}
+
+
 .register-background {
   @apply bg-cover bg-center bg-no-repeat h-screen flex justify-center items-center flex-col text-white text-center px-4;
 }

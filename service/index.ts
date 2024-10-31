@@ -1,14 +1,14 @@
 import axios from 'axios';
-import { TUser } from '../interface';
+import { TCarRent, TUser } from '../interface';
 
 
 
-const SERVER_URL = "http://localhost:5000";
+const SERVER_URL = "http://localhost:7001";
 
 axios.defaults.withCredentials = true;
 
 export const axiosJwt = axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: "http://localhost:7001",
     withCredentials: true,
 });
 axiosJwt.interceptors.request.use;
@@ -31,4 +31,13 @@ export const getAllUsers = () => {
 export const refreshToken = () => {
     const url = `${SERVER_URL}/user/refreshToken`;
     return axios.post(url);
+}
+
+// CarRent
+
+
+
+export const getCarRent = ()=>{
+    const url = `${SERVER_URL}/rent/getRents`
+    return axios.get(url)
 }
