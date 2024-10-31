@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { TCarRent, TUser } from '../interface';
-import { TUser } from '../interface';
 import { TBuy } from '../interface/index';
 
 
@@ -45,11 +44,7 @@ export const getCarRent = ()=>{
     const url = `${SERVER_URL}/rent/getRents`
     return axios.get(url)
 }
-
-export const userLogout = () => {
-    const url = `${SERVER_URL}/user/logout`;
-    return axios.post(url);
-}
+ 
 
 export const getCarBuys = ()=> {
     const url = `${SERVER_URL}/buy/allBuys`;
