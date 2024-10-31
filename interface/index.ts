@@ -55,3 +55,20 @@ export interface ICarBuy {
 export type TBuy = Partial<ICarBuy>;
 
 
+export interface ICarRent {
+    _id?: string;
+    user?: string;
+    carName : string ;
+    carImage : string ;
+    carAC: boolean;
+    carGear : string ;
+    carPrice : string ;
+    carDoors : string ;
+    carPeople : string ;
+    isBooked : boolean ;
+    createdAt:string ;
+    updatedAt?: string;
+    bookedSlots: Array<{ start: string; end: string }>;
+}
+
+export type TCarRent = Partial<ICarRent>
