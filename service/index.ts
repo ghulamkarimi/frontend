@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { TCarRent, TUser } from '../interface';
 import { TBuy } from '../interface/index';
+import { axiosJWT } from './axiosJwt';
 
 
 

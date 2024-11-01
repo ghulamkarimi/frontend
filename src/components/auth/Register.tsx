@@ -8,11 +8,12 @@ import * as Yup from 'yup';
 import { useFormik } from "formik";
 import { NotificationService } from "../../../service/NotificationService";
 import { userRegisterApi } from "../../../feature/reducers/userSlice";
+import { useRouter } from "next/navigation";
 
 
 
 const Register = () => {
-
+    const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => {
@@ -52,10 +53,11 @@ const Register = () => {
                 const response = await dispatch(userRegisterApi(values)).unwrap();
                 NotificationService.success(response.message || "Registration successful");
                  setTimeout(() => {
-                     window.location.href = "/login";
+                    router.push("/login");
                 }, 4000);
             } catch (error: any) {
-                NotificationService.error(error.message);
+                NotificationService.error(error.message || "Registration failed");
+
             }
         },
         validationSchema: formSchema

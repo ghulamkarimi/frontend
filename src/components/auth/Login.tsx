@@ -8,10 +8,14 @@ import * as Yup from 'yup';
 import { useFormik } from "formik";
 import { NotificationService } from "../../../service/NotificationService";
 import { setUserInfo, userLoginApi } from "../../../feature/reducers/userSlice";
+import { useRouter } from "next/navigation";
+ 
+
+
 
 const Login = () => {
     const dispatch = useDispatch<AppDispatch>();
-
+    const router = useRouter()
     const formSchema = Yup.object({
         email: Yup.string().email('Invalid email address')
             .required('Required'),
@@ -21,6 +25,8 @@ const Login = () => {
             .required('Required')
             .min(6, "Password must be at least 6 characters")
     })
+
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -35,10 +41,9 @@ const Login = () => {
                 console.log(response.userInfo)
                 localStorage.setItem("userId", response.userInfo.userId);
                 localStorage.setItem("exp", response.userInfo.exp)
-                setTimeout(() => {
-                    window.location.href = "/";
-                }, 4000)
+                router.push("/")
             } catch (error: any) {
+                console.log("Login Error :",error.response.date)
                 NotificationService.error(error.message);
             }
         },
@@ -73,10 +78,14 @@ const Login = () => {
                         onBlur={formik.handleBlur}
                         placeholder="Password"
                         className="inputRegister" />
-                    <button className="p-2 my-2 bg-blue-500 text-white rounded-md"
+                    <button
+                        className={`p-2 my-2 bg-blue-500 text-white rounded-md ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         type="submit"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Loading...' : 'Login'}
+                    </button>
 
-                    >Login</button>
                 </form>
             </div>
         </div>

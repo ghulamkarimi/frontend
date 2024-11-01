@@ -8,7 +8,8 @@ export interface IUser {
     confirmPassword: string;
     isAdmin: boolean;
     phone: string;
-    token: string;
+    profile_photo: string;
+    token: string | null;
     accessToken: string | null;
     refreshToken: string | null;
     verificationCode: string;
@@ -19,6 +20,7 @@ export interface IUserInfo {
     userId: string;
     firstName: string;
     lastName: string;
+    profile_photo: string;
     email: string;
     isAdmin: boolean;
     exp: number;

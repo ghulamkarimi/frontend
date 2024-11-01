@@ -32,7 +32,7 @@ function useMediaQuery(query: string) {
     const isMediumScreen = useMediaQuery("(max-width: 640px)");
 
     return (
-        <div className="mt-4 font-VIGA bg-orange-500 py-4 px-4">
+        <div className="font-VIGA bg-orange-500 py-4 px-4">
             <div className="flex flex-col gap-4 md:flex-row justify-between border-b-2 border-black shadow-sm pb-4">
 
                 {/* Logo und Kontaktinformation */}
@@ -130,7 +130,7 @@ function useMediaQuery(query: string) {
 
             {/* Copyright-Text */}
             <div className="flex flex-col items-center text-center pt-2">
-                <p>©2024 A & O. Alle Rechte vorbehalten. <Link href="/terms" className="underline">Nutzungsbedingungen</Link> | <Link href="/privacy" className="underline">Datenschutzerklärung</Link></p>
+                <p>©2024 A & O. Alle Rechte vorbehalten.| <Link href="/privacy" className="underline">Datenschutzerklärung</Link></p>
                 <p>Powered by Ghulam & Khalil</p>
             </div>
         </div>
