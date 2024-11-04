@@ -13,6 +13,9 @@
 
 
 
+.even-bg > :nth-child(even) {
+  @apply bg-orange-500;
+}
 
 
 /* Auswahl des Containers, der die beiden Monate enthält */
