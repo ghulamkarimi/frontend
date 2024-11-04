@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import { NotificationService } from "../../../service/NotificationService";
 import { setUserInfo, userLoginApi } from "../../../feature/reducers/userSlice";
 import { useRouter } from "next/navigation";
- 
+
 
 
 
@@ -37,12 +37,17 @@ const Login = () => {
             try {
                 const response = await dispatch(userLoginApi(values)).unwrap();
                 NotificationService.success(response.message || "Login successful");
+                setTimeout(()=> {
+                    router.push("/")
+                },4000)
                 dispatch(setUserInfo(response.data.userInfo));
+              
                 console.log(response.userInfo)
                 localStorage.setItem("exp", response.data.userInfo.exp)
-                router.push("/")
+               
+
             } catch (error: any) {
-                console.log("Login Error :",error.response.date)
+                console.log("Login Error :", error.response.date)
                 NotificationService.error(error.message);
             }
         },
