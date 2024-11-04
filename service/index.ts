@@ -35,6 +35,10 @@ export const refreshToken = () => {
     const url = `${SERVER_URL}/user/refreshToken`;
     return axios.post(url);
 }
+export const userLogout = () => {
+    const url = `${SERVER_URL}/user/logout`;
+    return axios.delete(url);
+}
 
 
 // CarRent

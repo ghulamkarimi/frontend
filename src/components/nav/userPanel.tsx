@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import {
   NavigationMenu,
@@ -10,61 +9,82 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../feature/store/store";
-import { displayUserById } from "../../../feature/reducers/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../feature/store/store";
+import { displayUserById, userLogoutApi } from "../../../feature/reducers/userSlice";
 import { FaCarSide, FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import { NotificationService } from "../../../service/NotificationService";
+import { IoIosLogIn } from "react-icons/io";
 
-const NavigationMenuDemo = () => {
+const DropdownMenuDemo = () => {
   const [userId, setUserId] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
-    console.log("storedUserId",storedUserId)
+    console.log("storedUserId", storedUserId);
     setUserId(storedUserId);
   }, []);
 
   const user = useSelector((state: RootState) => displayUserById(state, userId || ""));
 
   return (
-    <NavigationMenu >
+    <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="flex items-center bg-white gap-4 lg:gap-10 lg:px-8 lg:py-2">
-            <span>
-              <FaRegCircleUser className="lg:text-2xl" />
-            </span>
-            <span>{user?.firstName}</span>
+          <NavigationMenuTrigger className="flex items-center bg-white gap-4 lg:gap-6  lg:py-2">
+            {user ? (
+              <div className="flex items-center bg-white gap-4 lg:gap-6 lg:px-8 lg:py-2">
+                <span>
+                  <FaRegCircleUser className="lg:text-2xl" />
+                </span>
+                <span>{user?.firstName}</span>
+              </div>
+            ) : (
+              <span>
+                Register/Login
+              </span>
+            )}
           </NavigationMenuTrigger>
           <NavigationMenuContent className="gap-20">
             <NavigationMenuLink
               className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200"
-              href="/link1"
+              href={user ? "/meinProfile" : "/register"}
             >
               <span>
-                <FaRegCircleUser className="text-xl lg:text-2xl" />
+                <FaRegCircleUser className="lg:text-2xl" />
               </span>
-              <span>Profile</span>
+              <span>{user ? "Profile" : "Register"}</span>
             </NavigationMenuLink>
             <NavigationMenuLink
-              className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200"
-              href="/link2"
+              className="flex items-center gap-4 lg:gap-10 px-6 lg:px-8 bg-white py-2 hover:bg-gray-200"
+              href={user ? "/meineBuchungen" : "/login"}
             >
               <span>
-                <FaCarSide className="text-xl lg:text-2xl" />
+                {user ? <FaCarSide className="lg:text-2xl" /> : <IoIosLogIn className="lg:text-2xl" />}
               </span>
-              <span>Meine Buchungen</span>
+              <span>{user ? "Buchungen" : "Login"}</span>
             </NavigationMenuLink>
-            <NavigationMenuLink
-              className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200"
-              href="/link2"
-            >
-              <span>
-                <RiLogoutCircleLine className="text-xl lg:text-2xl" />
-              </span>
-              <span>Logout</span>
-            </NavigationMenuLink>
+            {user && (
+              <NavigationMenuLink
+                className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200"
+                onClick={async () => {
+                  try {
+                    const response = await dispatch(userLogoutApi()).unwrap();
+                    NotificationService.success("Logout successful");
+                  } catch (error) {
+                    console.log("Logout Error :", error);
+                    NotificationService.error("Logout failed: " + ((error as Error)?.message || "Unknown error"));
+                  }
+                }}
+              >
+                <span>
+                  <RiLogoutCircleLine className="text-xl lg:text-2xl" />
+                </span>
+                <span>Logout</span>
+              </NavigationMenuLink>
+            )}
           </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
@@ -75,4 +95,4 @@ const NavigationMenuDemo = () => {
   );
 };
 
-export default NavigationMenuDemo;
+export default DropdownMenuDemo;
