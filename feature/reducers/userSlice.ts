@@ -4,10 +4,10 @@ import {
     createSlice,
     EntityState,
 } from "@reduxjs/toolkit";
-import { userLogin, userRegister, getAllUsers } from '../../service/index';
+import { userLogin, userRegister, getAllUsers, userLogout } from '../../service/index';
 import { RootState } from "../store/store";
 import { IUser, IUserInfo, TUser } from "../../interface";
-import { profile } from "console";
+
 
 
 interface IUserState {
@@ -37,13 +37,13 @@ export const userRegisterApi = createAsyncThunk(
 
 export const userLoginApi = createAsyncThunk(
     "users/userLoginApi",
-    async (initialUser: TUser) => {
+    async (initialUser: TUser, { rejectWithValue }) => {
         try {
             const response = await userLogin(initialUser);
-            localStorage.setItem("userId",response.data.userInfo.userId)
+            localStorage.setItem("userId", response.data.userInfo.userId)
             return response.data;
         } catch (error: any) {
-            throw error.response.data.message;
+            return rejectWithValue(error?.response?.data?.message || "Error in user login");
         }
     }
 );
@@ -54,6 +54,18 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async (_, { rejec
         return response.data;
     } catch (error: any) {
         return rejectWithValue(error?.response?.data?.message || "Error fetching users");
+    }
+});
+
+export const userLogoutApi = createAsyncThunk("users/userLogoutApi", async (_, { rejectWithValue }) => {
+    try {
+        const response = await userLogout();
+        localStorage.removeItem("userId");
+        return response.data;
+    } catch (error) {
+
+        const errorMessage = (error as any)?.response?.data?.message || "Logout failed";
+        return rejectWithValue(errorMessage);
     }
 });
 
@@ -88,6 +100,11 @@ const userSlice = createSlice({
         setUserInfo: (state, action) => {
             state.userInfo = action.payload;
         },
+        clearUserInfos: (state) => {
+            state.userInfo = initialState.userInfo;
+            state.token = "";
+            state.userId = "";
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -110,7 +127,14 @@ const userSlice = createSlice({
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message || "Failed to fetch users";
-            });
+            })
+            .addCase(userLogoutApi.fulfilled, (state) => {
+                state.userInfo = initialState.userInfo;
+                state.token = "";
+                state.userId = "";
+                state.status = "idle";
+                state.error = null
+            })
     }
 });
 

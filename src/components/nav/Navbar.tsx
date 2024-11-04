@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../feature/store/store";
 import { setIsMenuOpen } from "../../../feature/reducers/appSlice";
 import { MdClose } from "react-icons/md";
-import NavigationMenuDemo from "./userPanel";
+import DropdownMenuDemo from "./userPanel";
 
 const Navbar = () => {
     const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const Navbar = () => {
                             src="/logo.png" alt="logo" />
                     </div>
                     <div className="flex justify-center items-center gap-8">
-                        <NavigationMenuDemo />
+                        <DropdownMenuDemo />
                         <div onClick={() => dispatch(setIsMenuOpen(!isMenuOpen))}>
                             <IoMdMenu className={`text-xl lg:text-3xl  ${isMenuOpen ? "hidden" : "flex"}`} />
                         </div>

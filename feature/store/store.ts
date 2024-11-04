@@ -30,20 +30,32 @@ export const store = configureStore({
 
 
 axiosJWT.interceptors.request.use(
-    async (config) => {
-      const currentDate = new Date();
-      const exp = localStorage.getItem("exp");
-      if (Number(exp) * 1000 > currentDate.getDate()) {
-        const response = await refreshToken();
-        config.headers.Authorization = `Bearer ${response.data.refreshToken}`;
-        store.dispatch(setToken(response.data.refreshToken));
+  async (config) => {
+    const currentDate = new Date();
+    const exp = localStorage.getItem("exp");
+
+    if (exp && Number(exp) * 1000 < currentDate.getTime()) {
+      const response = await refreshToken();
+      
+      const newAccessToken = response.data.accessToken;
+      localStorage.setItem("exp", response.data.exp);
+      config.headers.Authorization = `Bearer ${newAccessToken}`;
+      
+      store.dispatch(setToken(newAccessToken));
+    } else {
+      
+      const accessToken = localStorage.getItem("accessToken");
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
       }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
     }
-  );
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
   store.dispatch(fetchUsers());
   store.dispatch(getRentCarApi())
   store.dispatch(fetchCarBuys());
