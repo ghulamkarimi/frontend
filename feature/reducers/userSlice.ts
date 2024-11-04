@@ -40,6 +40,7 @@ export const userLoginApi = createAsyncThunk(
     async (initialUser: TUser) => {
         try {
             const response = await userLogin(initialUser);
+            localStorage.setItem("userId",response.data.userInfo.userId)
             return response.data;
         } catch (error: any) {
             throw error.response.data.message;
@@ -98,7 +99,7 @@ const userSlice = createSlice({
                 state.status = "succeeded";
             })
             .addCase(userLoginApi.fulfilled, (state, action) => {
-                userAdapter.setOne(state, action.payload.user);
+                userAdapter.setOne(state, action.payload.userInfo);
                 state.token = action.payload.token;
                 state.status = "succeeded";
             })

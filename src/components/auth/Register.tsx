@@ -51,6 +51,7 @@ const Register = () => {
         onSubmit: async (values) => {
             try {
                 const response = await dispatch(userRegisterApi(values)).unwrap();
+                console.log("responseRegister",response)
                 NotificationService.success(response.message || "Registration successful");
                  setTimeout(() => {
                     router.push("/login");

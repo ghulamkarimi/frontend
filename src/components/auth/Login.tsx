@@ -37,10 +37,9 @@ const Login = () => {
             try {
                 const response = await dispatch(userLoginApi(values)).unwrap();
                 NotificationService.success(response.message || "Login successful");
-                dispatch(setUserInfo(response.userInfo));
+                dispatch(setUserInfo(response.data.userInfo));
                 console.log(response.userInfo)
-                localStorage.setItem("userId", response.userInfo.userId);
-                localStorage.setItem("exp", response.userInfo.exp)
+                localStorage.setItem("exp", response.data.userInfo.exp)
                 router.push("/")
             } catch (error: any) {
                 console.log("Login Error :",error.response.date)
