@@ -11,15 +11,24 @@ const OfferCards = () => {
     }
 
     return (
-        <div className="py-6">
-            <h2 className="text-3xl font-bold mb-4 text-center">Unsere aktuellen Angebote</h2>
-            <div className="flex flex-wrap pt-4 gap-4">
+        <div className="py-6 px-2">
+            <h2 className="text-5xl font-bold mb-4 text-center text-orange-500 text-shadow ">Unsere aktuellen Angebote</h2>
+            <div className="flex flex-wrap place-content-center pt-4  gap-4">
                 {displayOffer.map((offer) => (
-                    <div key={offer._id} className="bg-white shadow-md rounded-md p-4">
-                        <img src={offer.imageUrl} alt={offer.title} className="w-full h-40 object-cover rounded-md" />
-                        <h2 className="text-xl font-bold mt-4">{offer.title}</h2>
-                        <p className="text-gray-500">{offer.description}</p>
-                        <p className="text-orange-500 font-bold mt-2">{offer.price}</p>
+                    <div key={offer._id} className="bg-white shadow-md offerCarte p-4 w-96 md:w-[400px] h-[400px]">
+                        <img src={offer.imageUrl} alt={offer.title} className="w-96 h-60 object-cover rounded-md" />
+                        <h2 className="text-2xl font-bold text-red-600 mt-4">{offer.title}</h2>
+                        <p className="font-bold py-1">{offer.description}</p>
+                        <div className="flex items-center gap-2 mt-3 text-xl">
+                            <p className="font-bold">Preice:</p>
+                            <p className="text-red-500 font-bold line-through">
+                                {offer.oldPrice ? `${offer.oldPrice} €` : ""}
+                            </p>
+                            <p className="text-green-500 font-bold">
+                                {offer.newPrice ? `${offer.newPrice} €` : ""}
+                            </p>
+
+                        </div>
                     </div>
                 ))}
             </div>
@@ -29,4 +38,4 @@ const OfferCards = () => {
 
 export default OfferCards;
 
- 
+
