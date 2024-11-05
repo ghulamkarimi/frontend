@@ -11,6 +11,7 @@ const OfferCards = () => {
     }
 
     return (
+
         <div className="py-6 px-2">
             <h2 className="text-5xl font-bold mb-4 text-center text-orange-500 text-shadow ">Unsere aktuellen Angebote</h2>
             <div className="flex flex-wrap place-content-center pt-4  gap-4">
@@ -29,7 +30,8 @@ const OfferCards = () => {
                             </p>
 
                         </div>
-                    </div>
+
+       
                 ))}
             </div>
         </div>
@@ -37,5 +39,4 @@ const OfferCards = () => {
 }
 
 export default OfferCards;
-
 
