@@ -24,10 +24,12 @@ const page = () => {
 
 
     useEffect(() => {
-    
-        const initialCategory = localStorage.getItem("initialCategory") || "All";
-        setCategory(initialCategory);
+        if (typeof window !== 'undefined') { 
+            const initialCategory = localStorage.getItem("initialCategory") || "All";
+            setCategory(initialCategory);
+        }
     }, []);
+    
 
     const filteredCars = cars.filter((car) => {
         const matchesCategory = category === "All" || car.carCategory === category;
@@ -36,7 +38,7 @@ const page = () => {
     });
 
     return (
-        <div>
+        <div className="pt-4">
             <div className="bg-white rounded-2xl shadow-md max-w-2xl mx-auto p-6">
                 <h2 className="text-2xl font-bold mb-4">Fahrzeugsuche</h2>
                 <div className="mb-4">

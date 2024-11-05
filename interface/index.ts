@@ -82,9 +82,8 @@ export interface IOffer {
     title: string;
     description: string;
     imageUrl: string;
-
     oldPrice: string;    
     newPrice: string;    
-
+    discountPercentage: string;
     userId: string;
 }
