@@ -31,6 +31,7 @@ export type TUser = Partial<IUser>;
 export interface ICarBuy {
     _id: string;
     carTitle: string;
+    carId: string;
     carPrice: string;
     owner: number;
     isSold: boolean;
@@ -48,6 +49,7 @@ export interface ICarBuy {
     carGearbox: string;
     carMotor: string;
     carHorsePower: string;
+    carEuroNorm: string;
     fuelType: string;
     carTechnicalInspection: Date;
     carCategory: string;
@@ -74,3 +76,12 @@ export interface ICarRent {
 }
 
 export type TCarRent = Partial<ICarRent>
+
+export interface IOffer {
+    _id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    price: string;
+    userId: string;
+}

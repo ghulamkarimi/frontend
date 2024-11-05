@@ -154,12 +154,11 @@ const selectSuggestion = (suggestion: string) => {
           {filteredSuggestions.length > 0 && (
           <ul className=" bg-white border mt-1 w-full  shadow-lg rounded-md">
             {filteredSuggestions.map((suggestion, index) => (
-              <div className=" flex items-center gap-3 w-full p-2">
-                       
+              <div key={index} className=" flex items-center gap-3 w-full p-2">
+         
                       <FaMapMarkerAlt className="w-6 h-6 text-orange-300 " />
-                
               <li
-                key={index}
+                
                 className="p-2 cursor-pointer border-b-2 border-orange-300 w-full hover:bg-orange-300"
                 onClick={() => selectSuggestion(suggestion)}
               >

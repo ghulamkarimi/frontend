@@ -1,5 +1,6 @@
 import HeroCards from "@/components/cards/HeroCards";
 import HomeCarouselHero from "@/components/carousel/HomeCarouselHero";
+import OfferCards from "@/components/offer/OfferCards";
 
 export default function Home() {
   return (
@@ -24,6 +25,9 @@ export default function Home() {
           <HeroCards />
         </div>
       </div>
+    
+        <OfferCards />
+  
       <div className="relative z-10 w-full ">
         <HomeCarouselHero />
       </div>

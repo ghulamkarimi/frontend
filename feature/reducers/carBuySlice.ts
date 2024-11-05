@@ -1,7 +1,7 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState} from "@reduxjs/toolkit";
 import { ICarBuy, TBuy } from "../../interface";
 import { RootState } from "../store/store";
-import { getCarBuys, getCarBuysById } from '../../service/index';
+import { getCarBuys } from '../../service/index';
 
 interface carBuyState {
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -30,15 +30,6 @@ export const fetchCarBuys = createAsyncThunk("carBuys/fetchCarBuys", async () =>
     }
 })
 
-export const getCarBuyById = createAsyncThunk<any, TBuy>("carBuys/getCarBuysById", async (buyCar: TBuy) => {
-    try {
-        const response = await getCarBuysById(buyCar);
-        return response.data;
-    } catch (error: any) {
-        return error?.response?.data?.message || "Error fetching carBuys";
-
-    }
-})
 
 
 const carBuySlice = createSlice({
@@ -60,12 +51,7 @@ const carBuySlice = createSlice({
                 state.error = action.error.message as string || "Error fetching carBuys";
 
             })
-            .addCase(getCarBuyById.pending, (state, action) => {
-                if (action.payload) {
-                    const payload = action.payload as ICarBuy;
-                    carBuyAdapter.setOne(state, payload);
-                }
-            })
+           
     }
 })
 export const { selectAll: displayCarBuys, selectById: displayCarBuyById } = carBuyAdapter.getSelectors<RootState>((state) => state.carBuys);
