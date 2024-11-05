@@ -51,6 +51,11 @@ export const getCarRent = ()=>{
 }
  
 
+export const getOneCarById = (id:string)=>{
+    const url = `${SERVER_URL}/rent/getRent/${id}`
+    return axios.get(url)
+}
+
 export const getCarBuys = ()=> {
     const url = `${SERVER_URL}/buy/allBuys`;
     return axios.get(url)
