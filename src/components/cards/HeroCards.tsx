@@ -24,7 +24,7 @@ const cards = [
     {
         title: "Werkstatt-Service",
         imageUrl: "/werkzeug.jpeg",
-        url: "/werkstatt-Service",
+        url: "/werkstatt-service",
         description: "Unser Werkstatt-Service bietet umfassende Wartung und Reparatur für Ihr Fahrzeug. Vertrauen Sie auf unsere Experten für zuverlässige Lösungen."
     },
 ]

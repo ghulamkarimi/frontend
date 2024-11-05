@@ -16,6 +16,8 @@ export const axiosJwt = axios.create({
 });
 axiosJwt.interceptors.request.use;
 
+// user
+
 export const userRegister = (user: TUser) => {
     const url = `${SERVER_URL}/user/register`;
     return axios.post(url, user);
@@ -40,19 +42,13 @@ export const userLogout = () => {
     return axios.delete(url);
 }
 
-
 // CarRent
-
-
 
 export const getCarRent = ()=>{
     const url = `${SERVER_URL}/rent/getRents`
     return axios.get(url)
 }
  
-
-
-
 // CarBuy
 
 export const getCarBuys = ()=> {
@@ -60,3 +56,9 @@ export const getCarBuys = ()=> {
     return axios.get(url)
 }
 
+// offers
+
+export const getOffers = ()=> {
+    const url = `${SERVER_URL}/offer/getOffers`;
+    return axios.get(url)
+}

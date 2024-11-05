@@ -76,3 +76,12 @@ export interface ICarRent {
 }
 
 export type TCarRent = Partial<ICarRent>
+
+export interface IOffer {
+    _id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    price: string;
+    userId: string;
+}

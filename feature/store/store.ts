@@ -2,7 +2,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer, { fetchUsers, setToken } from "../reducers/userSlice"; 
 import appReducer from "../reducers/appSlice"; 
-
+import offerReducer, { fetchOffers } from "../reducers/offerSlice";
 import { getCarRent, refreshToken} from "../../service";
 
 import carBuyReducer, { fetchCarBuys } from "../reducers/carBuySlice";
@@ -19,6 +19,7 @@ export const store = configureStore({
         app: appReducer,
         carRent:carRentReducer,
         carBuys: carBuyReducer,
+        offer: offerReducer,
 
     },
     middleware: (getDefaultMiddleware) =>
@@ -59,6 +60,7 @@ axiosJWT.interceptors.request.use(
   store.dispatch(fetchUsers());
   store.dispatch(getRentCarApi())
   store.dispatch(fetchCarBuys());
+  store.dispatch(fetchOffers());
 
   
 export type RootState = ReturnType<typeof store.getState>;
