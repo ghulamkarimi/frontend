@@ -32,8 +32,10 @@ const OfferCards = () => {
                         </div>
 
        
+                        </div>
                 ))}
             </div>
+        
         </div>
     );
 }
