@@ -12,7 +12,9 @@ import { BsFillFuelPumpFill } from "react-icons/bs";
 import { FaUserTie } from "react-icons/fa6";
 import FormattedDate from "@/components/FormatesDate";
 import Carousel from "react-multi-carousel";
-import Image from "next/image";
+import Zoom from 'react-medium-image-zoom';
+import "react-multi-carousel/lib/styles.css";
+import 'react-medium-image-zoom/dist/styles.css';
 
 const Page = () => {
     const { id: carId } = useParams();
@@ -41,7 +43,7 @@ const Page = () => {
     }
 
     return (
-        <div className="flex flex-col items-center rounded-lg py-6 px-4 sm:px-8">
+        <div className="flex flex-col items-center rounded-lg py-4 px-4 sm:px-8">
             {/* <img
                 className="w-full max-w-[90%] md:max-w-[700px] lg:max-w-[900px] h-auto rounded-lg"
                 src={singleCar?.carImage[0]}
@@ -49,31 +51,25 @@ const Page = () => {
             /> */}
             <Carousel
                 responsive={responsive}
-                swipeable={true}
                 className="w-full h-[600px]"
                 showDots={true}
-                infinite={true}
-                autoPlay={true}
-                autoPlaySpeed={5000}
-                keyBoardControl={true}
+                keyBoardControl
                 customTransition="all .5"
                 transitionDuration={500}
                 containerClass="carousel-container"
                 removeArrowOnDeviceType={["tablet", "mobile"]}
-                dotListClass="custom-dot
-            -list-style"
+                dotListClass="custom-dot-list-style"
                 itemClass="carousel-item-padding-40-px"
-
-
             >
-                {console.log(singleCar?.carImage)}
                 {singleCar?.carImage?.map((image, index) => (
-                    <img
-                        src={image}
-                        key={index}
-                        alt={singleCar?.carTitle || "Car Image"}
-                       
-                    />
+                    <Zoom key={index}>
+                        <img
+                            key={index}
+                            className="w-full h-[600px] object-cover "
+                            src={singleCar?.carImage[index]}
+                            alt={singleCar?.carTitle || "Car Image"}
+                        />
+                    </Zoom>
                 ))}
             </Carousel>
 
