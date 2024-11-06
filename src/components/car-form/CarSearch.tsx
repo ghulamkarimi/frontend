@@ -1,26 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+
+  FaMapMarkerAlt,
+ 
+
+} from "react-icons/fa";
 import CalenderC from "./Calenderc";
 import TimeC from "./TimeC";
 import { useSelector } from "react-redux";
 import { getAllRentCars } from "../../../feature/reducers/carRentSlice";
 import Tilt from "react-parallax-tilt";
-import { useRouter } from "next/navigation";
+import CarCard from "./CarCard";
+
 
 
 const CarSearch = () => {
-
-
-
-const router = useRouter()
-
+ 
   const rentCars = useSelector(getAllRentCars);
-
-
-
-
+ 
 
   console.log("rentCars:", rentCars);
   const [availableCars, setAvailableCars] = useState(rentCars);
@@ -121,21 +121,9 @@ const router = useRouter()
   };
 
   return (
-    <div className="  p-4 border-2 border-orange-300 rounded-md mb-4 mt-4 shadow-lg shadow-orange-300">
-      <div className="flex flex-col gap-2">
-        <h2 className="font-bold md:text-xl sm:text-sm text-xs">
-          Welche Art von PKW?
-        </h2>
-        <div className="flex items-center p-2 gap-3 border border-1 border-black w-fit">
-          <img
-            className="w-14"
-            src="/fahrzeugvermietungPic/pkw1.avif"
-            alt="pkw1"
-          />
-          <p>PKW</p>
-        </div>
-      </div>
-      <div className="flex flex-col xl:flex-row items-center gap-6 mt-3">
+    <div className=" p-4  border-2 w-full border-orange-300 rounded-md mb-4 mt-4 shadow-lg shadow-orange-300">
+      
+      <div className="flex flex-col xl:flex-row items-center gap-6 mt-3 ">
         <div className="xl:w-1/3 w-full  ">
           <div
             className="flex 2xl:justify-between justify-between
@@ -311,39 +299,9 @@ const router = useRouter()
       </div>
       {/* Show filtered cars if any, otherwise all cars */}
 
-      <div className="mt-6">
-        <div
-         
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
-        >
-          {(availableCars.length > 0 ? availableCars : rentCars).map((car) => (
-            <Tilt
-           
-              tiltMaxAngleX={20}
-              tiltMaxAngleY={20}
-              scale={1.1}
-              key={car._id}
-            >
-              <div 
-               onClick={() => {
-                localStorage.setItem("carRentId",car._id || "")
-                router.push(`/fahrzeugvermietung/${car._id}`)
-              }}
-              className="p-4 border-2 border-orange-500 rounded shadow-orange-300 cursor-pointer">
-                <img
-                  src={car.carImage}
-                  alt={car.carName}
-                  className="w-full h-full object-cover mb-2 rounded-3xl"
-                />
-                <h4 className="font-bold">{car.carName}</h4>
-                <p>{car.carPrice} € / Tag</p>
-                <p>Getriebe: {car.carGear}</p>
-                <p>Personen: {car.carPeople}</p>
-              </div>
-            </Tilt>
-          ))}
-        </div>
-      </div>
+    <div className=" w-full">
+    <CarCard availableCars = {availableCars}/>
+    </div>
     </div>
   );
 };

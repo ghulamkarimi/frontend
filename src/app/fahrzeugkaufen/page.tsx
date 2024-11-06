@@ -1,9 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { displayCarBuys } from "../../../feature/reducers/carBuySlice";
-
 import Link from "next/link";
 import { FaRoad, FaUserTie } from "react-icons/fa6";
 import { BsFillFuelPumpFill } from "react-icons/bs";
@@ -13,30 +12,31 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import FormattedDate from "@/components/FormatesDate";
 
-
 const carCategories = ["Transporter", "PKW", "Wohnwagen"];
 
 
 const page = () => {
+
+    
     const cars = useSelector(displayCarBuys);
     const [searchTerm, setSearchTerm] = useState("");
     const [category, setCategory] = useState("All");
 
 
-    useEffect(() => {
-    
-        const initialCategory = localStorage.getItem("initialCategory") || "All";
-        setCategory(initialCategory);
-    }, []);
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const initialCategory = localStorage.getItem("initialCategory") || "All";
+            setCategory(initialCategory);
+        }
+    }, []);
     const filteredCars = cars.filter((car) => {
         const matchesCategory = category === "All" || car.carCategory === category;
         const matchesSearchTerm = car.carTitle.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesCategory && matchesSearchTerm;
     });
-
     return (
-        <div>
+        <div className="pt-4">
             <div className="bg-white rounded-2xl shadow-md max-w-2xl mx-auto p-6">
                 <h2 className="text-2xl font-bold mb-4">Fahrzeugsuche</h2>
                 <div className="mb-4">
@@ -107,7 +107,7 @@ const page = () => {
                                 </div>
                             </CardContent>
                             <CardFooter className="pt-6">
-                                <Link 
+                                <Link
                                     href={`/fahrzeugkaufen/${car._id}`}
                                     className="bg-orange-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
                                 >
@@ -123,5 +123,4 @@ const page = () => {
         </div>
     );
 };
-
 export default page;
