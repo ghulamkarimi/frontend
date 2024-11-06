@@ -23,7 +23,9 @@ const DropdownMenuDemo = () => {
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
+
     console.log("storedUserId", storedUserId);
+
     setUserId(storedUserId);
   }, []);
 

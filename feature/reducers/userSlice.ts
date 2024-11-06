@@ -41,6 +41,7 @@ export const userLoginApi = createAsyncThunk(
         try {
             const response = await userLogin(initialUser);
             localStorage.setItem("userId", response.data.userInfo.userId)
+            localStorage.setItem("exp", response.data.userInfo.exp)
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error?.response?.data?.message || "Error in user login");

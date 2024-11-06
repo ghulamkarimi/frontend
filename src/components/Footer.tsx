@@ -130,7 +130,7 @@ function useMediaQuery(query: string) {
 
             {/* Copyright-Text */}
             <div className="flex flex-col items-center text-center pt-2">
-                <p>©2024 A & O. Alle Rechte vorbehalten.| <Link href="/privacy" className="underline">Datenschutzerklärung</Link></p>
+                <p>©2024 A & O. Alle Rechte vorbehalten.| <Link href="/datenschutz" className="underline">Datenschutzerklärung</Link></p>
                 <p>Powered by Ghulam & Khalil</p>
             </div>
         </div>

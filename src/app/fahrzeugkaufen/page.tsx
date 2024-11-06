@@ -25,11 +25,14 @@ const page = () => {
 
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+
+        if (typeof window !== 'undefined') { 
+
             const initialCategory = localStorage.getItem("initialCategory") || "All";
             setCategory(initialCategory);
         }
     }, []);
+
     const filteredCars = cars.filter((car) => {
         const matchesCategory = category === "All" || car.carCategory === category;
         const matchesSearchTerm = car.carTitle.toLowerCase().includes(searchTerm.toLowerCase());
