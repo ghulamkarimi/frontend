@@ -13,6 +13,17 @@
 
 
 
+.even-bg > :nth-child(even) {
+  @apply bg-orange-500;
+}
+
+.text-shadow {
+  text-shadow: 1px 3px 4px #000000;
+}
+.offerCarte {
+  border-radius: 32px 0px;
+}
+
 
 
 /* Auswahl des Containers, der die beiden Monate enthält */
