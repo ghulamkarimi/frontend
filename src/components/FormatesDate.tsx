@@ -9,7 +9,7 @@ interface FormattedDateProps {
 const FormattedDate: React.FC<FormattedDateProps> = ({ date, formatString = 'dd.MM.yyyy' }) => {
   const parsedDate = typeof date === 'string' ? new Date(date) : date;
 
-  // Überprüfe, ob das Datum gültig ist
+  
   if (isNaN(parsedDate.getTime())) {
     return <span>Ungültiges Datum</span>;
   }

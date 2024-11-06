@@ -2,30 +2,28 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+const CarouselItem = [
+  {
+    id: 1,
+    title: "A & O Team",
+    description: "Beste Wahl für Ihr Auto",
+    image: "/logoCarousel.webp",
+  },
+  {
+    id: 2,
+    title: " Reifen ,Service, ...",
+    description: "Beste Angebote für Sie",
+    image: "/reifenCarousel.png",
+  },
+  {
+    id: 3,
+    title: "Auto Service",
+    description: " Wir bieten Ihnen den besten Service",
+    image: "/werkzeug.jpeg",
+  },
+];
 
- const CarouselItem = [
-    {
-      id: 1,
-      title: "Slide 1",
-      description: "Description 1",
-      image: "/reifenCar.png",
-    },
-    {
-      id: 2,
-      title: "Slide 2",
-      description: "Description 2",
-      image: "/reifenCarousel.png",
-    },
-    {
-      id: 3,
-      title: "Slide 3",
-      description: "Description 3",
-      image: "/werkzeug.jpeg",
-    },
- ]
- 
- 
- const HomeCarouselHero = () => {
+const HomeCarouselHero = () => {
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -42,7 +40,7 @@ import "react-multi-carousel/lib/styles.css";
   };
 
   return (
-    <div className="w-full pt-10"> {/* 'pt-20' für mehr Abstand oben */}
+    <div className="w-full pt-10">
       <Carousel
         responsive={responsive}
         swipeable={true}
@@ -60,8 +58,13 @@ import "react-multi-carousel/lib/styles.css";
         itemClass="carousel-item-padding-40-px"
       >
         {CarouselItem.map((item) => (
-          <div key={item.id}>
-            <img className="w-full h-[600px] " src={item.image} alt={item.title} />
+          <div key={item.id} className="relative w-full h-[600px]">
+            <img className="w-full h-full object-cover" src={item.image} alt={item.title} />
+            {/* Text Overlay */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white p-4">
+              <h2 className="text-3xl font-bold mb-2 ">{item.title}</h2>
+              <p className="text-lg font-bold">{item.description}</p>
+            </div>
           </div>
         ))}
       </Carousel>
