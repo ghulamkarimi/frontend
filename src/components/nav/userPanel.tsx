@@ -23,9 +23,6 @@ const DropdownMenuDemo = () => {
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
-
-    console.log("storedUserId", storedUserId);
-
     setUserId(storedUserId);
   }, []);
 
@@ -76,7 +73,6 @@ const DropdownMenuDemo = () => {
                     const response = await dispatch(userLogoutApi()).unwrap();
                     NotificationService.success("Logout successful");
                   } catch (error) {
-                    console.log("Logout Error :", error);
                     NotificationService.error("Logout failed: " + ((error as Error)?.message || "Unknown error"));
                   }
                 }}

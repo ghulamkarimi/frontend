@@ -74,7 +74,7 @@ const CarCard = ({ availableCars }: ICarCardProps) => {
                   <img
                     src={car.carImage}
                     alt="Car Image"
-                    className="w-full h-60 object-cover rounded-t-lg"
+                    className=" w-80 h-56 object-cover rounded-t-lg"
                   />
                 </CardHeader>
 
@@ -157,7 +157,7 @@ const CarCard = ({ availableCars }: ICarCardProps) => {
                 <div className="bg-slate-300 px-2 py-4 w-full flex flex-col gap-3 rounded-t-lg">
                   <h2 className="md:font-bold text-xs md:text-sm">
                     Vollständige Fahrzeugdaten (beziehen sich auf das oben
-                    gezeigte Beispielfahrzeug)
+                    gezeigte Fahrzeug)
                   </h2>
                   <div className="w-full flex flex-wrap gap-6">
                     <span className="cardInfoSell">

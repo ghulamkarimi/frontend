@@ -1,12 +1,8 @@
 "use client";
-
 import { useState } from "react";
 import {
   FaCalendarAlt,
-
   FaMapMarkerAlt,
- 
-
 } from "react-icons/fa";
 import CalenderC from "./Calenderc";
 import TimeC from "./TimeC";
@@ -16,13 +12,9 @@ import Tilt from "react-parallax-tilt";
 import CarCard from "./CarCard";
 
 
-
 const CarSearch = () => {
- 
-  const rentCars = useSelector(getAllRentCars);
- 
 
-  console.log("rentCars:", rentCars);
+  const rentCars = useSelector(getAllRentCars);
   const [availableCars, setAvailableCars] = useState(rentCars);
   const [showCalender, setIsShowCalender] = useState<boolean>(false);
   const [showTime, setIsShowTime] = useState<boolean>(false);
@@ -33,12 +25,8 @@ const CarSearch = () => {
   const [showTimeReturn, setIsShowTimeReturn] = useState<boolean>(false);
   const [returnDate, setReturnDate] = useState<Date | null>(null);
   const [returnTime, setReturnTime] = useState<string | null>(null);
-
   const [loading, setLoading] = useState(false);
 
-  const locationSuggestions = ["Hagen", "Hamburg", "München"];
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
 
   const [age, setAge] = useState<number | null>(null);
   const handleAgeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -72,10 +60,8 @@ const CarSearch = () => {
       );
       return;
     }
+    setLoading(true); 
 
-    setLoading(true); // Start loading
-
-    // Simulate a loading time of 4 seconds
     setTimeout(() => {
       const pickupDateTime = new Date(pickupDate);
       pickupDateTime.setHours(
@@ -102,146 +88,100 @@ const CarSearch = () => {
       });
 
       setAvailableCars(filteredCars);
-      setLoading(false); // End loading
-    }, 4000); // 4000 milliseconds = 4 seconds
+      setLoading(false);
+    }, 4000);
   };
 
-  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const userInput = e.target.value;
-    setPickupLocation(userInput);
-    const suggestions = locationSuggestions.filter((location) =>
-      location.toLowerCase().includes(userInput.toLowerCase())
-    );
-    setFilteredSuggestions(suggestions);
-  };
-
-  const selectSuggestion = (suggestion: string) => {
-    setPickupLocation(suggestion);
-    setFilteredSuggestions([]);
-  };
 
   return (
-    <div className=" p-4  border-2 w-full border-orange-300 rounded-md mb-4 mt-4 shadow-lg shadow-orange-300">
-      
-      <div className="flex flex-col xl:flex-row items-center gap-6 mt-3 ">
-        <div className="xl:w-1/3 w-full  ">
-          <div
-            className="flex 2xl:justify-between justify-between
-         w-full items-center mt-3"
-          >
-            <p className="lg:font-bold 2xl:text-sm text-xs">
-              Abhol-& Rückgabeort
-            </p>
-            <div>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" />
-                <span className="lg:font-bold 2xl:text-sm text-xs px-2">
-                  Rückgabeort
-                </span>
-              </label>
-            </div>
-          </div>
-          <div className="mt-2 border-2 rounded-md ">
-            <label className="flex items-center gap-2 rounded-lg">
-              <FaMapMarkerAlt className="w-6 h-6 text-orange-300 absolute z-30" />
-              <input
-                className="relative border-none outline-none px-9 text-sm lg:font-bold py-2 w-full"
-                type="text"
-                placeholder="Abhol- & Rückgabeort"
-                value={pickupLocation}
-                onChange={handleLocationChange}
-              />
-            </label>
-            {filteredSuggestions.length > 0 && (
-              <ul className=" bg-white border mt-1 w-full  shadow-lg rounded-md">
-                {filteredSuggestions.map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className=" flex items-center gap-3 w-full p-2"
-                  >
-                    <FaMapMarkerAlt className="w-6 h-6 text-orange-300 " />
+    <div className=" p-4  border-2 w-full rounded-md mb-4 mt-4  ">
 
-                    <li
-                      className="p-2 cursor-pointer border-b-2 border-orange-300 w-full hover:bg-orange-300"
-                      onClick={() => selectSuggestion(suggestion)}
-                    >
-                      {suggestion}
-                    </li>
-                  </div>
-                ))}
-              </ul>
-            )}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 bg-gray-100 rounded-lg py-4 px-1">
+        <div className="">
+          <p className="pb-2">
+            Abhol-& Rückgabeort
+          </p>
+          <div className="py-2 flex gap-2 items-center px-2 border-2 border-orange-500 rounded-lg">
+            <FaMapMarkerAlt className="lg:text-xl text-orange-500 " />
+            <span className="text-base">
+              <p>Sprendlingen 55576</p>
+            </span>
           </div>
         </div>
-        <div className="xl:w-1/3 w-full ">
-          <div className="w-full mt-3">
-            <p className="lg:font-bold 2xl:text-sm text-xs 2xl:text-center">
-              Abholdatum-& Uhrzeit
+
+        <div className="pt-2">
+          <p className="">
+            Abholdatum-& Uhrzeit
+          </p>
+          <div className="flex items-center gap-3 border-2 border-orange-500 px-2 py-2 rounded-lg">
+            <span className="flex items-center gap-2" onClick={() => setIsShowCalender(!showCalender)}>
+              <FaCalendarAlt className="text-xl text-orange-500" />
+              <p
+
+                className="cursor-pointer"
+              >
+                {pickupDate
+                  ? pickupDate.toLocaleDateString()
+                  : "Abhole Datum"}
+              </p>
+            </span>
+            <div className="  w-[1.5px] h-5 bg-slate-400 " />
+            <p
+              onClick={() => setIsShowTime(!showTime)}
+              className="cursor-pointer"
+            >
+              {pickupTime ? pickupTime : "Zeit"}
             </p>
-            <div className="flex items-center w-full border-2 rounded-md mt-2">
-              <div className="px-6">
-                <div className="flex items-center gap-4">
-                  <div className=" flex items-center gap-2">
-                    <FaCalendarAlt className="text-xl text-orange-300" />
-                    <p
-                      onClick={() => setIsShowCalender(!showCalender)}
-                      className="lg:font-bold text-xs text-slate-400 cursor-pointer"
-                    >
-                      {pickupDate
-                        ? pickupDate.toLocaleDateString()
-                        : "Abhole Datum"}
-                    </p>
-                  </div>
-                  <div className="  w-[1.5px] h-10 bg-slate-400 "></div>
-                  <p
-                    onClick={() => setIsShowTime(!showTime)}
-                    className="lg:font-bold text-xs text-slate-400 cursor-pointer"
-                  >
-                    {pickupTime ? pickupTime : "Zeit"}
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
-        <div className="xl:w-1/3 w-full ">
-          <div className="w-full mt-3">
-            <p className="lg:font-bold 2xl:text-sm text-xs 2xl:text-center">
-              Rückgabedatum- & Uhrzeit
+
+        <div className="pt-2">
+          <p className="">
+            Rückgabedatum- & Uhrzeit
+          </p>
+          <div className="flex items-center gap-3 border-2 border-orange-500 px-2 py-2 rounded-lg">
+            <span className="flex items-center gap-2" onClick={() => setIsShowCalenderReturn(!showCalenderReturn)}>
+              <FaCalendarAlt className="text-xl text-orange-500" />
+              <p className=" cursor-pointer"
+              >
+                {returnDate
+                  ? returnDate.toLocaleDateString()
+                  : "Rückgabedatum"}
+              </p>
+            </span>
+            <div className="w-[1.5px] h-5 bg-slate-400 " />
+
+            <p
+              onClick={() => setIsShowTimeReturn(!showTimeReturn)}
+              className=" cursor-pointer"
+            >
+              {returnTime ? returnTime : "Zeit"}
             </p>
-            <div className="flex items-center border-2 rounded-md mt-2">
-              <div className="px-6">
-                <div className="flex items-center gap-4">
-                  <FaCalendarAlt className="text-xl text-orange-300" />
-                  <p
-                    onClick={() => setIsShowCalenderReturn(!showCalenderReturn)}
-                    className="lg:font-bold text-xs text-slate-400 cursor-pointer"
-                  >
-                    {returnDate
-                      ? returnDate.toLocaleDateString()
-                      : "Rückgabedatum"}
-                  </p>
-                  <div className="w-[1.5px] h-10 bg-slate-400 mx-4"></div>
-                  <p
-                    onClick={() => setIsShowTimeReturn(!showTimeReturn)}
-                    className="lg:font-bold text-xs text-slate-400 cursor-pointer"
-                  >
-                    {returnTime ? returnTime : "Zeit"}
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
+
       </div>
-      <div className="flex items-center justify-around mt-3">
+      <div className={`mt-3 ${showCalender ? "flex" : "hidden"}`}>
+        <CalenderC onDateSelect={handleDateSelect} />
+      </div>
+      <div className={`mt-3 ${showTime ? "flex" : "hidden"}`}>
+        <TimeC onTimeSelect={handleTimeSelect} />
+      </div>
+      <div className={`mt-3 ${showCalenderReturn ? "flex" : "hidden"}`}>
+        <CalenderC onDateSelect={handleDateSelectReturn} />
+      </div>
+      <div className={`mt-3 ${showTimeReturn ? "flex" : "hidden"}`}>
+        <TimeC onTimeSelect={handleTimeSelectReturn} />
+      </div>
+
+      <div className="flex items-center justify-around py-10 mt-4 rounded-lg bg-gray-100">
         <div className="flex items-center gap-2">
           <p>Ich bin </p>
-          <label className="relative">
+          <label className=" relative">
             <select
               value={age ?? ""}
               onChange={handleAgeChange}
-              className="border border-gray-300 rounded-md"
+              className="border border-gray-300 rounded-md py-1.5 px-2 "
             >
               <option value="" disabled>
                 Alter auswählen
@@ -258,14 +198,13 @@ const CarSearch = () => {
         <div>
           <button
             onClick={checkAvailability}
-            className="px-6 py-1 bg-orange-300 rounded-md hover:bg-green-300"
+            className="px-6 py-1 bg-orange-500 rounded-md hover:bg-orange-600"
           >
             Search
           </button>
         </div>
       </div>
 
-      {/* Loading and Available Cars Display */}
       {loading ? (
         <div className="flex items-center justify-center mt-4">
           <Tilt className="tilt-effect">
@@ -284,24 +223,9 @@ const CarSearch = () => {
         </div>
       )}
 
-      {/* Kalender- und Zeit-Komponenten */}
-      <div className={`mt-3 ${showCalender ? "flex" : "hidden"}`}>
-        <CalenderC onDateSelect={handleDateSelect} />
+      <div className=" w-full">
+        <CarCard availableCars={availableCars} />
       </div>
-      <div className={`mt-3 ${showTime ? "flex" : "hidden"}`}>
-        <TimeC onTimeSelect={handleTimeSelect} />
-      </div>
-      <div className={`mt-3 ${showCalenderReturn ? "flex" : "hidden"}`}>
-        <CalenderC onDateSelect={handleDateSelectReturn} />
-      </div>
-      <div className={`mt-3 ${showTimeReturn ? "flex" : "hidden"}`}>
-        <TimeC onTimeSelect={handleTimeSelectReturn} />
-      </div>
-      {/* Show filtered cars if any, otherwise all cars */}
-
-    <div className=" w-full">
-    <CarCard availableCars = {availableCars}/>
-    </div>
     </div>
   );
 };

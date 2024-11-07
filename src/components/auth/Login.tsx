@@ -41,13 +41,10 @@ const Login = () => {
                     router.push("/")
                 },4000)
                 dispatch(setUserInfo(response.data.userInfo));
-              
-                console.log(response.userInfo)
                 localStorage.setItem("exp", response.data.userInfo.exp)
                
 
             } catch (error: any) {
-                console.log("Login Error :", error.response.date)
                 NotificationService.error(error.message);
             }
         },
