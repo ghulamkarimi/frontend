@@ -19,7 +19,7 @@ const Impressum = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold text-orange-500">2. Verantwortliche Person</h2>
         <p className="text-gray-700 mt-2">
-          A & O Team, vertreten durch AutoService A&U.
+          Omran Ahmadi, vertreten durch AutoService A&U.
         </p>
       </section>
 

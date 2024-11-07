@@ -1,14 +1,33 @@
+"use client";
 import HomeCarouselHero from "@/components/carousel/HomeCarouselHero";
+import OfferCards from "@/components/offer/OfferCards";
+import { useEffect, useState } from "react";
 
 
 
 
 const WorkshopBookingPage = () => {
+    const [minDate, setMinDate] = useState("")
+    const [maxDate, setMaxDate] = useState("")
+   
+    useEffect(() => {
+        const today = new Date();
+        const min = today.toISOString().split("T")[0];
+    
+        const oneMonthLater = new Date(today);
+        oneMonthLater.setDate(today.getDate() + 30)
+        const max = oneMonthLater.toISOString().split("T")[0];
+        setMinDate(min);
+        setMaxDate(max);
+    }, []);
+    
     return (
         <div className=" min-h-screen pt-8">
            
+
             <div className="max-w-4xl mx-auto py-12 px-6 bg-gradient-to-r from-slate-400 via-slate-500 to-gray-400 shadow-lg rounded-lg">
             <h1 className="text-center text-4xl font-bold text-gray-800 mb-6">
+
                     Jetzt Werkstatttermin buchen
                 </h1>
                 <p className="text-center font-bold pb-2">… und bequem nach dem Service in der Werkstatt bezahlen.</p>
@@ -17,14 +36,21 @@ const WorkshopBookingPage = () => {
                 </p>
                 <form className="space-y-6">
                     <div>
-                        <select className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500" name="Service" id="">
 
-                            <option className="py-2" value="" disabled selected>Gewünschter Service</option>
-                            <option className="py-2"  value="1"> Reifenmontage</option>
-                            <option className="py-2"  value="2">Radwechsel</option>
-                            <option className="py-2"  value="3">Ölwechsel</option>
-                            <option className="py-2"  value="4">Sonstiges</option>
+                        <select
+                            defaultValue=""
+                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
+                            name="Service"
+                            id=""
+                        >
+                            <option className="py-2" value="" disabled>Gewünschter Service auswählen</option>
+                            <option className="py-2" value="1">Reifenmontage</option>
+                            <option className="py-2" value="2">Radwechsel</option>
+                            <option className="py-2" value="3">Ölwechsel</option>
+                            <option className="py-2" value="4">Sonstiges</option>
+
                         </select>
+
                     </div>
                     <div>
                         <label htmlFor="name" className="block text-gray-700 font-semibold">
@@ -82,11 +108,12 @@ const WorkshopBookingPage = () => {
                             Wunschtermin
                         </label>
                         <input
-
                             type="date"
                             id="date"
+                            min={minDate}
+                            max={maxDate}
                             name="date"
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
+                            className="w-full text- p-3 border rounded-lg focus:outline-none focus:border-orange-500"
                             required
                         />
                     </div>
@@ -112,6 +139,7 @@ const WorkshopBookingPage = () => {
                     </div>
                 </form>
             </div>
+            <OfferCards />
             <HomeCarouselHero />
         </div>
     );
