@@ -25,8 +25,9 @@ const WorkshopBookingPage = () => {
         <div className=" min-h-screen pt-8">
            
 
-            <div className="max-w-4xl mx-auto py-12 px-6 bg-gradient-to-r from-blue-400  to-cyan-500  shadow-lg rounded-lg">
-                <h1 className="text-center text-4xl font-bold text-gray-800 mb-6">
+            <div className="max-w-4xl mx-auto py-12 px-6 bg-gradient-to-r from-slate-400 via-slate-500 to-gray-400 shadow-lg rounded-lg">
+            <h1 className="text-center text-4xl font-bold text-gray-800 mb-6">
+
                     Jetzt Werkstatttermin buchen
                 </h1>
                 <p className="text-center font-bold pb-2">… und bequem nach dem Service in der Werkstatt bezahlen.</p>
@@ -35,6 +36,7 @@ const WorkshopBookingPage = () => {
                 </p>
                 <form className="space-y-6">
                     <div>
+
                         <select
                             defaultValue=""
                             className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
@@ -46,6 +48,7 @@ const WorkshopBookingPage = () => {
                             <option className="py-2" value="2">Radwechsel</option>
                             <option className="py-2" value="3">Ölwechsel</option>
                             <option className="py-2" value="4">Sonstiges</option>
+
                         </select>
 
                     </div>
