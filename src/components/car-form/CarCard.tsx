@@ -19,7 +19,6 @@ import { useState } from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { WiFog } from "react-icons/wi";
 
-
 interface ICarCardProps {
   availableCars: ICarRent[];
 }
@@ -29,6 +28,7 @@ const CarCard = ({ availableCars }: ICarCardProps) => {
   const [detailsVisibility, setDetailsVisibility] = useState<{
     [key: string]: boolean;
   }>({});
+  const [isCarVerfügbar,setIsCarVerfügbar] = useState<boolean>(false)
   const rentCars = useSelector(getAllRentCars);
   const router = useRouter();
 
@@ -43,21 +43,24 @@ const CarCard = ({ availableCars }: ICarCardProps) => {
     setLoading(true);
     localStorage.setItem("carRentId", carId || "");
     setTimeout(() => {
-      router.push(`/fahrzeugvermietung/${carId}`);
+     //
+     setIsCarVerfügbar(true)
       setLoading(false);
     }, 3000);
   };
-
+const carId = localStorage.getItem("carRentId" )
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className=" flex items-center gap-5 border-t-transparent rounded-full antialiased">
-         <div className=" flex items-center gap-1 text-3xl text-orange-400">
-            <WiFog className="animate-pulse"/><WiFog className="animate-pulse" /><WiFog className="animate-pulse"/>
-         </div> 
-        <div>
-        <FaCarSide className="text-orange-400 text-5xl sm:text-[8rem] animate-bounce" />
-        </div>
+          <div className=" flex items-center gap-1 text-3xl text-orange-400">
+            <WiFog className="animate-pulse" />
+            <WiFog className="animate-pulse" />
+            <WiFog className="animate-pulse" />
+          </div>
+          <div>
+            <FaCarSide className="text-orange-400 text-5xl sm:text-[8rem] animate-bounce" />
+          </div>
         </div>
       </div>
     );
@@ -65,8 +68,8 @@ const CarCard = ({ availableCars }: ICarCardProps) => {
 
   return (
     <div>
-      <div className="mt-6 ">
-        <div className="flex flex-col ">
+      <div className={`mt-6  `}>
+        <div className={`flex flex-col ${isCarVerfügbar === true ? " blur-xl" : " blur-none"}`}>
           {(availableCars.length > 0 ? availableCars : rentCars).map((car) => (
             <Card key={car._id} className="flex flex-col gap-1">
               <div className="p-2 border rounded-lg shadow hover:shadow-lg transition-shadow duration-300 bg-white cursor-pointer flex md:justify-between flex-col md:flex-row items-center mt-3">
@@ -233,7 +236,34 @@ const CarCard = ({ availableCars }: ICarCardProps) => {
             </Card>
           ))}
         </div>
+        <div className={`z-50   absolute top-[50%]  w-full  ${isCarVerfügbar === true ? "flex justify-center" : "hidden"}`}>
+        <div className=" px-2 py-6 flex flex-col gap-6   w-1/3 bg-white rounded-md">
+          <h1 className=" font-bold text-xs md:text-sm xl:text-2xl text-center">Sie haben ein Fahrzeug mit geringer Verfügbarkeit ausgewählt</h1>
+          <p className=" text-center ">
+            Sie haben eine Fahrzeugkategorie mit geringer Verfügbarkeit
+            ausgewählt. Sobald Ihre Buchung abgeschlossen ist, wird sich die
+            Station nach Prüfung der Verfügbarkeit innerhalb von 8 Stunden bei
+            Ihnen melden, um die Buchung zu bestätigen. Falls die Buchung nicht
+            bestätigt wird, bitten wir Sie eine neue Buchung zu tätigen.
+          </p>
+          <div className=" cursor-pointer flex py-4  items-center justify-center gap-4">
+            <button
+            onClick={()=>{
+                router.push(`/fahrzeugvermietung/${carId}`);
+            }}
+            className=" bg-yellow-400 font-bold md:text-xl px-6 py-2 text-sm rounded-md">
+              Weiter mit diesem Fahrzeug
+            </button>
+            <button
+            onClick={()=>setIsCarVerfügbar(false)}
+            className=" cursor-pointer rounded-md font-bold px-6 py-2 border-2 border-orange-400 text-orange-400">
+              Ein andere Fahrzeug auswählen
+            </button>
+          </div>
+        </div>
       </div>
+      </div>
+    
     </div>
   );
 };
