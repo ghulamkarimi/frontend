@@ -60,7 +60,7 @@ const CarSearch = () => {
       );
       return;
     }
-    setLoading(true); 
+    setLoading(true);
 
     setTimeout(() => {
       const pickupDateTime = new Date(pickupDate);
@@ -159,8 +159,10 @@ const CarSearch = () => {
             </p>
           </div>
         </div>
-
       </div>
+
+      <p className="text-center py-2 px-2 font-bold bg-orange-500 rounded-lg">Das Auto kann im Umkreis von 20 km zu Ihnen transportiert werden. Rufen Sie für weitere Details gerne an.</p>
+
       <div className={`mt-3 ${showCalender ? "flex" : "hidden"}`}>
         <CalenderC onDateSelect={handleDateSelect} />
       </div>

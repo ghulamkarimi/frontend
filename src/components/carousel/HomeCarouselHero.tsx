@@ -11,7 +11,7 @@ const CarouselItem = [
   },
   {
     id: 2,
-    title: " Reifen ,Service, ...",
+    title: " Reifen, Service, ...",
     description: "Beste Angebote für Sie",
     image: "/reifenCarousel.png",
   },
@@ -62,8 +62,8 @@ const HomeCarouselHero = () => {
             <img className="w-full h-full object-cover" src={item.image} alt={item.title} />
             {/* Text Overlay */}
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white p-4">
-              <h2 className="text-3xl font-bold mb-2 ">{item.title}</h2>
-              <p className="text-lg font-bold">{item.description}</p>
+              <h2 className="text-4xl font-bold mb-2">{item.title}</h2>
+              <p className="text-xl font-bold">{item.description}</p>
             </div>
           </div>
         ))}
