@@ -87,3 +87,16 @@ export interface IOffer {
     discountPercentage: string;
     userId: string;
 }
+
+export interface  IAppointment {
+    _id: string
+    service: string;
+    date: string;
+    fullName: string;
+    email: string;
+    phone: string;
+    notes: string;
+    licensePlate: string;
+}
+
+export type TAppointment = Partial<IAppointment>;

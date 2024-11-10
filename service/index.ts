@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TCarRent, TUser } from '../interface';
+import { IAppointment, TAppointment, TCarRent, TUser } from '../interface';
 import { TBuy } from '../interface/index';
 import { axiosJWT } from './axiosJwt';
 
@@ -66,4 +66,10 @@ export const getCarBuys = ()=> {
 export const getOffers = ()=> {
     const url = `${SERVER_URL}/offer/getOffers`;
     return axios.get(url)
+}
+
+// Appointment
+export const createAppointment = (appointment : TAppointment)=> {
+    const url = `${SERVER_URL}/appointment`;
+    return axios.post(url, appointment)
 }
