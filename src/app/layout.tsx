@@ -6,7 +6,6 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "@/components/Footer";
-import ErrorBoundary from "@/components/cookie/CookieBanner";
 import CookieBanner from "@/components/cookie/CookieBanner";
 
 
@@ -29,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps) {
     <ReduxProvider>
      
         <html lang="de">
-          <body className="bg-gray-200">
+          <body className="bg-gray-200 ">
             <header>
               <Navbar />
             </header>

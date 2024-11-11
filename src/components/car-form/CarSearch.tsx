@@ -12,7 +12,13 @@ import Tilt from "react-parallax-tilt";
 import CarCard from "./CarCard";
 
 
-const CarSearch = () => {
+
+interface ICarSearchProps{
+  isCarVerfügbar: boolean;
+  setIsCarVerfügbar:(isCarVerfügbar:boolean)=>void
+}
+
+const CarSearch = ({isCarVerfügbar,setIsCarVerfügbar}:ICarSearchProps) => {
 
   const rentCars = useSelector(getAllRentCars);
   const [availableCars, setAvailableCars] = useState(rentCars);
@@ -231,7 +237,7 @@ const CarSearch = () => {
       )}
 
       <div className=" w-full">
-        <CarCard availableCars={availableCars} />
+        <CarCard availableCars={availableCars} isCarVerfügbar={isCarVerfügbar} setIsCarVerfügbar={setIsCarVerfügbar} />
       </div>
     </div>
   );
