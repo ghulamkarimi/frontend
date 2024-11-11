@@ -1,16 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 const MenuItems = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-
-        const userId = localStorage.getItem("userId");
-        setIsLoggedIn(userId !== null);
-    }, []);
-
     const menuItems = [
         { title: 'Home', url: '/' },
         { title: 'Fahrzeugvermietung', url: '/fahrzeugvermietung' },
@@ -21,14 +9,7 @@ const MenuItems = () => {
         { title: 'Datenschutz', url: '/datenschutz' },
 
     ];
-
-    if (!isLoggedIn) {
-        menuItems.push(
-            { title: 'Register', url: '/register' },
-            { title: 'Login', url: '/login' }
-        );
-    }
-
+    
     return menuItems;
 };
 

@@ -22,7 +22,7 @@ const Register = () => {
 
     const formSchema = Yup.object({
         firstName: Yup.string().required('Required')
-            .matches(/^[A-Za-z]+$/, "Only alphabets are allowed in first name"),
+            .matches(/^[A-Za-z\s]+$/, "Only alphabets and spaces are allowed in name"),
 
         lastName: Yup.string().required('Required')
             .matches(/^[A-Za-z]+$/, "Only alphabets are allowed in last name"),
@@ -52,7 +52,7 @@ const Register = () => {
             try {
                 const response = await dispatch(userRegisterApi(values)).unwrap();
                 NotificationService.success(response.message || "Registration successful");
-                 setTimeout(() => {
+                setTimeout(() => {
                     router.push("/login");
                 }, 4000);
             } catch (error: any) {
@@ -84,6 +84,9 @@ const Register = () => {
                         onBlur={formik.handleBlur}
 
                     />
+                    {formik.errors.firstName && formik.touched.firstName && (
+                        <div className="text-red-500">{formik.errors.firstName}</div>
+                    )}
                     <input type="text"
                         placeholder="lastName"
                         className="inputRegister"
@@ -93,6 +96,9 @@ const Register = () => {
                         onBlur={formik.handleBlur}
 
                     />
+                    {formik.errors.lastName && formik.touched.lastName && (
+                        <div className="text-red-500">{formik.errors.lastName}</div>
+                    )}
                     <input type="email"
                         placeholder="Email"
                         className="inputRegister"
@@ -102,6 +108,9 @@ const Register = () => {
                         onBlur={formik.handleBlur}
 
                     />
+                    {formik.errors.email && formik.touched.email && (
+                        <div className="text-red-500">{formik.errors.email}</div>
+                    )}
                     <div className="flex relative items-center justify-center">
                         <input
                             className={` inputRegister ${formik.touched.password && formik.errors.password && "border-red-500"}`}
@@ -125,7 +134,7 @@ const Register = () => {
                     </div>
                     <div className="flex items-center justify-center relative">
                         <input
-                            className={`inputRegister ${formik.touched.confirmPassword && formik.errors.confirmPassword && "border-red-500"}`}
+                            className={` inputRegister ${formik.touched.password && formik.errors.password && "border-red-500"}`}
                             placeholder="Confirm Password"
                             type={showPassword ? "text" : "password"}
                             name="confirmPassword"
@@ -133,6 +142,7 @@ const Register = () => {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
+
                         {showPassword ? (
                             <IoEyeSharp
                                 onClick={() => setShowPassword(!showPassword)}

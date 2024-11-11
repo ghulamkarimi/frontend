@@ -42,14 +42,12 @@ const WorkshopBookingPage = () => {
         onSubmit: async (values) => {
             try {
                 await dispatch(createAppointmentApi(values)).unwrap();
-                NotificationService.success('Termin erfolgreich gebucht!');
+                NotificationService.success('Termin erfolgreich gebucht! Sie erhalten eine Bestätigung per E-Mail.');
             } catch (error: any) {
                 console.error('Fehler:', error);  // Ausgabe des gesamten Fehlerobjekts
                 const errorMessage = error?.message || "Ein unbekannter Fehler ist aufgetreten";
                 NotificationService.error(errorMessage);
             }
-            
-            
         }
     });
 
