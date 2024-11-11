@@ -22,15 +22,21 @@ import { WiFog } from "react-icons/wi";
 interface ICarCardProps {
   availableCars: ICarRent[];
   isCarVerfügbar: boolean;
-  setIsCarVerfügbar:(isCarVerfügbar:boolean)=>void
+  setIsCarVerfügbar: (isCarVerfügbar: boolean) => void;
+  rentalDays: number | null;
 }
 
-const CarCard = ({ availableCars,isCarVerfügbar,setIsCarVerfügbar }: ICarCardProps) => {
+const CarCard = ({
+  availableCars,
+  rentalDays,
+  setIsCarVerfügbar,
+  
+}: ICarCardProps) => {
   const [loading, setLoading] = useState(false);
   const [detailsVisibility, setDetailsVisibility] = useState<{
     [key: string]: boolean;
   }>({});
- 
+
   const rentCars = useSelector(getAllRentCars);
   const router = useRouter();
 
@@ -41,16 +47,21 @@ const CarCard = ({ availableCars,isCarVerfügbar,setIsCarVerfügbar }: ICarCardP
     }));
   };
 
+
+ 
+
+
+ 
   const handleSelectCar = (carId: string) => {
     setLoading(true);
     localStorage.setItem("carRentId", carId || "");
     setTimeout(() => {
-     //
-     setIsCarVerfügbar(true)
+      //
+      setIsCarVerfügbar(true);
       setLoading(false);
     }, 3000);
   };
-const carId = localStorage.getItem("carRentId" )
+  const carId = localStorage.getItem("carRentId");
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -136,7 +147,15 @@ const carId = localStorage.getItem("carRentId" )
 
                 <CardFooter className="pt-6">
                   <div className="text-white flex flex-col gap-4">
-                    <p>
+                    <p className=" flex flex-col gap-2">
+                      <span className=" text-red-500">
+                        {car.totalPrice
+                          ? `${new Intl.NumberFormat("de-DE", {
+                              style: "currency",
+                              currency: "EUR",
+                            }).format(car.totalPrice)} /${rentalDays}Tag`
+                          : ``}
+                      </span>
                       <span className="cardInfoSell">
                         <TbManualGearboxFilled className="cardInfoSellIcon" />
                         {car.carPrice} $ / Tag
@@ -238,9 +257,7 @@ const carId = localStorage.getItem("carRentId" )
             </Card>
           ))}
         </div>
-       
       </div>
-    
     </div>
   );
 };

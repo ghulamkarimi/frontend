@@ -1,13 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaCalendarAlt,
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import CalenderC from "./Calenderc";
 import TimeC from "./TimeC";
-import { useSelector } from "react-redux";
-import { getAllRentCars } from "../../../feature/reducers/carRentSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllRentCars, setTotalPrice } from "../../../feature/reducers/carRentSlice";
 import Tilt from "react-parallax-tilt";
 import CarCard from "./CarCard";
 
@@ -20,24 +20,49 @@ interface ICarSearchProps{
 
 const CarSearch = ({isCarVerfügbar,setIsCarVerfügbar}:ICarSearchProps) => {
 
+
+
+  const dispatch = useDispatch()
   const rentCars = useSelector(getAllRentCars);
   const [availableCars, setAvailableCars] = useState(rentCars);
   const [showCalender, setIsShowCalender] = useState<boolean>(false);
   const [showTime, setIsShowTime] = useState<boolean>(false);
-  const [pickupDate, setPickupDate] = useState<Date | null>(null);
-  const [pickupTime, setPickupTime] = useState<string | null>(null);
+
   const [showCalenderReturn, setIsShowCalenderReturn] =
     useState<boolean>(false);
   const [showTimeReturn, setIsShowTimeReturn] = useState<boolean>(false);
-  const [returnDate, setReturnDate] = useState<Date | null>(null);
-  const [returnTime, setReturnTime] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [rentalDays, setRentalDays] = useState<number | null>(null); 
 
+  const [pickupDate, setPickupDate] = useState<Date | null>(() => {
+    const storedPickupDate = localStorage.getItem("pickupDate");
+    return storedPickupDate ? new Date(storedPickupDate) : null;
+  });
+  const [pickupTime, setPickupTime] = useState<string | null>(() => {
+    return localStorage.getItem("pickupTime") || null;
+  });
+  const [returnDate, setReturnDate] = useState<Date | null>(() => {
+    const storedReturnDate = localStorage.getItem("returnDate");
+    return storedReturnDate ? new Date(storedReturnDate) : null;
+  });
+  const [returnTime, setReturnTime] = useState<string | null>(() => {
+    return localStorage.getItem("returnTime") || null;
+  });
 
   const [age, setAge] = useState<number | null>(null);
   const handleAgeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setAge(Number(event.target.value));
   };
+
+
+
+  useEffect(() => {
+    if (pickupDate) localStorage.setItem("pickupDate", pickupDate.toISOString());
+    if (pickupTime) localStorage.setItem("pickupTime", pickupTime);
+    if (returnDate) localStorage.setItem("returnDate", returnDate.toISOString());
+    if (returnTime) localStorage.setItem("returnTime", returnTime);
+
+  }, [pickupDate, pickupTime, returnDate, returnTime]);
 
   const handleDateSelect = (date: Date | null) => {
     setPickupDate(date);
@@ -58,7 +83,7 @@ const CarSearch = ({isCarVerfügbar,setIsCarVerfügbar}:ICarSearchProps) => {
     setReturnTime(time);
     setIsShowTimeReturn(false);
   };
-
+  
   const checkAvailability = () => {
     if (!pickupDate || !pickupTime || !returnDate || !returnTime) {
       alert(
@@ -66,22 +91,27 @@ const CarSearch = ({isCarVerfügbar,setIsCarVerfügbar}:ICarSearchProps) => {
       );
       return;
     }
-
+  
     setLoading(true);
-
-
+  
     setTimeout(() => {
       const pickupDateTime = new Date(pickupDate);
       pickupDateTime.setHours(
         Number(pickupTime.split(":")[0]),
         Number(pickupTime.split(":")[1])
       );
-
+  
       const returnDateTime = new Date(returnDate);
       returnDateTime.setHours(
         Number(returnTime.split(":")[0]),
         Number(returnTime.split(":")[1])
       );
+  
+      // Calculate rental duration
+      const rentalDurationInMs = returnDateTime.getTime() - pickupDateTime.getTime();
+      const calculatedRentalDays = Math.ceil(rentalDurationInMs / (1000 * 60 * 60 * 24));
+      setRentalDays(calculatedRentalDays);
+     
 
       const filteredCars = rentCars.filter((car) => {
         return (
@@ -94,11 +124,20 @@ const CarSearch = ({isCarVerfügbar,setIsCarVerfügbar}:ICarSearchProps) => {
             }))
         );
       });
-
-      setAvailableCars(filteredCars);
+  
+     
+      const updatedCars = filteredCars.map((car) => ({
+        ...car,
+        totalPrice: Number(car.carPrice) * calculatedRentalDays, 
+      }));
+  
+     
+      setAvailableCars(updatedCars);
+      dispatch(setTotalPrice(updatedCars[0]?.totalPrice || 0));
       setLoading(false);
-    }, 4000);
+    }, 2000);
   };
+  
 
 
   return (
@@ -237,7 +276,7 @@ const CarSearch = ({isCarVerfügbar,setIsCarVerfügbar}:ICarSearchProps) => {
       )}
 
       <div className=" w-full">
-        <CarCard availableCars={availableCars} isCarVerfügbar={isCarVerfügbar} setIsCarVerfügbar={setIsCarVerfügbar} />
+        <CarCard availableCars={availableCars} isCarVerfügbar={isCarVerfügbar} setIsCarVerfügbar={setIsCarVerfügbar} rentalDays={rentalDays}/>
       </div>
     </div>
   );

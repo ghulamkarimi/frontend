@@ -12,6 +12,7 @@ export interface ICarRentState {
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
  // carRentId: string | null;
+ totalPrice: number | null,
 }
 
 const carRentAdapter = createEntityAdapter<ICarRent, string>({
@@ -23,6 +24,7 @@ const initialState: ICarRentState & EntityState<ICarRent, string> =
     status: "idle",
     error: null,
     carRentId: "",
+    totalPrice:0
   });
 
 export const getRentCarApi = createAsyncThunk(
@@ -56,6 +58,9 @@ const carRentSlice = createSlice({
   //  setCarId: (state, action) => {
    //   state.carRentId = action.payload;
    // },
+   setTotalPrice:(state,action)=>{
+    state.totalPrice = action.payload
+   }
   },
   extraReducers: (builder) => {
     builder
@@ -85,7 +90,7 @@ const carRentSlice = createSlice({
 });
 
 
-export const {} = carRentSlice.actions
+export const {setTotalPrice} = carRentSlice.actions
 
 export const { selectAll: getAllRentCars, selectById: getRentCarById } =
   carRentAdapter.getSelectors((state: RootState) => state.carRent);
