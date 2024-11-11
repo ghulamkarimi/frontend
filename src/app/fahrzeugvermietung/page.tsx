@@ -14,12 +14,12 @@ const page = () => {
         <div className={`mx-w-full flex justify-center relative mt-2`}>
             
          
-            <div className={`xl:w-2/3 w-full relative ${isCarVerfügbar ? "blur-sm z-0" : "z-10"}`}>
+            <div className={`xl:w-2/3 w-full relative overflow-hidden ${isCarVerfügbar ? "blur-sm z-0" : "z-10"}`}>
                 <CarSearch isCarVerfügbar={isCarVerfügbar} setIsCarVerfügbar={setIsCarVerfügbar}/>
             </div>
 
           
-            <div className={`z-50 absolute top-0 xl:top[30%] max-w-full h-full xl:h-[30rem] ${isCarVerfügbar ? "flex  justify-center" : "hidden"}`}>
+            <div className={`z-50 absolute top-0 xl:top[30%] max-w-full  h-[30rem] overflow-hidden ${isCarVerfügbar ? "flex  justify-center" : "hidden"}`}>
                 <div className="px-2 py-6 flex flex-col w-full md:w-2/3 items-center  gap-4 mt-4  bg-white rounded-md">
                     <h1 className="font-bold text-sm md:text-sm xl:text-2xl text-center">
                         Sie haben ein Fahrzeug mit geringer Verfügbarkeit ausgewählt
