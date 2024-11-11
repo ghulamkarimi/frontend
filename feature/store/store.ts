@@ -4,7 +4,7 @@ import userReducer, { fetchUsers, setToken } from "../reducers/userSlice";
 import appReducer from "../reducers/appSlice"; 
 import offerReducer, { fetchOffers } from "../reducers/offerSlice";
 import { getCarRent, refreshToken} from "../../service";
-
+import workshopReducer from "../reducers/workshopSlice";
 import carBuyReducer, { fetchCarBuys } from "../reducers/carBuySlice";
 
 
@@ -20,6 +20,7 @@ export const store = configureStore({
         carRent:carRentReducer,
         carBuys: carBuyReducer,
         offer: offerReducer,
+        workshop : workshopReducer,
 
     },
     middleware: (getDefaultMiddleware) =>

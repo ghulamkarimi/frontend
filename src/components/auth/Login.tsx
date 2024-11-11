@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link";
 import React from "react";
-import { IoReturnDownBack } from "react-icons/io5";
+import { IoEyeSharp, IoReturnDownBack } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../feature/store/store";
 import * as Yup from 'yup';
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 const Login = () => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter()
+
     const formSchema = Yup.object({
         email: Yup.string().email('Invalid email address')
             .required('Required'),
@@ -37,12 +38,12 @@ const Login = () => {
             try {
                 const response = await dispatch(userLoginApi(values)).unwrap();
                 NotificationService.success(response.message || "Login successful");
-                setTimeout(()=> {
+                setTimeout(() => {
                     router.push("/")
-                },4000)
+                }, 4000)
                 dispatch(setUserInfo(response.data.userInfo));
                 localStorage.setItem("exp", response.data.userInfo.exp)
-               
+
 
             } catch (error: any) {
                 NotificationService.error(error.message);
@@ -72,13 +73,18 @@ const Login = () => {
                         placeholder="Email"
                         className="inputRegister"
                     />
-                    <input type="password"
-                        name="password"
-                        value={formik.values.password}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        placeholder="Password"
-                        className="inputRegister" />
+                    <div className="flex relative items-center justify-center">
+                        <input type="password"
+                            name="password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            placeholder="Password"
+                            className="inputRegister" />
+
+
+                    </div>
+
                     <button
                         className={`p-2 my-2 bg-blue-500 text-white rounded-md ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         type="submit"
