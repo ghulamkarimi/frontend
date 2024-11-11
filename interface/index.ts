@@ -73,6 +73,7 @@ export interface ICarRent {
     createdAt:string ;
     updatedAt?: string;
     bookedSlots: Array<{ start: string; end: string }>;
+    totalPrice?: number;
 }
 
 export type TCarRent = Partial<ICarRent>
