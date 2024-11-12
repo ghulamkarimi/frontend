@@ -12,7 +12,7 @@ export interface ICarRentState {
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
  // carRentId: string | null;
- totalPrice: number | null,
+ totalPrice: number ;
 }
 
 const carRentAdapter = createEntityAdapter<ICarRent, string>({

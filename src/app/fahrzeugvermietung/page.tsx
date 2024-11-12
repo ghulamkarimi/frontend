@@ -3,13 +3,16 @@
 import CarSearch from "@/components/car-form/CarSearch";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../feature/store/store";
+import { string } from "yup";
 
 const page = () => {
 
     const carId = localStorage.getItem("carRentId");
     const router = useRouter();
     const [isCarVerfügbar, setIsCarVerfügbar] = useState<boolean>(false);
-
+ const {totalPrice} = useSelector((state:RootState)=> state.carRent)
     return (
         <div className={`mx-w-full flex justify-center relative mt-2`}>
             
@@ -35,6 +38,7 @@ const page = () => {
                         <button
                             onClick={() => {
                                 router.push(`/fahrzeugvermietung/${carId}`);
+                                localStorage.setItem("totalPrice",totalPrice.toString())
                             }}
                             className="bg-yellow-400 font-bold md:text-xl px-6 py-2 text-sm rounded-md">
                             Weiter mit diesem Fahrzeug
