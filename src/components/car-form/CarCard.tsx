@@ -14,22 +14,21 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { ICarRent } from "../../../interface";
 import { useSelector } from "react-redux";
-import { getAllRentCars } from "../../../feature/reducers/carRentSlice";
+import { getAllRentCars, setIsCarVerfügbar } from "../../../feature/reducers/carRentSlice";
 import { useState } from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { WiFog } from "react-icons/wi";
+import { useDispatch } from "react-redux";
 
 interface ICarCardProps {
   availableCars: ICarRent[];
-  isCarVerfügbar: boolean;
-  setIsCarVerfügbar: (isCarVerfügbar: boolean) => void;
   rentalDays: number | null;
 }
 
 const CarCard = ({
   availableCars,
   rentalDays,
-  setIsCarVerfügbar,
+
   
 }: ICarCardProps) => {
   const [loading, setLoading] = useState(false);
@@ -39,7 +38,7 @@ const CarCard = ({
 
   const rentCars = useSelector(getAllRentCars);
   const router = useRouter();
-
+const dispatch = useDispatch()
   const toggleDetails = (carId: string) => {
     setDetailsVisibility((prevState) => ({
       ...prevState,
@@ -57,7 +56,7 @@ const CarCard = ({
     localStorage.setItem("carRentId", carId || "");
     setTimeout(() => {
       //
-      setIsCarVerfügbar(true);
+      dispatch(setIsCarVerfügbar(true));
       setLoading(false);
     }, 3000);
   };
