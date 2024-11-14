@@ -8,7 +8,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../feature/store/store";
 import {
   getRentCarById,
-  setTotalPrice,
+  setIsBasicDetailsActive,
+  setIsMediumDetailsActive,
+  setIsPremiumDetailsActive,
 } from "../../../../feature/reducers/carRentSlice";
 import { FaCheck } from "react-icons/fa6";
 import { AiOutlineClose } from "react-icons/ai";
@@ -20,7 +22,9 @@ const Page = () => {
   );
 
   const dispatch = useDispatch();
-  const { totalPrice } = useSelector((state: RootState) => state.carRent);
+  const { isBasicDetailsActive , isMediumDetailsActive,isPremiumDetailsActive} = useSelector(
+    (state: RootState) => state.carRent
+  );
 
   const [pickupDate, setPickupDate] = useState<string | null>(null);
   const [pickupTime, setPickupTime] = useState<string | null>(null);
@@ -29,12 +33,9 @@ const Page = () => {
   const [pickupLocation, setPickupLocation] = useState<string | null>(null);
   const [age, setAge] = useState<string | null>(null);
 
-  const storedTotalPrice = localStorage.getItem("totalPrice")
+  const storedTotalPrice = localStorage.getItem("totalPrice");
 
-  useEffect(()=>{
-    
-  },[storedTotalPrice])
-
+  useEffect(() => {}, [storedTotalPrice]);
 
   useEffect(() => {
     setPickupDate(localStorage.getItem("pickupDate"));
@@ -130,7 +131,9 @@ const Page = () => {
           </div>
           <div className=" flex flex-col gap-4 mt-2 font-bold text-xl">
             <p>Gesamtpreis</p>
-            <p className=" text-xl font-extrabold">{storedTotalPrice || ""} €</p>
+            <p className=" text-xl font-extrabold">
+              {storedTotalPrice || ""} €
+            </p>
           </div>
         </div>
       </div>
@@ -141,7 +144,9 @@ const Page = () => {
           </p>
           <p className=" xl:col-span-3 flex flex-col">
             <span>Gesamt</span>
-            <span className=" font-bold text-xl">{storedTotalPrice || ""} €</span>
+            <span className=" font-bold text-xl">
+              {storedTotalPrice || ""} €
+            </span>
           </p>
           <button className=" col-span-3 px-6 py-3 bg-yellow-500 rounded-md">
             Reservierung abschließen
@@ -149,127 +154,182 @@ const Page = () => {
         </div>
       </div>
       <div className=" px-2 py-4">
-       <div className=" mt-4 w-1/2 flex justify-center ">
-       <h1 className=" font-bold text-xl xl:text-2xl   ">Schutzpakete</h1>
-       </div>
+        <div className={`mt-4 w-1/2 flex justify-center`}>
+          <h1 className=" font-bold text-xl xl:text-2xl   ">Schutzpakete</h1>
+        </div>
         <div className=" w-full flex xl:flex-row flex-col items-center justify-center">
-        <div className="xl:w-1/4 w-full px-2 mt-2 ">
-          <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
-            <legend className="font-bold text-xs p-1 rounded-md bg-green-400">
-              Ausgewählt
-            </legend>
-            <div className=" font-bold">
-              <h1>Basic</h1>
-              <p>Selbstbeteiligung: 950,00 €</p>
-            </div>
-            <div className=" mt-7 font-bold">
-              <p>Inklusive</p>
-            </div>
-            <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
+          <div className="xl:w-1/4 w-full px-2 mt-2 ">
+            <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
+              <legend className="font-bold text-xs p-1 rounded-md bg-green-400">
+                Ausgewählt
+              </legend>
+              <div className=" font-bold">
+                <h1>Basic</h1>
+                <p>Selbstbeteiligung: 950,00 €</p>
+              </div>
+              <div className=" mt-7 font-bold">
+                <p>Inklusive</p>
+              </div>
+              <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
 
-            <div className=" mt-4 flex flex-col gap-3">
-              <div className=" flex gap-3 items-center">
-                <FaCheck className=" text-green-400 text-sm" />
-                <p className=" text-black ">Kollisionsschäden und Diebstahlschutz</p>
+              <div className=" mt-4 flex flex-col gap-3">
+                <div className=" flex gap-3 items-center">
+                  <FaCheck className=" text-green-400 text-sm" />
+                  <p className=" text-black ">
+                    Kollisionsschäden und Diebstahlschutz
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center">
+                  <AiOutlineClose className=" text-black text-sm" />
+                  <p className=" text-gray-400 underline text-decoration-color-gray-400 decoration-1">
+                    Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer
+                    und Reifen
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center">
+                  <AiOutlineClose className=" text-black text-sm " />
+                  <p className=" text-gray-400 underline text-decoration-color-gray-400 decoration-1">
+                    Insassenunfallschutz
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center ">
+                  <AiOutlineClose className=" text-black text-sm" />
+                  <p className="text-gray-400 underline text-decoration-color-gray-400 decoration-1">
+                    Schutz für persönliche Gegenstände
+                  </p>
+                </div>
               </div>
-              <div className=" flex gap-3 items-center">
-                <AiOutlineClose className=" text-black text-sm" />
-                <p className=" text-gray-400 underline text-decoration-color-gray-400 decoration-1">Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer und Reifen</p>
+              <div className=" mt-5 flex items-center justify-around">
+                <button
+                  onClick={() => {
+                    dispatch(setIsBasicDetailsActive(!isBasicDetailsActive));
+                  }}
+                  className=" cursor-pointer"
+                >
+                  Weitere Details &#8594;
+                </button>
+                <button className=" cursor-none px-6 py-2 bg-gray-300 text-black rounded-md">
+                  {" "}
+                  Ausgewählt
+                </button>
               </div>
-              <div className=" flex gap-3 items-center">
-                <AiOutlineClose className=" text-black text-sm " />
-                <p className=" text-gray-400 underline text-decoration-color-gray-400 decoration-1">Insassenunfallschutz</p>
+            </fieldset>
+          </div>
+          <div className="xl:w-1/4 w-full px-2 mt-2 ">
+            <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
+              <legend className="font-bold text-xs p-1 rounded-md bg-green-400 hidden">
+                Ausgewählt
+              </legend>
+              <div className=" font-bold">
+                <h1>Medium</h1>
+                <p>Selbstbeteiligung: 450,00 €</p>
               </div>
-              <div className=" flex gap-3 items-center ">
-                <AiOutlineClose className=" text-black text-sm" />
-                <p className="text-gray-400 underline text-decoration-color-gray-400 decoration-1">Schutz für persönliche Gegenstände</p>
+              <div className=" mt-7 font-bold">
+                <p>11,10 € /tag </p>
+                <p>Gesamt</p>
               </div>
-            </div>
-            <div className=" mt-5 flex items-center justify-around">
-                <button className=" cursor-pointer" >Weitere Details > </button><button className=" cursor-none px-6 py-2 bg-gray-300 text-black rounded-md"> Ausgewählt</button>
-            </div>
-          </fieldset>
-        </div>
-        <div className="xl:w-1/4 w-full px-2 mt-2 ">
-          <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
-            <legend className="font-bold text-xs p-1 rounded-md bg-green-400 hidden">
-              Ausgewählt
-            </legend>
-            <div className=" font-bold">
-              <h1>Medium</h1>
-              <p>Selbstbeteiligung: 450,00 €</p>
-            </div>
-            <div className=" mt-7 font-bold">
-              <p>11,10 € /tag </p>
-              <p>Gesamt</p>
-            </div>
-            <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
+              <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
 
-            <div className=" mt-4 flex flex-col gap-3">
-              <div className=" flex gap-3 items-center">
-                <FaCheck className=" text-green-400 text-sm" />
-                <p className=" text-black ">Kollisionsschäden und Diebstahlschutz</p>
+              <div className=" mt-4 flex flex-col gap-3">
+                <div className=" flex gap-3 items-center">
+                  <FaCheck className=" text-green-400 text-sm" />
+                  <p className=" text-black ">
+                    Kollisionsschäden und Diebstahlschutz
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center">
+                  <FaCheck className=" text-green-400 text-sm" />
+                  <p className=" text-black underline text-decoration-color-gray-400 decoration-1">
+                    Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer
+                    und Reifen
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center">
+                  <FaCheck className=" text-green-400 text-sm " />
+                  <p className=" text-black underline text-decoration-color-gray-400 decoration-1">
+                    Insassenunfallschutz
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center ">
+                  <AiOutlineClose className=" text-black text-sm" />
+                  <p className="text-gray-400 underline text-decoration-color-gray-400 decoration-1">
+                    Schutz für persönliche Gegenstände
+                  </p>
+                </div>
               </div>
-              <div className=" flex gap-3 items-center">
-                <FaCheck className=" text-green-400 text-sm" />
-                <p className=" text-black underline text-decoration-color-gray-400 decoration-1">Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer und Reifen</p>
+              <div className=" mt-5 flex items-center justify-around">
+                <button
+                onClick={()=>{
+                    dispatch(setIsMediumDetailsActive(!isMediumDetailsActive))
+                }}
+                className=" cursor-pointer">
+                  Weitere Details &#8594;{" "}
+                </button>
+                <button className=" cursor-pointer px-6 py-2 bg-orange-400 text-black rounded-md">
+                  {" "}
+                  Ausgewählt
+                </button>
               </div>
-              <div className=" flex gap-3 items-center">
-                <FaCheck className=" text-green-400 text-sm " />
-                <p className=" text-black underline text-decoration-color-gray-400 decoration-1">Insassenunfallschutz</p>
+            </fieldset>
+          </div>
+          <div className="xl:w-1/4 w-full px-2 mt-2  ">
+            <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
+              <legend className="font-bold text-xs p-1 rounded-md bg-green-400 hidden">
+                Ausgewählt
+              </legend>
+              <div className=" font-bold">
+                <h1>Premium</h1>
+                <p>Selbstbeteiligung: 0,00 €</p>
               </div>
-              <div className=" flex gap-3 items-center ">
-                <AiOutlineClose className=" text-black text-sm" />
-                <p className="text-gray-400 underline text-decoration-color-gray-400 decoration-1">Schutz für persönliche Gegenstände</p>
+              <div className=" mt-7 font-bold">
+                <p>14,20 € /tag </p>
+                <p>Gesamt</p>
               </div>
-            </div>
-            <div className=" mt-5 flex items-center justify-around">
-                <button className=" cursor-pointer" >Weitere Details > </button><button className=" cursor-pointer px-6 py-2 bg-orange-400 text-black rounded-md"> Ausgewählt</button>
-            </div>
-          </fieldset>
-        </div>
-        <div className="xl:w-1/4 w-full px-2 mt-2  ">
-          <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
-            <legend className="font-bold text-xs p-1 rounded-md bg-green-400 hidden">
-              Ausgewählt
-            </legend>
-            <div className=" font-bold">
-              <h1>Premium</h1>
-              <p>Selbstbeteiligung: 0,00 €</p>
-            </div>
-            <div className=" mt-7 font-bold">
-            <p>14,20 € /tag </p>
-            <p>Gesamt</p>
-            </div>
-            <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
+              <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
 
-            <div className=" mt-4 flex flex-col gap-3">
-              <div className=" flex gap-3 items-center">
-                <FaCheck className=" text-green-400 text-sm" />
-                <p className=" text-black ">Kollisionsschäden und Diebstahlschutz</p>
+              <div className=" mt-4 flex flex-col gap-3">
+                <div className=" flex gap-3 items-center">
+                  <FaCheck className=" text-green-400 text-sm" />
+                  <p className=" text-black ">
+                    Kollisionsschäden und Diebstahlschutz
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center">
+                  <FaCheck className=" text-green-400 text-sm" />
+                  <p className=" text-black underline text-decoration-color-gray-400 decoration-1">
+                    Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer
+                    und Reifen
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center">
+                  <FaCheck className=" text-green-400 text-sm " />
+                  <p className=" text-black underline text-decoration-color-gray-400 decoration-1">
+                    Insassenunfallschutz
+                  </p>
+                </div>
+                <div className=" flex gap-3 items-center ">
+                  <FaCheck className=" text-green-400 text-sm" />
+                  <p className="text-black underline text-decoration-color-gray-400 decoration-1">
+                    Schutz für persönliche Gegenstände
+                  </p>
+                </div>
               </div>
-              <div className=" flex gap-3 items-center">
-                <FaCheck className=" text-green-400 text-sm" />
-                <p className=" text-black underline text-decoration-color-gray-400 decoration-1">Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer und Reifen</p>
+              <div className=" mt-5 flex items-center justify-around">
+                <button 
+                onClick={()=>{
+                    dispatch(setIsPremiumDetailsActive(!isPremiumDetailsActive))
+                }}
+                className=" cursor-pointer">
+                  Weitere Details &#8594;{" "}
+                </button>
+                <button className=" cursor-pointer px-6 py-2 bg-orange-400 text-black rounded-md">
+                  {" "}
+                  Ausgewählt
+                </button>
               </div>
-              <div className=" flex gap-3 items-center">
-                <FaCheck className=" text-green-400 text-sm " />
-                <p className=" text-black underline text-decoration-color-gray-400 decoration-1">Insassenunfallschutz</p>
-              </div>
-              <div className=" flex gap-3 items-center ">
-                <FaCheck className=" text-green-400 text-sm" />
-                <p className="text-black underline text-decoration-color-gray-400 decoration-1">Schutz für persönliche Gegenstände</p>
-              </div>
-            </div>
-            <div className=" mt-5 flex items-center justify-around">
-                <button className=" cursor-pointer" >Weitere Details > </button><button className=" cursor-pointer px-6 py-2 bg-orange-400 text-black rounded-md"> Ausgewählt</button>
-            </div>
-          </fieldset>
+            </fieldset>
+          </div>
         </div>
-        </div>
-      </div>
-      <div>
-        
       </div>
     </div>
   );

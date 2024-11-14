@@ -7,14 +7,16 @@ import {
 import { ICarRent } from "../../interface";
 import { getCarRent, getOneCarById } from "../../service";
 import { RootState } from "../store/store";
-import { boolean } from "yup";
 
 export interface ICarRentState {
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   carId: string | null;
- totalPrice: number ;
- isCarVerfügbar:boolean
+  totalPrice: number;
+  isCarVerfügbar: boolean;
+  isBasicDetailsActive: boolean;
+  isMediumDetailsActive: boolean;
+  isPremiumDetailsActive: boolean;
 }
 
 const carRentAdapter = createEntityAdapter<ICarRent, string>({
@@ -26,9 +28,12 @@ const initialState: ICarRentState & EntityState<ICarRent, string> =
     status: "idle",
     error: null,
     carRentId: "",
-    totalPrice:0,
-    isCarVerfügbar:false,
-    carId:"",
+    totalPrice: 0,
+    isCarVerfügbar: false,
+    carId: "",
+    isBasicDetailsActive: false,
+    isMediumDetailsActive: false,
+    isPremiumDetailsActive: false,
   });
 
 export const getRentCarApi = createAsyncThunk(
@@ -59,15 +64,24 @@ const carRentSlice = createSlice({
   name: "carRent",
   initialState,
   reducers: {
-   setCarId: (state, action) => {
+    setCarId: (state, action) => {
       state.carId = action.payload;
     },
-   setTotalPrice:(state,action)=>{
-    state.totalPrice = action.payload
-   },
-   setIsCarVerfügbar:(state,action)=>{
-    state.isCarVerfügbar = action.payload
-   }
+    setTotalPrice: (state, action) => {
+      state.totalPrice = action.payload;
+    },
+    setIsCarVerfügbar: (state, action) => {
+      state.isCarVerfügbar = action.payload;
+    },
+    setIsBasicDetailsActive: (state, action) => {
+      state.isBasicDetailsActive = action.payload;
+    },
+    setIsMediumDetailsActive: (state, action) => {
+      state.isMediumDetailsActive = action.payload;
+    },
+    setIsPremiumDetailsActive: (state, action) => {
+      state.isPremiumDetailsActive = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -96,8 +110,14 @@ const carRentSlice = createSlice({
   },
 });
 
-
-export const {setTotalPrice,setIsCarVerfügbar,setCarId} = carRentSlice.actions
+export const {
+  setTotalPrice,
+  setIsCarVerfügbar,
+  setCarId,
+  setIsBasicDetailsActive,
+  setIsMediumDetailsActive,
+  setIsPremiumDetailsActive,
+} = carRentSlice.actions;
 
 export const { selectAll: getAllRentCars, selectById: getRentCarById } =
   carRentAdapter.getSelectors((state: RootState) => state.carRent);
