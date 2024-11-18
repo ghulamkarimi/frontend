@@ -39,7 +39,8 @@ const CarCard = ({
   const rentCars = useSelector(getAllRentCars);
   const router = useRouter();
 const dispatch = useDispatch()
-  const toggleDetails = (carId: string) => {
+const totalPrice = parseFloat(localStorage.getItem("carRentId") || "0");
+const toggleDetails = (carId: string) => {
     setDetailsVisibility((prevState) => ({
       ...prevState,
       [carId]: !prevState[carId],
@@ -148,12 +149,12 @@ const dispatch = useDispatch()
                   <div className="text-white flex flex-col gap-4">
                     <p className=" flex flex-col gap-2">
                       <span className=" text-red-500">
-                        {car.totalPrice
+                      {rentalDays 
                           ? `${new Intl.NumberFormat("de-DE", {
                               style: "currency",
                               currency: "EUR",
-                            }).format(car.totalPrice)} /${rentalDays}Tag`
-                          : ``}
+                            }).format(Number(car.carPrice) * rentalDays)} / ${rentalDays} Tage`
+                          : ""}
                       </span>
                       <span className="cardInfoSell">
                         <TbManualGearboxFilled className="cardInfoSellIcon" />

@@ -21,16 +21,16 @@ interface LayoutProps {
 }
 
 export default function MainLayout({ children }: LayoutProps) {
-  const { isCarVerfügbar, totalPrice, carId, isBasicDetailsActive,isMediumDetailsActive,isPremiumDetailsActive } =
+  const { isCarVerfügbar, totalPrice,  isBasicDetailsActive,isMediumDetailsActive,isPremiumDetailsActive } =
     useSelector((state: RootState) => state.carRent);
   const dispatch = useDispatch();
   const router = useRouter();
-
+  const storedCarId = localStorage.getItem("carRentId");
   useEffect(() => {
     // Zugriff auf `localStorage` nur im Browser
-    const storedCarId = localStorage.getItem("carRentId");
+    
     dispatch(setCarId(storedCarId));
-  }, []);
+  }, [storedCarId]);
 
   return (
     <main className="relative z-10">
@@ -54,10 +54,10 @@ export default function MainLayout({ children }: LayoutProps) {
             <div className="flex py-4 justify-center gap-4 mt-4">
               <button
                 onClick={() => {
-                  if (carId) {
+                  if (storedCarId) {
                     localStorage.setItem("totalPrice", totalPrice.toString());
                     setTimeout(() => {
-                      router.push(`/fahrzeugvermietung/${carId}`);
+                      router.push(`/fahrzeugvermietung/${storedCarId}`);
                       dispatch(setIsCarVerfügbar(false));
                     }, 2000);
                   }

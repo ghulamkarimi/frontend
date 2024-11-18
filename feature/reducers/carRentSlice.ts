@@ -12,6 +12,7 @@ export interface ICarRentState {
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   carId: string | null;
+  selectedSchutzPacket: string | null;
   totalPrice: number;
   isCarVerfügbar: boolean;
   isBasicDetailsActive: boolean;
@@ -34,6 +35,7 @@ const initialState: ICarRentState & EntityState<ICarRent, string> =
     isBasicDetailsActive: false,
     isMediumDetailsActive: false,
     isPremiumDetailsActive: false,
+    selectedSchutzPacket:null
   });
 
 export const getRentCarApi = createAsyncThunk(
@@ -82,6 +84,9 @@ const carRentSlice = createSlice({
     setIsPremiumDetailsActive: (state, action) => {
       state.isPremiumDetailsActive = action.payload;
     },
+    setSelectedSchutzPackage:(state,action)=>{
+      state.selectedSchutzPacket = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -117,6 +122,7 @@ export const {
   setIsBasicDetailsActive,
   setIsMediumDetailsActive,
   setIsPremiumDetailsActive,
+  setSelectedSchutzPackage,
 } = carRentSlice.actions;
 
 export const { selectAll: getAllRentCars, selectById: getRentCarById } =

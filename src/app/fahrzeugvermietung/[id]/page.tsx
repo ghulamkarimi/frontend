@@ -11,9 +11,10 @@ import {
   setIsBasicDetailsActive,
   setIsMediumDetailsActive,
   setIsPremiumDetailsActive,
+  setSelectedSchutzPackage,
 } from "../../../../feature/reducers/carRentSlice";
-import { FaCheck } from "react-icons/fa6";
-import { AiOutlineClose } from "react-icons/ai";
+
+import PackageOption from "@/components/cards/PackageOption";
 
 const Page = () => {
   const { id: carRentId } = useParams();
@@ -21,10 +22,15 @@ const Page = () => {
     getRentCarById(state, carRentId! as string)
   );
 
+  console.log("getOneCar", getOneCar);
+
   const dispatch = useDispatch();
-  const { isBasicDetailsActive , isMediumDetailsActive,isPremiumDetailsActive} = useSelector(
-    (state: RootState) => state.carRent
-  );
+  const {
+    isBasicDetailsActive,
+    isMediumDetailsActive,
+    isPremiumDetailsActive,
+    selectedSchutzPacket,
+  } = useSelector((state: RootState) => state.carRent);
 
   const [pickupDate, setPickupDate] = useState<string | null>(null);
   const [pickupTime, setPickupTime] = useState<string | null>(null);
@@ -33,7 +39,9 @@ const Page = () => {
   const [pickupLocation, setPickupLocation] = useState<string | null>(null);
   const [age, setAge] = useState<string | null>(null);
 
-  const storedTotalPrice = localStorage.getItem("totalPrice");
+  const storedTotalPrice = parseFloat(
+    localStorage.getItem("totalPrice") || "0"
+  );
 
   useEffect(() => {}, [storedTotalPrice]);
 
@@ -54,6 +62,35 @@ const Page = () => {
     : "Datum nicht verfügbar";
   const formattedPickupTime = pickupTime || "Zeit nicht verfügbar";
   const formattedReturnTime = returnTime || "Zeit nicht verfügbar";
+
+  const handleSelectPacket = (packet: string) =>
+    dispatch(setSelectedSchutzPackage(packet));
+  const toggleDetails = (packet: string) => {
+    if (packet === "Basic")
+      dispatch(setIsBasicDetailsActive(!isBasicDetailsActive));
+    if (packet === "Medium")
+      dispatch(setIsMediumDetailsActive(!isMediumDetailsActive));
+    if (packet === "Premium")
+      dispatch(setIsPremiumDetailsActive(!isPremiumDetailsActive));
+  };
+
+  const calculateRentalDays = () => {
+    if (pickupDate && returnDate) {
+      const pickup = new Date(pickupDate);
+      const returnD = new Date(returnDate);
+      const timeDifference = returnD.getTime() - pickup.getTime();
+      const rentalDays = Math.ceil(timeDifference / (1000 * 3600 * 24)); // Convert ms to days
+      return rentalDays;
+    }
+    return 0;
+  };
+
+  const rentalDays = calculateRentalDays();
+
+  // Calculate total prices for each package
+  const calculateGesamtePriceSchutzPacket = (dailyRate: number) => {
+    return (dailyRate * rentalDays).toFixed(2);
+  };
 
   return (
     <div className=" m-2">
@@ -94,7 +131,10 @@ const Page = () => {
             <p className=" font-bold text-xl">
               {getOneCar?.carName || "Car name not available"}
             </p>
-            <p className="font-bold text-xl"> {storedTotalPrice || ""} €</p>
+            <p className="font-bold text-xl">
+              {" "}
+              {(Number(getOneCar.carPrice) * rentalDays).toFixed(2)} €
+            </p>
           </div>
         </div>
         <div className="bg-white px-2 py-4 rounded-lg w-full md:w-1/5 overflow-hidden h-[11rem]">
@@ -117,7 +157,13 @@ const Page = () => {
               <div className=" border-2 h-9 border-orange-400" />
               <div>
                 <p className="font-bold text-sm"> Extra</p>
-                <span>0.00 €</span>
+                <span>
+                  {selectedSchutzPacket === "Medium"
+                    ? `${calculateGesamtePriceSchutzPacket(11.1)} €`
+                    : selectedSchutzPacket === "Premium"
+                    ? `${calculateGesamtePriceSchutzPacket(14.2)} €`
+                    : "Inklusive"}
+                </span>
               </div>
             </div>
           </div>
@@ -132,7 +178,23 @@ const Page = () => {
           <div className=" flex flex-col gap-4 mt-2 font-bold text-xl">
             <p>Gesamtpreis</p>
             <p className=" text-xl font-extrabold">
-              {storedTotalPrice || ""} €
+              {(() => {
+                const basePrice = (Number(getOneCar.carPrice) * rentalDays);
+                let protectionPrice = 0;
+
+                if (selectedSchutzPacket === "Medium") {
+                  protectionPrice = parseFloat(
+                    calculateGesamtePriceSchutzPacket(11.1)
+                  );
+                } else if (selectedSchutzPacket === "Premium") {
+                  protectionPrice = parseFloat(
+                    calculateGesamtePriceSchutzPacket(14.2)
+                  );
+                }
+
+                const totalPrice = basePrice + protectionPrice;
+                return `${totalPrice.toFixed(2)} €`;
+              })()}
             </p>
           </div>
         </div>
@@ -145,7 +207,23 @@ const Page = () => {
           <p className=" xl:col-span-3 flex flex-col">
             <span>Gesamt</span>
             <span className=" font-bold text-xl">
-              {storedTotalPrice || ""} €
+            {(() => {
+                const basePrice = (Number(getOneCar.carPrice) * rentalDays);
+                let protectionPrice = 0;
+
+                if (selectedSchutzPacket === "Medium") {
+                  protectionPrice = parseFloat(
+                    calculateGesamtePriceSchutzPacket(11.1)
+                  );
+                } else if (selectedSchutzPacket === "Premium") {
+                  protectionPrice = parseFloat(
+                    calculateGesamtePriceSchutzPacket(14.2)
+                  );
+                }
+
+                const totalPrice = basePrice + protectionPrice;
+                return `${totalPrice.toFixed(2)} €`;
+              })()}
             </span>
           </p>
           <button className=" col-span-3 px-6 py-3 bg-yellow-500 rounded-md">
@@ -157,178 +235,61 @@ const Page = () => {
         <div className={`mt-4 w-1/2 flex justify-center`}>
           <h1 className=" font-bold text-xl xl:text-2xl   ">Schutzpakete</h1>
         </div>
-        <div className=" w-full flex xl:flex-row flex-col items-center justify-center">
-          <div className="xl:w-1/4 w-full px-2 mt-2 ">
-            <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
-              <legend className="font-bold text-xs p-1 rounded-md bg-green-400">
-                Ausgewählt
-              </legend>
-              <div className=" font-bold">
-                <h1>Basic</h1>
-                <p>Selbstbeteiligung: 950,00 €</p>
-              </div>
-              <div className=" mt-7 font-bold">
-                <p>Inklusive</p>
-              </div>
-              <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
 
-              <div className=" mt-4 flex flex-col gap-3">
-                <div className=" flex gap-3 items-center">
-                  <FaCheck className=" text-green-400 text-sm" />
-                  <p className=" text-black ">
-                    Kollisionsschäden und Diebstahlschutz
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center">
-                  <AiOutlineClose className=" text-black text-sm" />
-                  <p className=" text-gray-400 underline text-decoration-color-gray-400 decoration-1">
-                    Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer
-                    und Reifen
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center">
-                  <AiOutlineClose className=" text-black text-sm " />
-                  <p className=" text-gray-400 underline text-decoration-color-gray-400 decoration-1">
-                    Insassenunfallschutz
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center ">
-                  <AiOutlineClose className=" text-black text-sm" />
-                  <p className="text-gray-400 underline text-decoration-color-gray-400 decoration-1">
-                    Schutz für persönliche Gegenstände
-                  </p>
-                </div>
-              </div>
-              <div className=" mt-5 flex items-center justify-around">
-                <button
-                  onClick={() => {
-                    dispatch(setIsBasicDetailsActive(!isBasicDetailsActive));
-                  }}
-                  className=" cursor-pointer"
-                >
-                  Weitere Details &#8594;
-                </button>
-                <button className=" cursor-none px-6 py-2 bg-gray-300 text-black rounded-md">
-                  {" "}
-                  Ausgewählt
-                </button>
-              </div>
-            </fieldset>
-          </div>
-          <div className="xl:w-1/4 w-full px-2 mt-2 ">
-            <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
-              <legend className="font-bold text-xs p-1 rounded-md bg-green-400 hidden">
-                Ausgewählt
-              </legend>
-              <div className=" font-bold">
-                <h1>Medium</h1>
-                <p>Selbstbeteiligung: 450,00 €</p>
-              </div>
-              <div className=" mt-7 font-bold">
-                <p>11,10 € /tag </p>
-                <p>Gesamt</p>
-              </div>
-              <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
+        {/* Basic Package Option */}
+        <div className=" w-full flex flex-col lg:flex-row ">
+          <PackageOption
+            name="Basic"
+            deductible="500"
+            dailyRate="InKlusive "
+            features={[
+              "Kollisionsschäden und Diebstahlschutz",
+              "Windschutzscheibenschutz",
+              "Insassenunfallschutz",
+              "Keine Abdeckung für persönliche Gegenstände",
+            ]}
+            isSelected={selectedSchutzPacket === "Basic"}
+            onSelect={() => handleSelectPacket("Basic")}
+            onToggleDetails={() => toggleDetails("Basic")}
+            isDetailsActive={isBasicDetailsActive}
+            gesamteSchutzPrice=""
+          />
 
-              <div className=" mt-4 flex flex-col gap-3">
-                <div className=" flex gap-3 items-center">
-                  <FaCheck className=" text-green-400 text-sm" />
-                  <p className=" text-black ">
-                    Kollisionsschäden und Diebstahlschutz
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center">
-                  <FaCheck className=" text-green-400 text-sm" />
-                  <p className=" text-black underline text-decoration-color-gray-400 decoration-1">
-                    Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer
-                    und Reifen
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center">
-                  <FaCheck className=" text-green-400 text-sm " />
-                  <p className=" text-black underline text-decoration-color-gray-400 decoration-1">
-                    Insassenunfallschutz
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center ">
-                  <AiOutlineClose className=" text-black text-sm" />
-                  <p className="text-gray-400 underline text-decoration-color-gray-400 decoration-1">
-                    Schutz für persönliche Gegenstände
-                  </p>
-                </div>
-              </div>
-              <div className=" mt-5 flex items-center justify-around">
-                <button
-                onClick={()=>{
-                    dispatch(setIsMediumDetailsActive(!isMediumDetailsActive))
-                }}
-                className=" cursor-pointer">
-                  Weitere Details &#8594;{" "}
-                </button>
-                <button className=" cursor-pointer px-6 py-2 bg-orange-400 text-black rounded-md">
-                  {" "}
-                  Ausgewählt
-                </button>
-              </div>
-            </fieldset>
-          </div>
-          <div className="xl:w-1/4 w-full px-2 mt-2  ">
-            <fieldset className="border-2 border-orange-300 shadow-lg shadow-orange-500 p-4 rounded-lg ">
-              <legend className="font-bold text-xs p-1 rounded-md bg-green-400 hidden">
-                Ausgewählt
-              </legend>
-              <div className=" font-bold">
-                <h1>Premium</h1>
-                <p>Selbstbeteiligung: 0,00 €</p>
-              </div>
-              <div className=" mt-7 font-bold">
-                <p>14,20 € /tag </p>
-                <p>Gesamt</p>
-              </div>
-              <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
+          {/* Medium Package Option */}
+          <PackageOption
+            name="Medium"
+            deductible="450"
+            dailyRate="11.10 €"
+            features={[
+              "Kollisionsschäden und Diebstahlschutz",
+              "Schutz für Windschutzscheibe, Glas, Scheinwerfer, Reifen",
+              "Insassenunfallschutz",
+              "Schutz für persönliche Gegenstände",
+            ]}
+            isSelected={selectedSchutzPacket === "Medium"}
+            onSelect={() => handleSelectPacket("Medium")}
+            onToggleDetails={() => toggleDetails("Medium")}
+            isDetailsActive={isMediumDetailsActive}
+            gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(11.1)}
+          />
 
-              <div className=" mt-4 flex flex-col gap-3">
-                <div className=" flex gap-3 items-center">
-                  <FaCheck className=" text-green-400 text-sm" />
-                  <p className=" text-black ">
-                    Kollisionsschäden und Diebstahlschutz
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center">
-                  <FaCheck className=" text-green-400 text-sm" />
-                  <p className=" text-black underline text-decoration-color-gray-400 decoration-1">
-                    Schutz vor Schäden an Windschutzscheibe, Glas, Scheinwerfer
-                    und Reifen
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center">
-                  <FaCheck className=" text-green-400 text-sm " />
-                  <p className=" text-black underline text-decoration-color-gray-400 decoration-1">
-                    Insassenunfallschutz
-                  </p>
-                </div>
-                <div className=" flex gap-3 items-center ">
-                  <FaCheck className=" text-green-400 text-sm" />
-                  <p className="text-black underline text-decoration-color-gray-400 decoration-1">
-                    Schutz für persönliche Gegenstände
-                  </p>
-                </div>
-              </div>
-              <div className=" mt-5 flex items-center justify-around">
-                <button 
-                onClick={()=>{
-                    dispatch(setIsPremiumDetailsActive(!isPremiumDetailsActive))
-                }}
-                className=" cursor-pointer">
-                  Weitere Details &#8594;{" "}
-                </button>
-                <button className=" cursor-pointer px-6 py-2 bg-orange-400 text-black rounded-md">
-                  {" "}
-                  Ausgewählt
-                </button>
-              </div>
-            </fieldset>
-          </div>
+          {/* Premium Package Option */}
+          <PackageOption
+            name="Premium"
+            deductible="0"
+            dailyRate="14.20 €"
+            features={[
+              "Kollisionsschäden und Diebstahlschutz",
+              "Vollschutz für Windschutzscheibe, Glas, Scheinwerfer, Reifen",
+              "Insassenunfallschutz",
+              "Schutz für persönliche Gegenstände",
+            ]}
+            isSelected={selectedSchutzPacket === "Premium"}
+            onSelect={() => handleSelectPacket("Premium")}
+            onToggleDetails={() => toggleDetails("Premium")}
+            isDetailsActive={isPremiumDetailsActive}
+            gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(14.2)}
+          />
         </div>
       </div>
     </div>
