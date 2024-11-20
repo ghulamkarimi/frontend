@@ -36,7 +36,7 @@ export interface ICarBuy {
     owner: number;
     isSold: boolean;
     carFirstRegistrationDay: string;
-    carImage:string[];
+    carImages:string[];
     carDescription: string;
     carKilometers: string;
     carColor: string;

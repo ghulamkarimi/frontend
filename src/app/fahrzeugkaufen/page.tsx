@@ -16,28 +16,23 @@ const carCategories = ["Transporter", "PKW", "Wohnwagen"];
 
 
 const page = () => {
-
-    
     const cars = useSelector(displayCarBuys);
+    console.log(cars);
     const [searchTerm, setSearchTerm] = useState("");
     const [category, setCategory] = useState("All");
-
+    const filteredCars = cars.filter((car) => {
+        const matchesCategory = category === "All" || car.carCategory === category;
+        const matchesSearchTerm = car?.carTitle?.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesCategory && matchesSearchTerm;
+    });
 
 
     useEffect(() => {
-
-        if (typeof window !== 'undefined') { 
-
-            const initialCategory = localStorage.getItem("initialCategory") || "All";
+        if (typeof window !== 'undefined') {
+            const initialCategory = localStorage.getItem('initialCategory') || 'All';
             setCategory(initialCategory);
         }
     }, []);
-
-    const filteredCars = cars.filter((car) => {
-        const matchesCategory = category === "All" || car.carCategory === category;
-        const matchesSearchTerm = car.carTitle.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesCategory && matchesSearchTerm;
-    });
     return (
         <div className="pt-4">
             <div className="bg-white rounded-2xl shadow-md max-w-2xl mx-auto p-6">
@@ -69,49 +64,50 @@ const page = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-10">
                 {filteredCars.length > 0 ? (
                     filteredCars.map((car) => (
-                        <Card key={car._id} className="p-4 border rounded-lg shadow hover:shadow-lg transition-shadow duration-300 bg-white">
+                        <Card key={car?._id} className="p-4 border rounded-lg shadow hover:shadow-lg transition-shadow duration-300 bg-white">
                             <CardHeader>
                                 <img
-                                    src={car.carImage[0]}
+                                    src={car?.carImages[0] }
                                     alt="Car Image"
                                     className="w-full h-60 object-cover rounded-t-lg"
                                 />
+
                             </CardHeader>
                             <CardContent className="flex flex-col gap-2">
-                                <CardTitle className="text-gray-600">{car.carTitle}</CardTitle>
-                                <p className="text-lg font-semibold">Preis: {car.carPrice}</p>
+                                <CardTitle className="text-gray-600">{car?.carTitle}</CardTitle>
+                                <p className="text-lg font-semibold">Preis: {car?.carPrice}</p>
                                 <div className="grid grid-cols-3 gap-4 pt-4">
                                     <span className="cardInfoSell">
                                         <FaRoad className="cardInfoSellIcon" />
-                                        {car.carKilometers}
+                                        {car?.carKilometers}
                                     </span>
                                     <span className="cardInfoSell">
                                         <FaUserTie className="cardInfoSellIcon" />
-                                        {car.owner}
+                                        {car?.owner}
                                     </span>
                                     <span className="cardInfoSell">
                                         <TbManualGearboxFilled className="cardInfoSellIcon" />
-                                        {car.carGearbox}
+                                        {car?.carGearbox}
                                     </span>
                                 </div>
                                 <div className="grid grid-cols-3 gap-4 pt-4">
                                     <span className="cardInfoSell">
                                         <IoMdSpeedometer className="cardInfoSellIcon" />
-                                        {car.carHorsePower}
+                                        {car?.carHorsePower}
                                     </span>
                                     <span className="cardInfoSell">
                                         <FaCalendarAlt className="cardInfoSellIcon" />
-                                     <FormattedDate date={car.carFirstRegistrationDay} />
+                                        <FormattedDate date={car?.carFirstRegistrationDay} />
                                     </span>
                                     <span className="cardInfoSell">
                                         <BsFillFuelPumpFill className="cardInfoSellIcon" />
-                                        {car.fuelType}
+                                        {car?.fuelType}
                                     </span>
                                 </div>
                             </CardContent>
                             <CardFooter className="pt-6">
                                 <Link
-                                    href={`/fahrzeugkaufen/${car._id}`}
+                                    href={`/fahrzeugkaufen/${car?._id}`}
                                     className="bg-orange-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
                                 >
                                     Details

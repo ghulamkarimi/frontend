@@ -61,12 +61,12 @@ const Page = () => {
                 dotListClass="custom-dot-list-style"
                 itemClass="carousel-item-padding-40-px"
             >
-                {singleCar?.carImage?.map((image, index) => (
+                {singleCar?.carImages?.map((image, index) => (
                     <Zoom key={index}>
                         <img
                             key={index}
                             className="w-full h-[600px] object-cover "
-                            src={singleCar?.carImage[index]}
+                            src={singleCar?.carImages[index]}
                             alt={singleCar?.carTitle || "Car Image"}
                         />
                     </Zoom>
