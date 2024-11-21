@@ -15,6 +15,7 @@ import { AiOutlineClose } from "react-icons/ai";
 
 import { useEffect } from "react";
 import { FaCheck } from "react-icons/fa6";
+import { useSelectPacket } from "@/utils/rentalUtils";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -31,6 +32,7 @@ export default function MainLayout({ children }: LayoutProps) {
     
     dispatch(setCarId(storedCarId));
   }, [storedCarId]);
+
 
   return (
     <main className="relative z-10">
@@ -150,7 +152,14 @@ export default function MainLayout({ children }: LayoutProps) {
                 <button onClick={()=>{
                     dispatch(setIsBasicDetailsActive(false))
                 }} className=" px-8 py-2 border-2 border-orange-400 rounded-md">Züruck zu Ihre Buchung</button>
-                <button  className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md" >Auswählen</button>
+                <button 
+                 onClick={()=>
+                    {
+                    
+                      dispatch(setIsBasicDetailsActive(false))
+                    }
+                  }
+                className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md" >Auswählen</button>
               </div>
             </div>
           </div>
@@ -231,7 +240,15 @@ export default function MainLayout({ children }: LayoutProps) {
                 <button onClick={()=>{
                     dispatch(setIsMediumDetailsActive(false))
                 }} className=" px-8 py-2 border-2 border-orange-400 rounded-md">Züruck zu Ihre Buchung</button>
-                <button  className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md" >Auswählen</button>
+                <button 
+                 onClick={()=>
+                    {
+                    
+                     
+                      dispatch(setIsMediumDetailsActive(false))
+                    }
+                  }
+                className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md" >Auswählen</button>
               </div>
             </div>
           </div>
@@ -312,7 +329,15 @@ export default function MainLayout({ children }: LayoutProps) {
                 <button onClick={()=>{
                     dispatch(setIsPremiumDetailsActive(false))
                 }} className=" px-8 py-2 border-2 border-orange-400 rounded-md">Züruck zu Ihre Buchung</button>
-                <button  className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md" >Auswählen</button>
+                <button 
+                onClick={()=>
+                  {
+                   
+                    dispatch(setIsPremiumDetailsActive(false))
+                  }
+                }
+                
+                className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md" >Auswählen</button>
               </div>
             </div>
           </div>
