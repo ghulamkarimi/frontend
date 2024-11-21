@@ -101,3 +101,13 @@ export interface  IAppointment {
 }
 
 export type TAppointment = Partial<IAppointment>;
+
+
+export interface ISchutzPacket {
+    _id: string;           
+    name: string;           
+    deductible: number;    
+    dailyRate: number;      
+    features: string[];     
+    user: string;           
+  }

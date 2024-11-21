@@ -34,6 +34,8 @@ const PackageOption = ({
     isMediumDetailsActive,
     isPremiumDetailsActive,
   } = useSelector((state: RootState) => state.carRent);
+
+  
   return (
     <div className=" w-full flex xl:flex-row flex-col items-center justify-center">
       <div className=" w-full px-2 mt-2 ">

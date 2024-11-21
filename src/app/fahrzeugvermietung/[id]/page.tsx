@@ -17,7 +17,7 @@ import {
 
 import PackageOption from "@/components/cards/PackageOption";
 import RentalLocationCard from "@/components/cards/RentalLocationCard";
-import { calculateRentalDays, useSelectPacket } from "@/utils/rentalUtils";
+import { calculatePriceSchutzPacket, calculateRentalDays, useSelectPacket } from "@/utils/rentalUtils";
 
 
 const Page = () => {
@@ -92,6 +92,7 @@ const router = useRouter()
   const calculateGesamtePriceSchutzPacket = (dailyRate: number) => {
     return (dailyRate * rentalDays).toFixed(2);
   };
+  // const calculateGesamtePriceSchutzPackets = calculatePriceSchutzPacket(localStorage.getItem("packet")!,rentalDays)
 
   return (
     <div className=" m-2">
@@ -162,7 +163,7 @@ const router = useRouter()
             onSelect={() => handleSelectPacket("Basic")}
             onToggleDetails={() => toggleDetails("Basic")}
             isDetailsActive={isBasicDetailsActive}
-            gesamteSchutzPrice=""
+            gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(1)}
           />
 
           {/* Medium Package Option */}

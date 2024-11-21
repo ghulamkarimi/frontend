@@ -71,17 +71,8 @@ const page = () => {
 
 
 
-  // Switch statement for SchutzPacket logic
-  switch (selectedSchutzPacket) {
-    case "Basic":
-      break;
-    case "Medium":
-      break;
-    case "Premium":
-      break;
-    default:
-      break;
-  }
+
+
 
   return (
     <div className=" max-w-full">
