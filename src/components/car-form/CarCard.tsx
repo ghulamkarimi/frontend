@@ -14,22 +14,21 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { ICarRent } from "../../../interface";
 import { useSelector } from "react-redux";
-import { getAllRentCars } from "../../../feature/reducers/carRentSlice";
+import { getAllRentCars, setIsCarVerfügbar } from "../../../feature/reducers/carRentSlice";
 import { useState } from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { WiFog } from "react-icons/wi";
+import { useDispatch } from "react-redux";
 
 interface ICarCardProps {
   availableCars: ICarRent[];
-  isCarVerfügbar: boolean;
-  setIsCarVerfügbar: (isCarVerfügbar: boolean) => void;
   rentalDays: number | null;
 }
 
 const CarCard = ({
   availableCars,
   rentalDays,
-  setIsCarVerfügbar,
+
   
 }: ICarCardProps) => {
   const [loading, setLoading] = useState(false);
@@ -39,8 +38,9 @@ const CarCard = ({
 
   const rentCars = useSelector(getAllRentCars);
   const router = useRouter();
-
-  const toggleDetails = (carId: string) => {
+const dispatch = useDispatch()
+const totalPrice = parseFloat(localStorage.getItem("carRentId") || "0");
+const toggleDetails = (carId: string) => {
     setDetailsVisibility((prevState) => ({
       ...prevState,
       [carId]: !prevState[carId],
@@ -57,7 +57,7 @@ const CarCard = ({
     localStorage.setItem("carRentId", carId || "");
     setTimeout(() => {
       //
-      setIsCarVerfügbar(true);
+      dispatch(setIsCarVerfügbar(true));
       setLoading(false);
     }, 3000);
   };
@@ -149,12 +149,12 @@ const CarCard = ({
                   <div className="text-white flex flex-col gap-4">
                     <p className=" flex flex-col gap-2">
                       <span className=" text-red-500">
-                        {car.totalPrice
+                      {rentalDays 
                           ? `${new Intl.NumberFormat("de-DE", {
                               style: "currency",
                               currency: "EUR",
-                            }).format(car.totalPrice)} /${rentalDays}Tag`
-                          : ``}
+                            }).format(Number(car.carPrice) * rentalDays)} / ${rentalDays} Tage`
+                          : ""}
                       </span>
                       <span className="cardInfoSell">
                         <TbManualGearboxFilled className="cardInfoSellIcon" />

@@ -13,12 +13,9 @@ import CarCard from "./CarCard";
 
 
 
-interface ICarSearchProps{
-  isCarVerfügbar: boolean;
-  setIsCarVerfügbar:(isCarVerfügbar:boolean)=>void
-}
 
-const CarSearch = ({isCarVerfügbar,setIsCarVerfügbar}:ICarSearchProps) => {
+
+const CarSearch = () => {
 
 
 
@@ -276,7 +273,7 @@ const CarSearch = ({isCarVerfügbar,setIsCarVerfügbar}:ICarSearchProps) => {
       )}
 
       <div className=" w-full">
-        <CarCard availableCars={availableCars} isCarVerfügbar={isCarVerfügbar} setIsCarVerfügbar={setIsCarVerfügbar} rentalDays={rentalDays}/>
+        <CarCard availableCars={availableCars}  rentalDays={rentalDays}/>
       </div>
     </div>
   );

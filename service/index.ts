@@ -73,3 +73,13 @@ export const createAppointment = (appointment : TAppointment)=> {
     const url = `${SERVER_URL}/appointment`;
     return axios.post(url, appointment)
 }
+
+
+
+// SchutzPacket
+
+
+export const allSchutzPacket = ()=>{
+    const url = `${SERVER_URL}/schutzPacket/getAllSchutzPacket`
+    return axios.get(url)
+}
