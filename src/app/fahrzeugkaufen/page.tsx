@@ -11,6 +11,7 @@ import { IoMdSpeedometer } from "react-icons/io";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import FormattedDate from "@/components/FormatesDate";
+import { ICarBuy } from "../../../interface";
 
 const carCategories = ["Transporter", "PKW", "Wohnwagen"];
 
@@ -20,19 +21,24 @@ const page = () => {
     console.log(cars);
     const [searchTerm, setSearchTerm] = useState("");
     const [category, setCategory] = useState("All");
-    const filteredCars = cars.filter((car) => {
-        const matchesCategory = category === "All" || car.carCategory === category;
-        const matchesSearchTerm = car?.carTitle?.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesCategory && matchesSearchTerm;
-    });
-
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const initialCategory = localStorage.getItem('initialCategory') || 'All';
-            setCategory(initialCategory);
-        }
+        const initialCategory = localStorage.getItem('initialCategory') || "All";
+        setCategory(initialCategory);
     }, []);
+    
+    const [filteredCars, setFilteredCars] = useState<ICarBuy[]>([]);
+
+    useEffect(() => {
+        const filtered = cars.filter((car) => {
+            const matchesCategory = category === "All" || car.carCategory === category;
+            const matchesSearchTerm = car?.carTitle?.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesCategory && matchesSearchTerm;
+        });
+        setFilteredCars(filtered);
+    }, [cars, category, searchTerm]);
+    
+
     return (
         <div className="pt-4">
             <div className="bg-white rounded-2xl shadow-md max-w-2xl mx-auto p-6">
@@ -67,10 +73,11 @@ const page = () => {
                         <Card key={car?._id} className="p-4 border rounded-lg shadow hover:shadow-lg transition-shadow duration-300 bg-white">
                             <CardHeader>
                                 <img
-                                    src={car?.carImages[0] }
+                                    src={car?.carImages[0]}
                                     alt="Car Image"
                                     className="w-full h-60 object-cover rounded-t-lg"
                                 />
+
 
                             </CardHeader>
                             <CardContent className="flex flex-col gap-2">
