@@ -17,8 +17,12 @@ import {
 
 import PackageOption from "@/components/cards/PackageOption";
 import RentalLocationCard from "@/components/cards/RentalLocationCard";
-import { calculatePriceSchutzPacket, calculateRentalDays, useSelectPacket } from "@/utils/rentalUtils";
-
+import {
+  calculatePriceSchutzPacket,
+  calculateRentalDays,
+  useSelectPacket,
+} from "@/utils/rentalUtils";
+import { getAllSchutzPacket } from "../../../../feature/reducers/schutzPacketSlice";
 
 const Page = () => {
   const { id: carRentId } = useParams();
@@ -26,8 +30,7 @@ const Page = () => {
     getRentCarById(state, carRentId! as string)
   );
 
-
-const router = useRouter()
+  const router = useRouter();
   const dispatch = useDispatch();
   const {
     isBasicDetailsActive,
@@ -39,10 +42,11 @@ const router = useRouter()
     returnDate,
     returnTime,
   } = useSelector((state: RootState) => state.carRent);
-
+  const allSchutzPaket = useSelector(getAllSchutzPacket);
   const storedTotalPrice = parseFloat(
     localStorage.getItem("totalPrice") || "0"
   );
+  console.log("allSchutzPaket",allSchutzPaket)
 
   useEffect(() => {}, [storedTotalPrice]);
 
@@ -70,21 +74,17 @@ const router = useRouter()
 
   const handleSelectPacket = useSelectPacket();
 
- 
- 
   const toggleDetails = (packet: string) => {
     if (packet === "Basic")
       dispatch(setIsBasicDetailsActive(!isBasicDetailsActive));
-    console.log("packet",packet)
+    console.log("packet", packet);
     if (packet === "Medium")
       dispatch(setIsMediumDetailsActive(!isMediumDetailsActive));
-    console.log("packet",packet)
+    console.log("packet", packet);
     if (packet === "Premium")
       dispatch(setIsPremiumDetailsActive(!isPremiumDetailsActive));
-    console.log("packet",packet)
+    console.log("packet", packet);
   };
-
-
 
   const rentalDays = calculateRentalDays(pickupDate!, returnDate!);
 
@@ -134,10 +134,11 @@ const router = useRouter()
             </span>
           </p>
           <button
-          onClick={()=>{
-            router.push(`/reservation/${carRentId}`)
-          }}
-          className=" col-span-3 px-6 py-3 bg-yellow-500 rounded-md">
+            onClick={() => {
+              router.push(`/reservation/${carRentId}`);
+            }}
+            className=" col-span-3 px-6 py-3 bg-yellow-500 rounded-md"
+          >
             Reservierung abschließen
           </button>
         </div>
@@ -147,60 +148,28 @@ const router = useRouter()
           <h1 className=" font-bold text-xl xl:text-2xl   ">Schutzpakete</h1>
         </div>
 
-        {/* Basic Package Option */}
+      
         <div className=" w-full flex flex-col lg:flex-row ">
-          <PackageOption
-            name="Basic"
-            deductible="500"
-            dailyRate="InKlusive "
-            features={[
-              "Kollisionsschäden und Diebstahlschutz",
-              "Windschutzscheibenschutz",
-              "Insassenunfallschutz",
-              "Keine Abdeckung für persönliche Gegenstände",
-            ]}
-            isSelected={selectedSchutzPacket === "Basic"}
-            onSelect={() => handleSelectPacket("Basic")}
-            onToggleDetails={() => toggleDetails("Basic")}
-            isDetailsActive={isBasicDetailsActive}
-            gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(1)}
-          />
-
-          {/* Medium Package Option */}
-          <PackageOption
-            name="Medium"
-            deductible="450"
-            dailyRate="11.10 €"
-            features={[
-              "Kollisionsschäden und Diebstahlschutz",
-              "Schutz für Windschutzscheibe, Glas, Scheinwerfer, Reifen",
-              "Insassenunfallschutz",
-              "Schutz für persönliche Gegenstände",
-            ]}
-            isSelected={selectedSchutzPacket === "Medium"}
-            onSelect={() => handleSelectPacket("Medium")}
-            onToggleDetails={() => toggleDetails("Medium")}
-            isDetailsActive={isMediumDetailsActive}
-            gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(11.1)}
-          />
-
-          {/* Premium Package Option */}
-          <PackageOption
-            name="Premium"
-            deductible="0"
-            dailyRate="14.20 €"
-            features={[
-              "Kollisionsschäden und Diebstahlschutz",
-              "Vollschutz für Windschutzscheibe, Glas, Scheinwerfer, Reifen",
-              "Insassenunfallschutz",
-              "Schutz für persönliche Gegenstände",
-            ]}
-            isSelected={selectedSchutzPacket === "Premium"}
-            onSelect={() => handleSelectPacket("Premium")}
-            onToggleDetails={() => toggleDetails("Premium")}
-            isDetailsActive={isPremiumDetailsActive}
-            gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(14.2)}
-          />
+        {allSchutzPaket.map((schutzPacket) => (
+            <PackageOption
+              key={schutzPacket._id}
+              name={schutzPacket?.name}
+              deductible={schutzPacket?.deductible}
+              dailyRate={rentalDays}
+              features={schutzPacket?.features || []}
+              isSelected={selectedSchutzPacket === schutzPacket?.name}
+              onSelect={() => handleSelectPacket(schutzPacket?.name)}
+              onToggleDetails={() => toggleDetails(schutzPacket?.name)}
+              isDetailsActive={
+                schutzPacket.name === "Basic"
+                  ? isBasicDetailsActive
+                  : schutzPacket.name === "Medium"
+                  ? isMediumDetailsActive
+                  : isPremiumDetailsActive
+              }
+              gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(schutzPacket?.dailyRate)}
+            />
+          ))}
         </div>
       </div>
     </div>

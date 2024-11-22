@@ -24,7 +24,7 @@ const initialState: ISchutzPacketSate & EntityState<ISchutzPacket, string> =
 
 export const fetchAllSchutzPacketApi = createAsyncThunk("/schutzPacket/fetchAllSchutzPacketApi",async()=>{
     const response = await allSchutzPacket()
-    console.log("response",response)
+    console.log("responseAdel",response)
     return response.data
 })
 
@@ -42,7 +42,7 @@ export const fetchAllSchutzPacketApi = createAsyncThunk("/schutzPacket/fetchAllS
         })
         builder.addCase(fetchAllSchutzPacketApi.fulfilled,(state,action)=>{
             state.status = "succeeded"
-            schutzPacketAdapter.setAll(state,action.payload)
+            schutzPacketAdapter.setAll(state,action.payload.schutzPacket)
         })
         builder.addCase(fetchAllSchutzPacketApi.rejected,(state,action)=>{
             state.status = "failed"

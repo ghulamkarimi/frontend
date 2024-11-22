@@ -18,6 +18,7 @@ import { FaUserTie } from "react-icons/fa6";
 import { GiCarDoor } from "react-icons/gi";
 import { MdOutlineSevereCold } from "react-icons/md";
 import { SiTransmission } from "react-icons/si";
+import FormReservation from "@/components/formReservation/FormReservation";
 
 const page = () => {
   const { id: carRentId } = useParams();
@@ -99,165 +100,9 @@ const page = () => {
         </div>
       </div>
       <div className=" w-full flex lg:flex-row flex-col-reverse ">
-        <div className=" px-2 mb-3 lg:w-3/6 xl:w-4/6">
-          <div className=" py-4 px-2 bg-gray-400 rounded-md flex flex-col gap-3">
-            <h1 className=" font-bold text-xl">1. Fahrer-Details</h1>
-            <div className=" mt-3  ">
-              <div className=" mt-2 flex flex-col gap-2 items-start">
-                <label className="block font-medium">Vorname*</label>
-                <input
-                  id="vorname"
-                  className="outline-none border-2 rounded-md bg-white px-2 py-4 w-full"
-                  type="text"
-                />
-              </div>
-              <div className="mt-2 flex flex-col gap-2 items-start">
-                <label className="block font-medium">Nachname*</label>
-                <input
-                  id="Nachname"
-                  className="outline-none border-2 rounded-md bg-white px-2 py-4 w-full"
-                  type="text"
-                />
-              </div>
-              <div className="mt-2 flex flex-col gap-2 items-start">
-                <label className="block font-medium">Geburtsdatum*</label>
-                <input
-                  id="Geburtsdatum"
-                  className="outline-none border-2 rounded-md bg-white px-2 py-4 w-full"
-                  type="text"
-                />
-              </div>
-              <div className="mt-2 flex flex-col gap-2 items-start">
-                <label className="block font-medium">E-Mail*</label>
-                <input
-                  id=" E-Mail"
-                  className="outline-none border-2 rounded-md bg-white px-2 py-4 w-full"
-                  type="text"
-                />
-              </div>
-              <div className=" mt-3 flex  gap-2 items-center">
-                <input
-                  id=" Angebote"
-                  className="outline-none border-2 rounded-md bg-white  w-7 h-7"
-                  type="checkbox"
-                />
-                <label className="flex font-medium leading-relaxed">
-                  Ich bin damit einverstanden, aktuelle Nachrichten und Angebote
-                  von der A&O zu erhalten.
-                </label>
-              </div>
-              <div className=" mt-3 flex  gap-2 items-center ">
-                <input
-                  id="Neuigkeiten"
-                  className="outline-none border-2 rounded-md bg-white  w-7 h-7"
-                  type="checkbox"
-                />
-                <label className="flex font-medium px-2 leading-relaxed">
-                  Ich möchte Neuigkeiten und Sonderangebote von der A&O
-                  erhalten. finden Sie in unserer Datenschutzbedingungen .
-                </label>
-              </div>
-              <div className="mt-4 flex flex-col gap-2">
-                <label
-                  htmlFor="telefonnummer"
-                  className="font-medium px-2 leading-relaxed"
-                >
-                  Telefonnummer*
-                </label>
-                <div className="mt-2 flex items-center border-2 rounded-md bg-white w-full">
-                  <span className="flex items-center justify-center px-2">
-                    🇩🇪
-                  </span>
-
-                  <span className="px-2 text-gray-600">+49</span>
-
-                  <input
-                    id="telefonnummer"
-                    className="outline-none bg-transparent flex-1 px-2 py-4 text-xl"
-                    type="text"
-                    placeholder="123 456 789"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className=" px-2 mb-3 mt-3 rounded-md bg-gray-400">
-            <div className=" mt-3 py-4 px-2   flex flex-col gap-3">
-              <div className=" flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Kreditkarte</h2>
-                <div className=" flex items-center gap-2">
-                  <img src="/paymentBilder/credit-card-amex.svg" alt="" />
-                  <img src="/paymentBilder/credit-card-discover.svg" alt="" />
-                  <img src="/paymentBilder/credit-card-mastercard.svg" alt="" />
-                  <img src="/paymentBilder/credit-card-visa.svg" alt="" />
-                </div>
-              </div>
-              <p className="text-sm text-gray-500 mb-4">
-                Die Kreditkarte muss auf den Namen des Hauptfahrers ausgestellt
-                sein und muss bei der Abholung vorgelegt werden.
-              </p>
-
-              <div>
-                <label
-                  htmlFor="kartennummer"
-                  className="block font-medium mb-1"
-                >
-                  Kartennummer
-                </label>
-                <input
-                  id="kartennummer"
-                  type="text"
-                  className="w-full border-2 rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Kartennummer"
-                />
-              </div>
-              {/* Ablaufdatum */}
-              <div className="flex gap-4 mt-4">
-                <div className="flex-1">
-                  <label
-                    htmlFor="ablaufdatum"
-                    className="block font-medium mb-1"
-                  >
-                    Ablaufdatum
-                  </label>
-                  <input
-                    id="ablaufdatum"
-                    type="text"
-                    className="w-full border-2 rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="MM/JJ"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label
-                    htmlFor="sicherheitscode"
-                    className="block font-medium mb-1"
-                  >
-                    Sicherheitscode
-                  </label>
-                  <input
-                    id="sicherheitscode"
-                    type="text"
-                    className="w-full border-2 rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="CVV"
-                  />
-                </div>
-              </div>
-              <p className="text-sm text-gray-500 mt-4">
-                Zu Ihrer Sicherheit kann eine Überprüfung Ihrer Identität
-                verlangt werden. Kontaktieren Sie Ihre Bank für weitere
-                Informationen.
-              </p>
-            </div>
-
-            {/* Bestätigen Button */}
-            <button
-              type="submit"
-              className="w-full bg-orange-600 text-white font-medium py-3 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 mb-3"
-            >
-              Bestätigen Sie Ihre Buchung
-            </button>
-          </div>
-        </div>
+       <div className=" lg:w-3/6 xl:w-4/6">
+        <FormReservation/>
+       </div>
         <div className=" mb-4 px-2 lg:w-3/6 xl:w-2/6">
           <div>
             <div>

@@ -7,8 +7,8 @@ import { RootState } from "../../../feature/store/store";
 
 interface PackageOptionProps {
   name: string;
-  deductible: string;
-  dailyRate: string;
+  deductible: number;
+  dailyRate: number;
   features: string[];
   isSelected: boolean;
   onSelect: () => void;
