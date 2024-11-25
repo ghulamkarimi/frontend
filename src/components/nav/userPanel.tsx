@@ -32,13 +32,17 @@ const DropdownMenuDemo = () => {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="flex items-center bg-white gap-4 lg:gap-6  lg:py-2">
+          <NavigationMenuTrigger className="flex items-center bg-white gap-4 h-10 lg:gap-6  lg:py-2">
             {user ? (
-              <div className="flex items-center bg-white gap-4 lg:gap-6 lg:px-8 lg:py-2">
-                <span>
-                  <FaRegCircleUser className="lg:text-2xl" />
+              <div className="flex items-center  gap-4 lg:gap-6 lg:px-8 lg:py-1">
+
+                <span className="flex items-center gap-2">
+                
+                  <img
+                    className="w-8 h-8 rounded-full"
+                    src={user?.profile_photo} alt="" />
+                      {user?.firstName}
                 </span>
-                <span>{user?.firstName}</span>
               </div>
             ) : (
               <span>
@@ -47,15 +51,27 @@ const DropdownMenuDemo = () => {
             )}
           </NavigationMenuTrigger>
           <NavigationMenuContent className="gap-20">
+
             <NavigationMenuLink
               className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200"
               href={user ? "/meinProfile" : "/register"}
             >
               <span>
-                <FaRegCircleUser className="lg:text-2xl" />
+                {user?.profile_photo ? (
+                  // Benutzerbild anzeigen
+                  <img
+                    className="w-8 h-8 rounded-full"
+                    src={user.profile_photo}
+                    alt="Benutzerbild"
+                  />
+                ) : (
+
+                  <FaRegCircleUser className="lg:text-2xl" />
+                )}
               </span>
               <span>{user ? "Profile" : "Register"}</span>
             </NavigationMenuLink>
+
             <NavigationMenuLink
               className="flex items-center gap-4 lg:gap-10 px-6 lg:px-8 bg-white py-2 hover:bg-gray-200"
               href={user ? "/meineBuchungen" : "/login"}
