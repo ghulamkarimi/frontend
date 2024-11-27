@@ -39,10 +39,11 @@ const WorkshopBookingPage = () => {
             notes: ""
         },
         validationSchema: formSchema,
-        onSubmit: async (values) => {
+        onSubmit: async (values, {resetForm}) => {
             try {
                 await dispatch(createAppointmentApi(values)).unwrap();
                 NotificationService.success('Termin erfolgreich gebucht! Sie erhalten eine Bestätigung per E-Mail.');
+                resetForm();
             } catch (error: any) {
                 console.error('Fehler:', error);  // Ausgabe des gesamten Fehlerobjekts
                 const errorMessage = error?.message || "Ein unbekannter Fehler ist aufgetreten";

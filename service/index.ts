@@ -1,22 +1,8 @@
 import axios from 'axios';
-import { IAppointment, TAppointment, TCarRent, TUser } from '../interface';
-import { TBuy } from '../interface/index';
-import { axiosJWT } from './axiosJwt';
+import { TAppointment, TCarRent, TUser } from '../interface';
+import axiosJWT  from '../service/axiosJwt';
 
-
-
-
-const SERVER_URL = "http://localhost:7001";
-
-axios.defaults.withCredentials = true;
-
-export const axiosJwt = axios.create({
-    baseURL: "http://localhost:7001",
-    withCredentials: true,
-});
-axiosJwt.interceptors.request.use;
-
-// user
+const SERVER_URL = 'http://localhost:7001';
 
 export const userRegister = (user: TUser) => {
     const url = `${SERVER_URL}/user/register`;
@@ -25,7 +11,7 @@ export const userRegister = (user: TUser) => {
 
 export const userLogin = (user: TUser) => {
     const url = `${SERVER_URL}/user/login`;
-    return axiosJwt.post(url, user);
+    return axiosJWT.post(url, user);
 }
 
 export const getAllUsers = () => {
@@ -33,53 +19,60 @@ export const getAllUsers = () => {
     return axios.get(url);
 }
 
-export const refreshToken = () => {
-    const url = `${SERVER_URL}/user/refreshToken`;
-    return axios.post(url);
-}
 export const userLogout = () => {
     const url = `${SERVER_URL}/user/logout`;
-    return axios.delete(url);
+    return axiosJWT.delete(url);
 }
 
+export const refreshToken = () => {
+    const url = `${SERVER_URL}/user/refreshToken`;
+    return axios.post(url, null, { withCredentials: true });
+  };
+  
+
+export const profilePhotoUpload = (data: File) => {
+    const url = `${SERVER_URL}/user/profile/photo`;
+    const formData = new FormData();
+    formData.append("profile_photo", data);
+    return axiosJWT.post(url, formData);
+  };
+  
 // CarRent
 
-export const getCarRent = ()=>{
-    const url = `${SERVER_URL}/rent/getRents`
-    return axios.get(url)
+export const getCarRent = () => {
+    const url = `${SERVER_URL}/rent/getRents`;
+    return axios.get(url);
 }
- 
+
 // CarBuy
 
-export const getOneCarById = (id:string)=>{
-    const url = `${SERVER_URL}/rent/getRent/${id}`
-    return axios.get(url)
+export const getOneCarById = (id: string) => {
+    const url = `${SERVER_URL}/rent/getRent/${id}`;
+    return axios.get(url);
 }
 
-export const getCarBuys = ()=> {
+export const getCarBuys = () => {
     const url = `${SERVER_URL}/buy/allBuys`;
-    return axios.get(url)
+    return axios.get(url);
 }
 
 // offers
 
-export const getOffers = ()=> {
+export const getOffers = () => {
     const url = `${SERVER_URL}/offer/getOffers`;
-    return axios.get(url)
+    return axios.get(url);
 }
 
 // Appointment
-export const createAppointment = (appointment : TAppointment)=> {
+
+export const createAppointment = (appointment: TAppointment) => {
     const url = `${SERVER_URL}/appointment`;
-    return axios.post(url, appointment)
+    return axios.post(url, appointment);
 }
-
-
 
 // SchutzPacket
 
-
-export const allSchutzPacket = ()=>{
-    const url = `${SERVER_URL}/schutzPacket/getAllSchutzPacket`
-    return axios.get(url)
+export const allSchutzPacket = () => {
+    const url = `${SERVER_URL}/schutzPacket/getAllSchutzPacket`;
+    return axios.get(url);
 }

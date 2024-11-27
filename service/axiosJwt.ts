@@ -1,5 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
 
-export const axiosJWT = axios.create();
-axiosJWT.interceptors.request.use;
+
+
+
+const axiosJWT = axios.create({
+  baseURL: "http://localhost:7001",
+  withCredentials: true,
+});
+
+
+export default axiosJWT;

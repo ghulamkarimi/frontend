@@ -3,14 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
 
-
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
 
 
 .even-bg > :nth-child(even) {
@@ -23,8 +18,6 @@
 .offerCarte {
   border-radius: 32px 0px;
 }
-
-
 
 /* Auswahl des Containers, der die beiden Monate enthält */
 .react-datepicker__month-container {

@@ -7,7 +7,7 @@ export default function Home() {
     <div className="w-full flex flex-col items-center">
 
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center h-3/4"
+        className="absolute inset-0 z-0 bg-cover bg-center h-[700px] "
         style={{ backgroundImage: "url('/homeBackground.jpg')" }}
       ></div>
 
