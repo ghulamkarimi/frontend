@@ -24,36 +24,23 @@ const page = () => {
   const { id: carRentId } = useParams();
   const dispatch = useDispatch();
   const {
-    age,
     pickupDate,
     pickupTime,
     returnDate,
     returnTime,
-    selectedSchutzPacket,
+   
   } = useSelector((state: RootState) => state.carRent);
   const getOneCar = useSelector((state: RootState) =>
     getRentCarById(state, carRentId! as string)
   );
-  const formattedPickupDate = pickupDate
-    ? new Date(pickupDate).toLocaleDateString()
-    : "Datum nicht verfügbar";
-  const formattedReturnDate = returnDate
-    ? new Date(returnDate).toLocaleDateString()
-    : "Datum nicht verfügbar";
-  const formattedPickupTime = pickupTime || "Zeit nicht verfügbar";
-  const formattedReturnTime = returnTime || "Zeit nicht verfügbar";
-  const rentalDays = calculateRentalDays(pickupDate!, returnDate!);
 
-  const calculateGesamtePriceSchutzPacket = (
-  
-    dailyRate: number
-  ) => {
-    return (dailyRate * rentalDays).toFixed(2);
-  };
 
-  const storedTotalPrice = localStorage.getItem("gesamtPreice");
-  console.log("storedTotalPrice", storedTotalPrice);
-  const totalPriceNumber = storedTotalPrice ? parseFloat(storedTotalPrice) : 0;
+  const storedTotalPrice = parseFloat(
+    localStorage.getItem("totalPrice") || "0"
+  );
+ 
+
+  useEffect(() => {}, [storedTotalPrice]);
 
   useEffect(() => {
     const rentalDetails = {
@@ -66,11 +53,28 @@ const page = () => {
     };
 
     dispatch(setRentalDetails(rentalDetails));
-  }, [dispatch, totalPriceNumber]);
+  }, [dispatch]);
 
-  const rentalDaysReservation = calculateRentalDays(pickupDate!, returnDate!);
+  const formattedPickupDate = pickupDate
+    ? new Date(pickupDate).toLocaleDateString()
+    : "Datum nicht verfügbar";
+  const formattedReturnDate = returnDate
+    ? new Date(returnDate).toLocaleDateString()
+    : "Datum nicht verfügbar";
+  const formattedPickupTime = pickupTime || "Zeit nicht verfügbar";
+  const formattedReturnTime = returnTime || "Zeit nicht verfügbar";
 
 
+  const rentalDays = calculateRentalDays(pickupDate!, pickupTime!,returnDate!,returnTime!);
+
+  const calculateGesamtePriceSchutzPacket = (
+  
+    dailyRate: number
+  ) => {
+    return (dailyRate * rentalDays).toFixed(2);
+  };
+
+ 
 
 
 
@@ -93,7 +97,7 @@ const page = () => {
             <p className=" flex flex-col ">
               <span>Gesamt</span>
               <span className="  font-bold">
-                {totalPriceNumber.toFixed(2)} €
+                {localStorage.getItem("gesamtPreice")}€
               </span>
             </p>
           </div>
@@ -108,7 +112,7 @@ const page = () => {
             <div>
               <h1 className=" text-sm font-bold mb-3">{getOneCar?.carName}</h1>
               <img
-                className=" px-2 rounded-md"
+                className=" px-2 rounded-md w-full"
                 src={getOneCar?.carImage}
                 alt={getOneCar.carImage}
               />
@@ -134,11 +138,11 @@ const page = () => {
             </div>
             <div className=" mt-2 flex items-center justify-between">
               <span>
-                {localStorage.getItem("packet")} für ({rentalDaysReservation}{" "}
+                {localStorage.getItem("packet")} für ({rentalDays}{" "}
                 Tage)
               </span>
               <span className=" font-bold">
-                {totalPriceNumber.toFixed(2)} €
+              {localStorage.getItem("gesamtPreice")} €
               </span>
             </div>
             <div className=" mt-3">
@@ -159,9 +163,9 @@ const page = () => {
                 <p>
                   {calculatePriceSchutzPacket(
                     localStorage.getItem("packet")!,
-                    rentalDaysReservation
+                    rentalDays
                   )}{" "}
-                  €
+                 €
                 </p>
               </div>
               <div className=" border-2 h-1 w-full px-2" />
@@ -174,13 +178,13 @@ const page = () => {
                     i
                   </span>
                 </p>
-                <p>{rentalDaysReservation} Tage</p>
+                <p>{rentalDays} Tage</p>
               </div>
             </div>
             <div className=" w-full border-2 border-black h-[0.1px] mt-2" />
             <div className=" mt-3 flex items-center justify-around">
               <p>Gesamt</p>
-              <p className=" font-bold">{totalPriceNumber.toFixed(2)} €</p>
+              <p className=" font-bold">{localStorage.getItem("gesamtPreice")} €</p>
             </div>
           </div>
         </div>

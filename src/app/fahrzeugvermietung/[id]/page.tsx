@@ -12,13 +12,13 @@ import {
   setIsMediumDetailsActive,
   setIsPremiumDetailsActive,
   setRentalDetails,
-  setSelectedSchutzPackage,
+ 
 } from "../../../../feature/reducers/carRentSlice";
 
 import PackageOption from "@/components/cards/PackageOption";
 import RentalLocationCard from "@/components/cards/RentalLocationCard";
 import {
-  calculatePriceSchutzPacket,
+
   calculateRentalDays,
   useSelectPacket,
 } from "@/utils/rentalUtils";
@@ -86,13 +86,12 @@ const Page = () => {
     console.log("packet", packet);
   };
 
-  const rentalDays = calculateRentalDays(pickupDate!, returnDate!);
+  const rentalDays = calculateRentalDays(pickupDate!, pickupTime!,returnDate!,returnTime!);
 
-  // Calculate total prices for each package
   const calculateGesamtePriceSchutzPacket = (dailyRate: number) => {
     return (dailyRate * rentalDays).toFixed(2);
   };
-  // const calculateGesamtePriceSchutzPackets = calculatePriceSchutzPacket(localStorage.getItem("packet")!,rentalDays)
+ 
 
   return (
     <div className=" m-2">
