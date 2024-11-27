@@ -96,20 +96,23 @@ const ImageCropper = ({
           </ReactCrop>
         </div>
       )}
-      <div className="flex justify-end space-x-4 mt-4">
-        <button
-          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-          onClick={closeModal}
-        >
-          Abbrechen
-        </button>
-        <button
-          className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
-          onClick={handleSave}
-        >
-          Speichern
-        </button>
-      </div>
+      {/* Buttons nur anzeigen, wenn imgSrc vorhanden ist */}
+      {imgSrc && (
+        <div className="flex justify-center space-x-4 mt-4">
+          <button
+            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            onClick={closeModal}
+          >
+            Abbrechen
+          </button>
+          <button
+            className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+            onClick={handleSave}
+          >
+            Speichern
+          </button>
+        </div>
+      )}
       {crop && <canvas ref={previewCanvasRef} className="hidden" />}
     </div>
   );
