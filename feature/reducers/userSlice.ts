@@ -133,6 +133,7 @@ const userSlice = createSlice({
             })
             .addCase(userLoginApi.fulfilled, (state, action) => {
                 userAdapter.setOne(state, action.payload.userInfo);
+                state.userInfo=action.payload.userInfo;
                 state.token = action.payload.token;
                 state.status = "succeeded";
             })
@@ -161,7 +162,7 @@ const userSlice = createSlice({
                     console.error("Payload enthält keine Benutzerinformationen:", action.payload);
                 }
             })
-            
+
     }
 });
 

@@ -88,27 +88,29 @@ const DropdownMenuDemo = () => {
               </span>
               <span>{user ? "Profile" : "Register"}</span>
             </NavigationMenuLink>
+              {!user && (
+                <NavigationMenuLink
+                  className="flex items-center gap-4 lg:gap-10 px-6 lg:px-8 bg-white py-2 hover:bg-gray-200"
+                  href="/login"
+                >
+                  <span>
+                    <IoIosLogIn className="lg:text-2xl" />
+                  </span>
+                  <span>Login</span>
+                </NavigationMenuLink>
+              )}
 
-            <NavigationMenuLink
-              className="flex items-center gap-4 lg:gap-10 px-6 lg:px-8 bg-white py-2 hover:bg-gray-200"
-              href={user ? "/meineBuchungen" : "/login"}
-            >
-              <span>
-                {user ? <FaCarSide className="lg:text-2xl" /> : <IoIosLogIn className="lg:text-2xl" />}
-              </span>
-              <span>{user ? "Buchungen" : "Login"}</span>
-            </NavigationMenuLink>
-            {user && (
-              <NavigationMenuLink
-                className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200"
-                onClick={handleLogout}
-              >
-                <span>
-                  <RiLogoutCircleLine className="text-xl lg:text-2xl" />
-                </span>
-                <span>Logout</span>
-              </NavigationMenuLink>
-            )}
+              {user && (
+                <NavigationMenuLink
+                  className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200 cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  <span>
+                    <RiLogoutCircleLine className="text-xl lg:text-2xl" />
+                  </span>
+                  <span>Logout</span>
+                </NavigationMenuLink>
+              )}
 
           </NavigationMenuContent>
         </NavigationMenuItem>
