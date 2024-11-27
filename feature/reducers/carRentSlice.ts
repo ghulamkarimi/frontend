@@ -18,6 +18,7 @@ export interface ICarRentState {
   isBasicDetailsActive: boolean;
   isMediumDetailsActive: boolean;
   isPremiumDetailsActive: boolean;
+  loading:boolean
   rentalDays: number;
   pickupDate: string | null;
   pickupTime: string | null;
@@ -41,12 +42,13 @@ const initialState: ICarRentState & EntityState<ICarRent, string> =
     isBasicDetailsActive: false,
     isMediumDetailsActive: false,
     isPremiumDetailsActive: false,
+    loading:false,
     selectedSchutzPacket: "Basic",
     rentalDays: 0,
-    pickupDate: null,
-    pickupTime: null,
-    returnDate: null,
-    returnTime: null,
+    pickupDate: "",
+    pickupTime: "",
+    returnDate: "",
+    returnTime: "",
     pickupLocation: null,
     age: null,
   });
@@ -92,13 +94,13 @@ const carRentSlice = createSlice({
         pickupLocation,
         age,
       } = action.payload;
-      state.rentalDays = rentalDays;
-      state.pickupDate = pickupDate;
-      state.pickupTime = pickupTime;
-      state.returnDate = returnDate;
-      state.returnTime = returnTime;
-      state.pickupLocation = pickupLocation;
-      state.age = age;
+      state.rentalDays = action.payload.rentalDays ?? state.rentalDays;
+      state.pickupDate = action.payload.pickupDate ?? state.pickupDate;
+      state.pickupTime = action.payload.pickupTime ?? state.pickupTime;
+      state.returnDate = action.payload.returnDate ?? state.returnDate;
+      state.returnTime = action.payload.returnTime ?? state.returnTime;
+      state.pickupLocation = action.payload.pickupLocation ?? state.pickupLocation;
+      state.age = action.payload.age ?? state.age;
     },
     setTotalPrice: (state, action) => {
       state.totalPrice = action.payload;
@@ -117,6 +119,9 @@ const carRentSlice = createSlice({
     },
     setSelectedSchutzPackage: (state, action) => {
       state.selectedSchutzPacket = action.payload;
+    },
+    setIsLoading: (state, action) => {
+      state.loading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -154,7 +159,8 @@ export const {
   setIsMediumDetailsActive,
   setIsPremiumDetailsActive,
   setSelectedSchutzPackage,
-  setRentalDetails
+  setRentalDetails,
+  setIsLoading
 } = carRentSlice.actions;
 
 export const { selectAll: getAllRentCars, selectById: getRentCarById } =

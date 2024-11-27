@@ -19,17 +19,16 @@ import { useState } from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { WiFog } from "react-icons/wi";
 import { useDispatch } from "react-redux";
+import { calculateRentalDays } from "@/utils/rentalUtils";
+import { RootState } from "../../../feature/store/store";
 
 interface ICarCardProps {
   availableCars: ICarRent[];
-  rentalDays: number | null;
+  
 }
 
 const CarCard = ({
-  availableCars,
-  rentalDays,
-
-  
+  availableCars, 
 }: ICarCardProps) => {
   const [loading, setLoading] = useState(false);
   const [detailsVisibility, setDetailsVisibility] = useState<{
@@ -46,12 +45,13 @@ const toggleDetails = (carId: string) => {
       [carId]: !prevState[carId],
     }));
   };
+const {pickupDate,pickupTime,returnDate,returnTime} = useSelector((state:RootState)=>state.carRent)
+
+const rentalDays = pickupTime && returnTime && pickupDate && returnDate
+  ? calculateRentalDays(pickupDate, pickupTime, returnDate, returnTime)
+  : 0;
 
 
- 
-
-
- 
   const handleSelectCar = (carId: string) => {
     setLoading(true);
     localStorage.setItem("carRentId", carId || "");
@@ -147,14 +147,14 @@ const toggleDetails = (carId: string) => {
 
                 <CardFooter className="pt-6">
                   <div className="text-white flex flex-col gap-4">
-                    <p className=" flex flex-col gap-2">
+                    <p className={ `flex flex-col gap-2`}>
                       <span className=" text-red-500">
                       {rentalDays 
                           ? `${new Intl.NumberFormat("de-DE", {
                               style: "currency",
                               currency: "EUR",
                             }).format(Number(car.carPrice) * rentalDays)} / ${rentalDays} Tage`
-                          : ""}
+                          : "Datum Wählen bitte "}
                       </span>
                       <span className="cardInfoSell">
                         <TbManualGearboxFilled className="cardInfoSellIcon" />

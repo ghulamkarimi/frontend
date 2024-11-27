@@ -10,9 +10,10 @@ interface TimeCProps{
 
 const TimeC = ({ onTimeSelect }:TimeCProps) => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const times = Array.from({ length: 24 }, (_, i) => {
-    const hour = i < 10 ? `0${i}` : i.toString();
-    return `${hour}:00`;
+  const times = Array.from({ length: 16 }, (_, i) => {
+    const hour = i + 7;
+    const formattedHour = hour < 10 ? `0${hour}` :  hour.toString();
+    return `${formattedHour}:00 Uhr`;
   });
 
   const handleTimeSelect = (time: string) => {
