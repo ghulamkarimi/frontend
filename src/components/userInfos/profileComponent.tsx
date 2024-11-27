@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../feature/store/store";
 import { displayUserById, profilePhotoUploadApi } from "../../../feature/reducers/userSlice";
 import { HiCamera } from "react-icons/hi2";
 import Modal from "../crop/Modal";
-import axios from "axios";
 import { NotificationService } from "../../../service/NotificationService";
 
 const ProfileComponent = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const userId = localStorage.getItem("userId");
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // `localStorage` sicher nutzen
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setUserId(localStorage.getItem("userId"));
+    }
+  }, []);
 
   // Benutzerinformationen abrufen
   const user = useSelector((state: RootState) =>
@@ -23,7 +29,6 @@ const ProfileComponent = () => {
     try {
       const response = await dispatch(profilePhotoUploadApi(file)).unwrap();
       console.log("Profile Photo UserSlice:", response);
-      // Aktualisiere das Profilbild in der UI
       NotificationService.success(response.message || "Profilbild erfolgreich hochgeladen!");
     } catch (error) {
       console.error("Fehler beim Hochladen des Profilbilds:", error);
@@ -46,7 +51,7 @@ const ProfileComponent = () => {
           />
           <HiCamera
             className="absolute bottom-2 right-2 text-3xl text-orange-500 bg-white rounded-full p-1 shadow-lg cursor-pointer hover:text-cyan-700"
-            onClick={() => setShowModal(true)} // Modal öffnen
+            onClick={() => setShowModal(true)}
           />
         </div>
       </div>
@@ -54,10 +59,10 @@ const ProfileComponent = () => {
       {showModal && (
         <Modal
           updateAvatar={(imgSrc: string) => {
-            setCroppedImage(imgSrc); // Aktualisiere das Bild lokal
+            setCroppedImage(imgSrc);
           }}
-          closeModal={() => setShowModal(false)} // Modal schließen
-          onSave={(file: File) => handleSaveImage(file)} // Datei speichern
+          closeModal={() => setShowModal(false)}
+          onSave={(file: File) => handleSaveImage(file)}
         />
       )}
     </div>

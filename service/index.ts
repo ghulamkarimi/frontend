@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { TAppointment, TCarRent, TUser } from '../interface';
-import axiosJWT  from '../service/axiosJwt';
+import axiosJWT from './axiosJwt';
 
 const SERVER_URL = 'http://localhost:7001';
+
 
 export const userRegister = (user: TUser) => {
     const url = `${SERVER_URL}/user/register`;
@@ -26,8 +27,9 @@ export const userLogout = () => {
 
 export const refreshToken = () => {
     const url = `${SERVER_URL}/user/refreshToken`;
-    return axios.post(url, null, { withCredentials: true });
+    return axios.get(url, { withCredentials: true }); // Mit Credentials senden
   };
+  
   
 
 export const profilePhotoUpload = (data: File) => {
