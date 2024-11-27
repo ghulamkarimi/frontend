@@ -40,6 +40,7 @@ export const userLoginApi = createAsyncThunk(
     async (initialUser: TUser, { rejectWithValue }) => {
         try {
             const response = await userLogin(initialUser);
+            console.log("login UserSlice:", response.data);
             localStorage.setItem("userId", response.data.userInfo.userId)
             localStorage.setItem("exp", response.data.userInfo.exp)
             return response.data;
@@ -61,6 +62,7 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async (_, { rejec
 export const userLogoutApi = createAsyncThunk("users/userLogoutApi", async (_, { rejectWithValue }) => {
     try {
         const response = await userLogout();
+        localStorage.removeItem("exp");
         localStorage.removeItem("userId");
         return response.data;
     } catch (error) {
@@ -72,19 +74,19 @@ export const userLogoutApi = createAsyncThunk("users/userLogoutApi", async (_, {
 export const profilePhotoUploadApi = createAsyncThunk(
     "users/profilePhotoUploadApi",
     async (data: File, { rejectWithValue }) => {
-      try {
-        const response = await profilePhotoUpload(data);
-        console.log("Profile Photo UserSlice:", response.data);
-        return response.data;
-      } catch (error: any) {
-        return rejectWithValue(error?.response?.data?.message || "Fehler beim Hochladen des Profilbilds");
-      }
+        try {
+            const response = await profilePhotoUpload(data);
+            console.log("Profile Photo UserSlice:", response.data);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error?.response?.data?.message || "Fehler beim Hochladen des Profilbilds");
+        }
     }
-  );
-  
-  
-  
-  
+);
+
+
+
+
 
 const initialState: IUserState & EntityState<IUser, string> =
     userAdapter.getInitialState({
@@ -151,6 +153,9 @@ const userSlice = createSlice({
                 state.userId = "";
                 state.status = "idle";
                 state.error = null
+            })
+            .addCase(profilePhotoUploadApi.fulfilled, (state, action) => {
+                userAdapter.setOne(state, action.payload.userInfo);
             })
     }
 });

@@ -21,34 +21,22 @@ const ProfileComponent = () => {
 
   const handleSaveImage = async (file: File) => {
     try {
-      const formData = new FormData();
-      formData.append("userImage", file); // Das Feld muss "userImage" heißen
-  
-      const response = await axios.post("http://localhost:7001/user/profile/photo", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true, // Wichtig, damit Cookies (z. B. accessToken) gesendet werden
-      });
-  
-      console.log("Profilbild erfolgreich hochgeladen:", response.data);
-  
+      const response = await dispatch(profilePhotoUploadApi(file)).unwrap();
+      console.log("Profile Photo UserSlice:", response);
       // Aktualisiere das Profilbild in der UI
-      NotificationService.success("Profilbild erfolgreich hochgeladen!");
+      NotificationService.success(response.message || "Profilbild erfolgreich hochgeladen!");
     } catch (error) {
       console.error("Fehler beim Hochladen des Profilbilds:", error);
       NotificationService.error("Fehler beim Hochladen des Profilbilds!");
     }
   };
-  
-  
 
   return (
     <div className="profile-container mx-auto max-w-3xl p-6">
       <h1 className="text-3xl font-bold text-center text-orange-600 pb-4">
         {`${user?.firstName || "Benutzer"}'s Profil`}
       </h1>
-  
+
       <div className="profile-photo-container mb-6 flex justify-center relative">
         <div className="relative">
           <img
@@ -62,7 +50,7 @@ const ProfileComponent = () => {
           />
         </div>
       </div>
-  
+
       {showModal && (
         <Modal
           updateAvatar={(imgSrc: string) => {

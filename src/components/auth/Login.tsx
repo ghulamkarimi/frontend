@@ -37,14 +37,12 @@ const Login = () => {
         onSubmit: async (values) => {
             try {
                 const response = await dispatch(userLoginApi(values)).unwrap();
+                console.log("Login seite response:", response);
                 NotificationService.success(response.message || "Login successful");
                 setTimeout(() => {
                     router.push("/")
                 }, 4000)
-                dispatch(setUserInfo(response.data.userInfo));
-                localStorage.setItem("exp", response.data.userInfo.exp)
-
-
+                dispatch(setUserInfo(response.userInfo))
             } catch (error: any) {
                 NotificationService.error(error.message);
             }

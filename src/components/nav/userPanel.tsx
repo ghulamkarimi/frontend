@@ -16,12 +16,14 @@ import { FaCarSide, FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { NotificationService } from "../../../service/NotificationService";
 import { IoIosLogIn } from "react-icons/io";
-import router from "next/router";
+import { useRouter } from "next/navigation";
+
+
 
 const DropdownMenuDemo = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
-
+  const router = useRouter()
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     setUserId(storedUserId);
@@ -33,9 +35,10 @@ const DropdownMenuDemo = () => {
   const handleLogout = async () => {
     try {
       const response = await dispatch(userLogoutApi()).unwrap();
-      NotificationService.success("Logout successful");
-      router.push("/login"); // Benutzer zur Login-Seite umleiten
-    } catch (error) {
+      console.log("Logout response:", response);
+      NotificationService.success(response.message);
+      router.push("/login")
+    } catch (error: any) {
       NotificationService.error(
         "Logout failed: " + ((error as Error)?.message || "Unknown error")
       );

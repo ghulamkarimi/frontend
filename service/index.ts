@@ -33,8 +33,12 @@ export const refreshToken = () => {
 export const profilePhotoUpload = (data: File) => {
     const url = `${SERVER_URL}/user/profile/photo`;
     const formData = new FormData();
-    formData.append("profile_photo", data);
-    return axiosJWT.post(url, formData);
+    formData.append("image", data);
+    return axiosJWT.put(url, formData,{
+        headers: {
+            "Content-Type": "multipart/form-data",
+          },
+    });
   };
   
 // CarRent

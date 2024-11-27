@@ -42,8 +42,10 @@ axiosJWT.interceptors.request.use(
 
     if (exp && Number(exp) * 1000 < currentDate) {
       const response = await refreshToken();
+      console.log("Token refreshed", response.data.accessToken);
 
       config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+      console.log("Token refreshed header", response.data.accessToken);
       const decodedToken = jwtDecode<DecodedToken>(response.data.accessToken);
       localStorage.setItem("exp", decodedToken.exp.toString());
     }
