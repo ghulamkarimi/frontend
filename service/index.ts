@@ -32,16 +32,22 @@ export const refreshToken = () => {
   
   
 
-export const profilePhotoUpload = (data: File) => {
+  export const profilePhotoUpload = (data: File) => {
     const url = `${SERVER_URL}/user/profile/photo`;
     const formData = new FormData();
     formData.append("userImage", data);
-    return axiosJWT.put(url, formData,{
-        headers: {
-            "Content-Type": "multipart/form-data",
-          },
+  
+    for (let pair of formData.entries()) {
+      console.log(`FormData: ${pair[0]} = ${pair[1]}`); // Log FormData
+    }
+  
+    return axiosJWT.put(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
   };
+  
   
 // CarRent
 

@@ -9,8 +9,8 @@ interface ModalProps {
   
   const Modal: React.FC<ModalProps> = ({ updateAvatar, closeModal, onSave }) => {
     const handleSave = (file: File) => {
-      console.log("File wird gesendet:", file); // Debugging
-      onSave(file); // Datei an die übergeordnete Komponente weiterleiten
+      console.log("Gespeicherte Datei:", file); // Debugging
+      onSave(file);
     };
   
     return (
@@ -20,7 +20,6 @@ interface ModalProps {
           <div className="flex min-h-full justify-center px-2 py-12 text-center">
             <div className="relative w-[95%] sm:w-[80%] min-h-[60vh] rounded-2xl bg-gray-800 text-white text-left shadow-xl transition-all">
               <div className="px-5 py-4">
-                {/* Schließen-Button */}
                 <button
                   type="button"
                   className="rounded-md p-1 inline-flex items-center justify-center text-gray-400 hover:bg-gray-700 focus:outline-none absolute top-2 right-2"
@@ -29,12 +28,10 @@ interface ModalProps {
                   <span className="sr-only">Schließen</span>
                   <CloseIcon />
                 </button>
-  
-                {/* ImageCropper-Komponente */}
                 <ImageCropper
                   closeModal={closeModal}
                   updateAvatar={updateAvatar}
-                  onSave={handleSave} // Datei von ImageCropper empfangen
+                  onSave={handleSave}
                 />
               </div>
             </div>
