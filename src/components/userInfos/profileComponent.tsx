@@ -40,6 +40,7 @@ const ProfileComponent = () => {
       const response = await dispatch(profilePhotoUploadApi(file)).unwrap();
       console.log("Profile Photo UserSlice:", response);
       NotificationService.success(response.message || "Profilbild erfolgreich hochgeladen!");
+      setShowModal(false);
     } catch (error) {
       console.error("Fehler beim Hochladen des Profilbilds:", error);
       NotificationService.error("Fehler beim Hochladen des Profilbilds!");
