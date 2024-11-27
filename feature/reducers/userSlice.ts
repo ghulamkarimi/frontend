@@ -20,8 +20,9 @@ interface IUserState {
 }
 
 const userAdapter = createEntityAdapter<IUser, string>({
-    selectId: (user) => user._id || "",
+    selectId: (user) => (user?._id ? user._id : ""),
 });
+
 
 export const userRegisterApi = createAsyncThunk(
     "users/userRegisterApi",
@@ -83,10 +84,6 @@ export const profilePhotoUploadApi = createAsyncThunk(
         }
     }
 );
-
-
-
-
 
 const initialState: IUserState & EntityState<IUser, string> =
     userAdapter.getInitialState({
@@ -155,8 +152,16 @@ const userSlice = createSlice({
                 state.error = null
             })
             .addCase(profilePhotoUploadApi.fulfilled, (state, action) => {
-                userAdapter.setOne(state, action.payload.userInfo);
+                if (action.payload?.userInfo) {
+                    userAdapter.setOne(state, action.payload.userInfo);
+                    state.status = "succeeded";
+                } else {
+                    state.status = "failed";
+                    state.error = "Benutzerinformationen fehlen";
+                    console.error("Payload enthält keine Benutzerinformationen:", action.payload);
+                }
             })
+            
     }
 });
 

@@ -9,21 +9,30 @@ import { NotificationService } from "../../../service/NotificationService";
 const ProfileComponent = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [userId, setUserId] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [croppedImage, setCroppedImage] = useState("");
 
-  // `localStorage` sicher nutzen
+  // Benutzer-ID aus localStorage abrufen
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setUserId(localStorage.getItem("userId"));
+      const storedUserId = localStorage.getItem("userId");
+      console.log("Geladene Benutzer-ID:", storedUserId);
+      setUserId(storedUserId);
     }
   }, []);
 
-  // Benutzerinformationen abrufen
-  const user = useSelector((state: RootState) =>
-    displayUserById(state, userId || "")
-  );
+  // Benutzer aus Redux-State abrufen
+  const user = useSelector((state: RootState) => {
+    console.log("Aktueller Redux-State:", state.users);
+    return userId ? displayUserById(state, userId) : null;
+  });
 
-  const [showModal, setShowModal] = useState(false); // Modal-Status
-  const [croppedImage, setCroppedImage] = useState(user?.profile_photo || ""); // Geschnittenes Bild
+  // Profilbild initial setzen
+  useEffect(() => {
+    if (user?.profile_photo) {
+      setCroppedImage(user.profile_photo);
+    }
+  }, [user]);
 
   const handleSaveImage = async (file: File) => {
     try {
@@ -36,16 +45,26 @@ const ProfileComponent = () => {
     }
   };
 
+  // Rückgabe, falls keine Benutzer-ID vorhanden
+  if (!userId) {
+    return <p>Lädt Benutzerinformationen...</p>;
+  }
+
+  // Rückgabe, falls Benutzer nicht gefunden
+  if (!user) {
+    return <p>Benutzer nicht gefunden.</p>;
+  }
+
   return (
     <div className="profile-container mx-auto max-w-3xl p-6">
       <h1 className="text-3xl font-bold text-center text-orange-600 pb-4">
-        {`${user?.firstName || "Benutzer"}'s Profil`}
+        {`${user.firstName || "Benutzer"}'s Profil`}
       </h1>
 
       <div className="profile-photo-container mb-6 flex justify-center relative">
         <div className="relative">
           <img
-            src={croppedImage || user?.profile_photo || "https://www.example.com/default-avatar.png"}
+            src={croppedImage || "https://www.example.com/default-avatar.png"}
             alt="Profilbild"
             className="w-40 h-40 rounded-full border-4 border-orange-500 shadow-lg object-cover"
           />

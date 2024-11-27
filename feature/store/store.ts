@@ -8,8 +8,8 @@ import carBuyReducer, { fetchCarBuys } from "../reducers/carBuySlice";
 import schutzPacket, { fetchAllSchutzPacketApi } from "../reducers/schutzPacketSlice"
 import carRentReducer, { getRentCarApi } from "../reducers/carRentSlice"
 import axiosJWT from "../../service/axiosJwt";
-import { refreshToken } from "../../service";
 import jwtDecode from "jwt-decode";
+import { refreshToken } from '../../service/index';
 
 
 interface DecodedToken {
