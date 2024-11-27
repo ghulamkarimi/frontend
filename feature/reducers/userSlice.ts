@@ -4,7 +4,7 @@ import {
     createSlice,
     EntityState,
 } from "@reduxjs/toolkit";
-import { userLogin, userRegister, getAllUsers, userLogout } from '../../service/index';
+import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload } from '../../service/index';
 import { RootState } from "../store/store";
 import { IUser, IUserInfo, TUser } from "../../interface";
 
@@ -69,6 +69,22 @@ export const userLogoutApi = createAsyncThunk("users/userLogoutApi", async (_, {
         return rejectWithValue(errorMessage);
     }
 });
+export const profilePhotoUploadApi = createAsyncThunk(
+    "users/profilePhotoUploadApi",
+    async (data: File, { rejectWithValue }) => {
+      try {
+        const response = await profilePhotoUpload(data);
+        console.log("Profile Photo UserSlice:", response.data);
+        return response.data;
+      } catch (error: any) {
+        return rejectWithValue(error?.response?.data?.message || "Fehler beim Hochladen des Profilbilds");
+      }
+    }
+  );
+  
+  
+  
+  
 
 const initialState: IUserState & EntityState<IUser, string> =
     userAdapter.getInitialState({

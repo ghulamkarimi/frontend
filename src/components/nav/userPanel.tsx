@@ -16,6 +16,7 @@ import { FaCarSide, FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { NotificationService } from "../../../service/NotificationService";
 import { IoIosLogIn } from "react-icons/io";
+import router from "next/router";
 
 const DropdownMenuDemo = () => {
   const [userId, setUserId] = useState<string | null>(null);
@@ -28,6 +29,19 @@ const DropdownMenuDemo = () => {
 
   const user = useSelector((state: RootState) => displayUserById(state, userId || ""));
 
+
+  const handleLogout = async () => {
+    try {
+      const response = await dispatch(userLogoutApi()).unwrap();
+      NotificationService.success("Logout successful");
+      router.push("/login"); // Benutzer zur Login-Seite umleiten
+    } catch (error) {
+      NotificationService.error(
+        "Logout failed: " + ((error as Error)?.message || "Unknown error")
+      );
+    }
+  };
+
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -37,11 +51,11 @@ const DropdownMenuDemo = () => {
               <div className="flex items-center  gap-4 lg:gap-6 lg:px-8 lg:py-1">
 
                 <span className="flex items-center gap-2">
-                
+
                   <img
                     className="w-8 h-8 rounded-full"
                     src={user?.profile_photo} alt="" />
-                      {user?.firstName}
+                  {user?.firstName}
                 </span>
               </div>
             ) : (
@@ -84,14 +98,7 @@ const DropdownMenuDemo = () => {
             {user && (
               <NavigationMenuLink
                 className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200"
-                onClick={async () => {
-                  try {
-                    const response = await dispatch(userLogoutApi()).unwrap();
-                    NotificationService.success("Logout successful");
-                  } catch (error) {
-                    NotificationService.error("Logout failed: " + ((error as Error)?.message || "Unknown error"));
-                  }
-                }}
+                onClick={handleLogout}
               >
                 <span>
                   <RiLogoutCircleLine className="text-xl lg:text-2xl" />
@@ -99,6 +106,7 @@ const DropdownMenuDemo = () => {
                 <span>Logout</span>
               </NavigationMenuLink>
             )}
+
           </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>

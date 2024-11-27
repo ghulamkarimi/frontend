@@ -6,7 +6,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "@/components/Footer";
-import CookieBanner from "@/components/cookie/CookieBanner";
+
 import MainLayout from "./mainLayout";
 
 interface LayoutProps {
@@ -31,9 +31,9 @@ export default function RootLayout({ children }: LayoutProps) {
             <footer>
               <Footer />
             </footer>
-            <div className="z-50">
+            {/* <div className="z-50">
               <CookieBanner />
-            </div>
+            </div> */}
 
           </MainLayout>
           <ToastContainer />

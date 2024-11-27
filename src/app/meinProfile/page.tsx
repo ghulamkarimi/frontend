@@ -24,41 +24,32 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen p-4 justify-center">
-      {/* Navbar */}
-      <nav className="bg-gray-100 border-r lg:border-b lg:w-1/4 lg:h-full shadow p-4 rounded-md">
-        <ul className="flex flex-col lg:gap-4 gap-2 justify-center lg:justify-start">
+    <div className="min-h-screen flex flex-col items-center p-2 bg-gray-50">
+      {/* Navbar klein halten */}
+      <nav className="bg-gray-100 w-fit rounded-lg flex shadow mb-6">
+        <ul className="flex gap-1 p-2">
           <li>
             <button
-              className={`w-full text-left px-4 py-2 rounded ${
-                selectedOption === "profile"
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-200"
-              }`}
+              className={`px-4 py-2 rounded ${selectedOption === "profile" ? "bg-blue-500 text-white" : ""
+                }`}
               onClick={() => setSelectedOption("profile")}
             >
-              Profil ändern
+              Profil
             </button>
           </li>
           <li>
             <button
-              className={`w-full text-left px-4 py-2 rounded ${
-                selectedOption === "password"
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-200"
-              }`}
+              className={`px-2 py-2 rounded ${selectedOption === "password" ? "bg-blue-500 text-white" : ""
+                }`}
               onClick={() => setSelectedOption("password")}
             >
-              Passwort ändern
+              Passwort
             </button>
           </li>
           <li>
             <button
-              className={`w-full text-left px-4 py-2 rounded ${
-                selectedOption === "bookings"
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-200"
-              }`}
+              className={`px-4 py-2 rounded ${selectedOption === "bookings" ? "bg-blue-500 text-white" : ""
+                }`}
               onClick={() => setSelectedOption("bookings")}
             >
               Buchungen
@@ -66,11 +57,8 @@ const Page = () => {
           </li>
           <li>
             <button
-              className={`w-full text-left px-4 py-2 rounded ${
-                selectedOption === "abmelden"
-                  ? "bg-red-500 text-white"
-                  : "hover:bg-gray-200"
-              }`}
+              className={`px-4 py-2 rounded ${selectedOption === "abmelden" ? "bg-red-500 text-white" : ""
+                }`}
               onClick={() => setSelectedOption("abmelden")}
             >
               Abmelden
@@ -79,9 +67,8 @@ const Page = () => {
         </ul>
       </nav>
 
-      {/* Content */}
-      <main className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold mb-4">Inhalt</h1>
+      {/* Content breiter */}
+      <main className="flex-1 w-full max-w-5xl p-6 bg-white rounded-lg shadow-lg">
         <div>{renderContent()}</div>
       </main>
     </div>
