@@ -1,10 +1,17 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { AiOutlineLock } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../feature/store/store";
 import { NotificationService } from "../../../service/NotificationService";
+import { changePasswordApi } from "../../../feature/reducers/userSlice";
+import { AiOutlineLock } from "react-icons/ai";
 
 const PasswordComponent = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const passwordStrengthRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -16,7 +23,10 @@ const PasswordComponent = () => {
         .email("Ungültige E-Mail-Adresse")
         .required("E-Mail ist erforderlich"),
       newPassword: Yup.string()
-        .min(8, "Das Passwort muss mindestens 8 Zeichen lang sein")
+        .matches(
+          passwordStrengthRegex,
+          "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten."
+        )
         .required("Neues Passwort ist erforderlich"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("newPassword")], "Passwörter stimmen nicht überein")
@@ -24,14 +34,13 @@ const PasswordComponent = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        // Hier Backend-API-Aufruf mit den Formularwerten
-        console.log("Sende Werte:", values);
-        // Beispiel für NotificationService
+        // Dispatch an Redux-Thunk
+        await dispatch(changePasswordApi(values)).unwrap();
         NotificationService.success("Passwort erfolgreich geändert!");
         resetForm();
-      } catch (error) {
+      } catch (error: any) {
         NotificationService.error(
-          "Fehler beim Ändern des Passworts. Bitte versuchen Sie es erneut."
+          error || "Fehler beim Ändern des Passworts. Bitte versuchen Sie es erneut."
         );
       }
     },

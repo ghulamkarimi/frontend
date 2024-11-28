@@ -47,10 +47,12 @@ export const profilePhotoUpload = (data: File) => {
         },
     });
 };
+
 export const changePasswordWithEmail = (passwordData: IChangePassword) => {
-    const url = `${SERVER_URL}/user/changePassword`;
-    return axios.post(url, passwordData);
+    const url = `${SERVER_URL}/user/changePasswordWithEmail`;
+    return axios.put(url, passwordData);
 };
+
 export const deleteAccount = (confirmDelete: boolean) => {
     const url = `${SERVER_URL}/user/deleteAccount`;
     return axiosJWT.delete(url, {
