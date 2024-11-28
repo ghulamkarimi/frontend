@@ -111,3 +111,10 @@ export interface ISchutzPacket {
     features: string[];     
     user: string;           
   }
+
+  export interface IChangePassword {
+    email: string; // E-Mail-Adresse des Benutzers
+    currentPassword?: string; // Optional, falls benötigt
+    newPassword: string; // Das neue Passwort
+    confirmPassword: string; // Das neue Passwort zur Bestätigung
+}

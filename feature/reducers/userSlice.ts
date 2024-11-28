@@ -7,7 +7,8 @@ import {
 import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload } from '../../service/index';
 import { RootState } from "../store/store";
 import { IUser, IUserInfo, TUser } from "../../interface";
-
+import { IChangePassword } from "../../interface";
+import { changePasswordWithEmail } from "../../service/index";
 
 
 interface IUserState {
@@ -84,6 +85,17 @@ export const profilePhotoUploadApi = createAsyncThunk(
         }
     }
 );
+export const changePasswordApi = createAsyncThunk(
+    "user/changePassword",
+    async (passwordData: IChangePassword, { rejectWithValue }) => {
+      try {
+        const response = await changePasswordWithEmail(passwordData);
+        return response.data;
+      } catch (error: any) {
+        return rejectWithValue(error.response.data.message || "Fehler beim Ändern des Passworts");
+      }
+    }
+  );
 
 const initialState: IUserState & EntityState<IUser, string> =
     userAdapter.getInitialState({
@@ -162,6 +174,11 @@ const userSlice = createSlice({
                     console.error("Payload enthält keine Benutzerinformationen:", action.payload);
                 }
             })
+            .addCase(changePasswordApi.fulfilled, (state) => {
+                state.status = "succeeded";
+                state.error = null;
+            });
+            
 
     }
 });

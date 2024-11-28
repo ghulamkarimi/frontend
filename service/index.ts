@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TAppointment, TCarRent, TUser } from '../interface';
+import { IChangePassword, TAppointment, TCarRent, TUser } from '../interface';
 import axiosJWT from './axiosJwt';
 
 const SERVER_URL = 'http://localhost:7001';
@@ -47,7 +47,10 @@ export const refreshToken = () => {
       },
     });
   };
-  
+  export const changePasswordWithEmail = (passwordData: IChangePassword) => {
+    const url = `${SERVER_URL}/user/changePassword`;
+    return axios.post(url, passwordData);
+};
   
 // CarRent
 
