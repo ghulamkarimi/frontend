@@ -85,10 +85,10 @@
 
 
 .register-background {
-  @apply bg-cover bg-center bg-no-repeat h-screen flex justify-center items-center flex-col text-white text-center px-4;
+  @apply bg-cover bg-center bg-no-repeat min-h-screen flex justify-center items-center flex-col text-white text-center px-4;
 }
 .hintergrund {
-  @apply bg-cover bg-center bg-no-repeat h-screen flex justify-center items-center flex-col text-white text-center px-4;
+  @apply bg-cover bg-center bg-no-repeat min-h-screen flex justify-center items-center flex-col text-white text-center px-4;
 }
 
 .home-background {
