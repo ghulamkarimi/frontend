@@ -21,14 +21,9 @@ import { useRouter } from "next/navigation";
 const DropdownMenuDemo = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-
-  // Zustand für userId
   const [userId, setUserId] = useState<string | null>(null);
-
-  // Benutzerzustand direkt aus Redux Store laden
   const user = useSelector((state: RootState) => (userId ? displayUserById(state, userId) : null));
 
-  // useEffect, um userId von localStorage zu lesen, nur wenn das Component im Browser läuft
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUserId = localStorage.getItem("userId");
