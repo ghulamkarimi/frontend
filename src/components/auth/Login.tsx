@@ -60,7 +60,7 @@ const Login = () => {
     >
       {/* Linke Seite: Login */}
       <div className="flex-1 flex items-center justify-center p-6">
-        <div className=" rounded-lg shadow-lg p-8 max-w-md w-full">
+        <div className="rounded-lg shadow-lg p-8 max-w-md w-full">
           <div className="text-center mb-6">
             <h3 className="text-3xl font-bold">Login</h3>
             <p className="text-sm pt-2 font-bold">
@@ -86,42 +86,48 @@ const Login = () => {
                     : "border-gray-300"
                 }`}
               />
-              {formik.touched.email && formik.errors.email && (
-                <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
-              )}
+              <div className="h-5">
+                {formik.touched.email && formik.errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+                )}
+              </div>
             </div>
 
             <div className="relative">
               <label htmlFor="password" className="block text-sm font-medium">
                 Passwort
               </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                placeholder="Passwort"
-                className={`mt-2 block w-full px-4 py-3 border rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 transition-all ${
-                  formik.touched.password && formik.errors.password
-                    ? "border-red-500"
-                    : "border-gray-300"
-                }`}
-              />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-4 flex items-center cursor-pointer"
-              >
-                {showPassword ? (
-                  <IoEyeOffSharp className="text-gray-500" />
-                ) : (
-                  <IoEyeSharp className="text-gray-500" />
+              <div className="relative mt-2">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="Passwort"
+                  className={`block w-full px-4 py-3 border rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+                    formik.touched.password && formik.errors.password
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
+                />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-4 flex items-center cursor-pointer"
+                >
+                  {showPassword ? (
+                    <IoEyeOffSharp className="text-gray-500" />
+                  ) : (
+                    <IoEyeSharp className="text-gray-500" />
+                  )}
+                </span>
+              </div>
+              <div className="h-5">
+                {formik.touched.password && formik.errors.password && (
+                  <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
                 )}
-              </span>
-              {formik.touched.password && formik.errors.password && (
-                <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
-              )}
+              </div>
             </div>
 
             <div className="">
@@ -136,18 +142,21 @@ const Login = () => {
               </button>
             </div>
           </form>
-         <div className="flex flex-col">
-         <span className="text-xl my-4">Oder</span>
-          <button className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all" >
-            Password vergessen
-          </button>
-         </div>
+          <div className="flex flex-col">
+            <span className="text-xl my-4">Oder</span>
+            <button
+              onClick={() => router.push("/forgetPassword")}
+              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
+            >
+              Passwort vergessen
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Rechte Seite: Registrierung */}
       <div className="flex-1 flex items-center justify-center p-6 bg-opacity-50 bg-black">
-        <div className=" flex flex-col text-center">
+        <div className="flex flex-col text-center">
           <h3 className="text-3xl font-bold text-white mb-4">Kein Konto?</h3>
           <p className="text-sm text-gray-300 mb-6">
             Registrieren Sie sich jetzt und genießen Sie den vollen Zugriff auf

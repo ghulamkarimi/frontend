@@ -23,6 +23,7 @@ export interface IUserInfo {
     profile_photo: string;
     email: string;
     isAdmin: boolean;
+    isAccountVerified?: boolean;
     exp: number;
     iat: number;
 }
@@ -114,6 +115,7 @@ export interface ISchutzPacket {
 
   export interface IChangePassword {
     email: string; 
+    password: string;
     currentPassword?: string;
     newPassword: string; 
     confirmPassword: string; 

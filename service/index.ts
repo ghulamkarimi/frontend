@@ -30,8 +30,6 @@ export const refreshToken = () => {
     return axios.get(url, { withCredentials: true }); // Mit Credentials senden
 };
 
-
-
 export const profilePhotoUpload = (data: File) => {
     const url = `${SERVER_URL}/user/profile/photo`;
     const formData = new FormData();
@@ -59,6 +57,17 @@ export const deleteAccount = (confirmDelete: boolean) => {
         data: { confirmDelete }, // Sende die Bestätigung mit
     });
 };
+
+export const requestPasswordReset =(email: string) => {
+    const url = `${SERVER_URL}/user/requestPasswordReset`;
+    return axios.post(url, { email });
+}
+
+export const confirmEmailVerificationCode = (email: string, verificationCode: string) => {
+    const url = `${SERVER_URL}/user/confirmVerificationCode`;
+    return axios.post(url, { email, verificationCode });
+  };
+  
 
 // CarRent
 

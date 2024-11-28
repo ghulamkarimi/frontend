@@ -4,7 +4,7 @@ import {
     createSlice,
     EntityState,
 } from "@reduxjs/toolkit";
-import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload, deleteAccount } from '../../service/index';
+import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload, deleteAccount, requestPasswordReset, confirmEmailVerificationCode } from '../../service/index';
 import { RootState } from "../store/store";
 import { IUser, IUserInfo, TUser } from "../../interface";
 import { IChangePassword } from "../../interface";
@@ -18,6 +18,7 @@ interface IUserState {
     userId: string;
     file: File | null;
     userInfo: IUserInfo;
+    message?: string;
 }
 
 const userAdapter = createEntityAdapter<IUser, string>({
@@ -107,6 +108,37 @@ export const deleteAccountApi = createAsyncThunk(
         }
     }
 );
+
+export const requestPasswordResetApi = createAsyncThunk(
+    "user/requestPasswordResetApi",
+    async (email: string, { rejectWithValue }) => {
+
+        try {
+            const response = await requestPasswordReset(email);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data.message || "Fehler beim Zurücksetzen des Passworts");
+        }
+    }
+)
+
+export const confirmEmailVerificationCodeApi = createAsyncThunk(
+    "user/confirmEmailVerificationCode",
+    async (
+      { email, verificationCode }: { email: string; verificationCode: string },
+      { rejectWithValue }
+    ) => {
+      try {
+        const response = await confirmEmailVerificationCode(email, verificationCode);
+        return response.data;
+      } catch (error: any) {
+        return rejectWithValue(
+          error.response?.data?.message || "Fehler beim Bestätigen des Verifizierungscodes."
+        );
+      }
+    }
+  );
+
 const initialState: IUserState & EntityState<IUser, string> =
     userAdapter.getInitialState({
         status: "idle",
@@ -192,9 +224,21 @@ const userSlice = createSlice({
                 state.status = "succeeded";
                 state.error = null;
             })
-            ;
-
-
+            .addCase(requestPasswordResetApi.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.message = action.payload.message; 
+              })
+              .addCase(confirmEmailVerificationCodeApi.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.message = action.payload.message;
+                if (action.payload.user) {
+                  state.userInfo = {
+                    ...state.userInfo,
+                    email: action.payload.user.email,
+                    isAccountVerified: action.payload.user.isAccountVerified,
+                  };
+                }
+              });
     }
 });
 
