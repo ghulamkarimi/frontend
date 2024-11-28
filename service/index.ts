@@ -28,30 +28,36 @@ export const userLogout = () => {
 export const refreshToken = () => {
     const url = `${SERVER_URL}/user/refreshToken`;
     return axios.get(url, { withCredentials: true }); // Mit Credentials senden
-  };
-  
-  
+};
 
-  export const profilePhotoUpload = (data: File) => {
+
+
+export const profilePhotoUpload = (data: File) => {
     const url = `${SERVER_URL}/user/profile/photo`;
     const formData = new FormData();
     formData.append("userImage", data);
-  
+
     for (let pair of formData.entries()) {
-      console.log(`FormData: ${pair[0]} = ${pair[1]}`); // Log FormData
+        console.log(`FormData: ${pair[0]} = ${pair[1]}`); // Log FormData
     }
-  
+
     return axiosJWT.put(url, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
     });
-  };
-  export const changePasswordWithEmail = (passwordData: IChangePassword) => {
+};
+export const changePasswordWithEmail = (passwordData: IChangePassword) => {
     const url = `${SERVER_URL}/user/changePassword`;
     return axios.post(url, passwordData);
 };
-  
+export const deleteAccount = (confirmDelete: boolean) => {
+    const url = `${SERVER_URL}/user/deleteAccount`;
+    return axiosJWT.delete(url, {
+        data: { confirmDelete }, // Sende die Bestätigung mit
+    });
+};
+
 // CarRent
 
 export const getCarRent = () => {
