@@ -88,14 +88,14 @@ export const profilePhotoUploadApi = createAsyncThunk(
 export const changePasswordApi = createAsyncThunk(
     "user/changePassword",
     async (passwordData: IChangePassword, { rejectWithValue }) => {
-      try {
-        const response = await changePasswordWithEmail(passwordData);
-        return response.data;
-      } catch (error: any) {
-        return rejectWithValue(error.response.data.message || "Fehler beim Ändern des Passworts");
-      }
+        try {
+            const response = await changePasswordWithEmail(passwordData);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data.message || "Fehler beim Ändern des Passworts");
+        }
     }
-  );
+);
 
 const initialState: IUserState & EntityState<IUser, string> =
     userAdapter.getInitialState({
@@ -145,7 +145,7 @@ const userSlice = createSlice({
             })
             .addCase(userLoginApi.fulfilled, (state, action) => {
                 userAdapter.setOne(state, action.payload.userInfo);
-                state.userInfo=action.payload.userInfo;
+                state.userInfo = action.payload.userInfo;
                 state.token = action.payload.token;
                 state.status = "succeeded";
             })
@@ -178,7 +178,7 @@ const userSlice = createSlice({
                 state.status = "succeeded";
                 state.error = null;
             });
-            
+
 
     }
 });

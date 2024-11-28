@@ -63,11 +63,10 @@ const PasswordComponent = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               placeholder="Ihre E-Mail-Adresse"
-              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 ${
-                formik.touched.email && formik.errors.email
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 ${formik.touched.email && formik.errors.email
                   ? "border-red-500"
                   : "border-gray-300"
-              }`}
+                }`}
             />
             {formik.touched.email && formik.errors.email && (
               <p className="text-red-500 text-xs mt-1">{formik.errors.email}</p>
@@ -88,11 +87,10 @@ const PasswordComponent = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               placeholder="Neues Passwort"
-              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 ${
-                formik.touched.newPassword && formik.errors.newPassword
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 ${formik.touched.newPassword && formik.errors.newPassword
                   ? "border-red-500"
                   : "border-gray-300"
-              }`}
+                }`}
             />
             {formik.touched.newPassword && formik.errors.newPassword && (
               <p className="text-red-500 text-xs mt-1">
@@ -115,11 +113,10 @@ const PasswordComponent = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               placeholder="Neues Passwort bestätigen"
-              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 ${
-                formik.touched.confirmPassword && formik.errors.confirmPassword
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 ${formik.touched.confirmPassword && formik.errors.confirmPassword
                   ? "border-red-500"
                   : "border-gray-300"
-              }`}
+                }`}
             />
             {formik.touched.confirmPassword &&
               formik.errors.confirmPassword && (
