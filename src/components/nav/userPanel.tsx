@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../feature/store/store";
-import { userLogoutApi } from "../../../feature/reducers/userSlice";
-import { FaCarSide, FaRegCircleUser } from "react-icons/fa6";
+import { displayUserById, userLogoutApi } from "../../../feature/reducers/userSlice";
+import { FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { NotificationService } from "../../../service/NotificationService";
 import { IoIosLogIn } from "react-icons/io";
@@ -22,14 +22,19 @@ const DropdownMenuDemo = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
+  // Zustand für userId
+  const [userId, setUserId] = useState<string | null>(null);
+
   // Benutzerzustand direkt aus Redux Store laden
-  const userId = useSelector((state: RootState) => state.user.userId); // Überprüfe, ob der Reducer wirklich `user` heißt
-  const user = useSelector((state: RootState) => state.user.userInfo); // Annahme: `userInfo` enthält die Benutzerinformationen
-  
-  // Aktualisierungen in der Konsole anzeigen (zu Debugging-Zwecken)
-  React.useEffect(() => {
-    console.log("Benutzerzustand:", user);
-  }, [user]);
+  const user = useSelector((state: RootState) => (userId ? displayUserById(state, userId) : null));
+
+  // useEffect, um userId von localStorage zu lesen, nur wenn das Component im Browser läuft
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUserId = localStorage.getItem("userId");
+      setUserId(storedUserId);
+    }
+  }, []);
 
   const handleLogout = async () => {
     try {
