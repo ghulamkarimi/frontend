@@ -1,20 +1,13 @@
-"use client";
+"use client"; // Wichtig, da clientseitige Hooks verwendet werden
 
 import { useRouter } from "next/navigation";
 import "./globals.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../feature/store/store";
-import {
-  setCarId,
-  setIsBasicDetailsActive,
-  setIsCarVerfügbar,
-  setIsMediumDetailsActive,
-  setIsPremiumDetailsActive,
-} from "../../feature/reducers/carRentSlice";
-import { AiOutlineClose } from "react-icons/ai";
-
+import { setCarId, setIsCarVerfügbar } from "../../feature/reducers/carRentSlice";
 import { useState, useEffect } from "react";
-import { FaCheck } from "react-icons/fa6";
+import { subscribeToSocketEvents } from '../../feature/reducers/offerSlice'; // Passe den Pfad an
+import { AppDispatch } from '../../feature/store/store';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,7 +21,8 @@ export default function MainLayout({ children }: LayoutProps) {
     isMediumDetailsActive,
     isPremiumDetailsActive,
   } = useSelector((state: RootState) => state.carRent);
-  const dispatch = useDispatch();
+  
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const [storedCarId, setStoredCarId] = useState<string | null>(null);
@@ -42,7 +36,12 @@ export default function MainLayout({ children }: LayoutProps) {
         dispatch(setCarId(carId));
       }
     }
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    // WebSocket-Ereignisse abonnieren
+    subscribeToSocketEvents(dispatch);
+  }, [dispatch]);
 
   return (
     <main className="relative z-10">

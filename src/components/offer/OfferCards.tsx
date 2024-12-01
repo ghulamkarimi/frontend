@@ -1,25 +1,63 @@
-"use client";
-import { useSelector } from "react-redux";
-import { displayOffers } from "../../../feature/reducers/offerSlice";
+"use client"; // Ganz oben hinzufügen, um clientseitige Hooks zu unterstützen
+
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { displayOffers, offerCreated, offerUpdated, offerDeleted } from "../../../feature/reducers/offerSlice";
+import { socket } from "../../../service"; // Importiere die WebSocket-Instanz
 
 const OfferCards = () => {
-    const displayOffer = useSelector(displayOffers) || [];
-
+    const dispatch = useDispatch();
+    const offers = useSelector(displayOffers) || [];
 
     useEffect(() => {
-        if (!displayOffer || displayOffer.length === 0) {
-            return;
-        }
-    }, [displayOffer]);
+        // WebSocket-Verbindung herstellen
+        socket.connect();
+
+        // Logge Verbindung
+        socket.on("connect", () => {
+            console.log("✅ WebSocket verbunden mit ID:", socket.id);
+        });
+
+        // WebSocket-Ereignisse abonnieren
+        socket.on("offerCreated", (newOffer) => {
+            console.log("📩 Neues Angebot erstellt:", newOffer);
+            dispatch(offerCreated(newOffer));
+        });
+
+        socket.on("offerUpdated", (updatedOffer) => {
+            console.log("✏️ Angebot aktualisiert:", updatedOffer);
+            dispatch(offerUpdated({ id: updatedOffer._id, changes: updatedOffer }));
+        });
+
+        socket.on("offerDeleted", (deletedOfferId) => {
+            console.log("🗑️ Angebot gelöscht mit ID:", deletedOfferId);
+            dispatch(offerDeleted(deletedOfferId));
+        });
+
+        socket.on("disconnect", () => {
+            console.log("❌ WebSocket-Verbindung getrennt.");
+        });
+
+        // Cleanup-Funktion, um die WebSocket-Ereignisse zu bereinigen, wenn die Komponente unmountet wird
+        return () => {
+            socket.off("offerCreated");
+            socket.off("offerUpdated");
+            socket.off("offerDeleted");
+            socket.off("connect");
+            socket.off("disconnect");
+            socket.disconnect();
+        };
+    }, [dispatch]); // Verwende `dispatch` als einzige Abhängigkeit, um sicherzustellen, dass der Effekt nur einmal ausgeführt wird
 
     return (
         <div className="py-8 px-4 my-4">
-            <h2 className="text-5xl font-extrabold mb-8 text-center text-orange-600 text-shadow-md drop-shadow-lg bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
-                Unsere aktuellen Angebote
-            </h2>
+            {offers.length > 0 && (
+                <h2 className="text-5xl font-extrabold mb-8 text-center text-orange-600 text-shadow-md drop-shadow-lg bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
+                    Unsere aktuellen Angebote
+                </h2>
+            )}
             <div className="flex flex-wrap place-content-center gap-6">
-                {displayOffer.map((offer, index) => (
+                {offers.map((offer, index) => (
                     <div
                         key={offer?._id || index} // Fallback zu `index`, falls `_id` fehlt
                         className="offerCarte bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-lg p-5 w-full sm:w-[400px] max-w-sm transform hover:scale-105"
@@ -47,7 +85,6 @@ const OfferCards = () => {
                         </div>
                     </div>
                 ))}
-
             </div>
         </div>
     );
