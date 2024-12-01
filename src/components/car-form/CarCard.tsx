@@ -14,7 +14,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { ICarRent } from "../../../interface";
 import { useSelector } from "react-redux";
-import { getAllRentCars, setIsCarVerfügbar } from "../../../feature/reducers/carRentSlice";
+import { getAllRentCars, setIsCarVerfügbar, setIsLoading } from "../../../feature/reducers/carRentSlice";
 import { useState } from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { WiFog } from "react-icons/wi";
@@ -62,22 +62,7 @@ const rentalDays = pickupTime && returnTime && pickupDate && returnDate
     }, 3000);
   };
   const carId = localStorage.getItem("carRentId");
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className=" flex items-center gap-5 border-t-transparent rounded-full antialiased">
-          <div className=" flex items-center gap-1 text-3xl text-orange-400">
-            <WiFog className="animate-pulse" />
-            <WiFog className="animate-pulse" />
-            <WiFog className="animate-pulse" />
-          </div>
-          <div>
-            <FaCarSide className="text-orange-400 text-5xl sm:text-[8rem] animate-bounce" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div>
@@ -163,7 +148,12 @@ const rentalDays = pickupTime && returnTime && pickupDate && returnDate
                     </p>
                     <button
                       onClick={() => {
-                        handleSelectCar(car._id!);
+                       
+                        dispatch(setIsLoading(true))
+                        setTimeout(() => {
+                          handleSelectCar(car._id!);
+                          
+                        }, 2000);
                       }}
                       className="bg-orange-500 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors py-2"
                     >
