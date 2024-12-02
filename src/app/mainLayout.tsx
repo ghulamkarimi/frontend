@@ -4,10 +4,21 @@ import { useRouter } from "next/navigation";
 import "./globals.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../feature/store/store";
-import { setCarId, setIsCarVerfügbar } from "../../feature/reducers/carRentSlice";
+import {
+  setCarId,
+  setIsBasicDetailsActive,
+  setIsCarVerfügbar,
+  setIsLoading,
+  setIsMediumDetailsActive,
+  setIsPremiumDetailsActive,
+} from "../../feature/reducers/carRentSlice";
+import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
+import { FaCarSide, FaCheck } from "react-icons/fa6";
+import { WiFog } from "react-icons/wi";
 import { subscribeToSocketEvents } from '../../feature/reducers/offerSlice'; // Passe den Pfad an
 import { AppDispatch } from '../../feature/store/store';
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -20,6 +31,7 @@ export default function MainLayout({ children }: LayoutProps) {
     isBasicDetailsActive,
     isMediumDetailsActive,
     isPremiumDetailsActive,
+    loading,
   } = useSelector((state: RootState) => state.carRent);
   
   const dispatch = useDispatch<AppDispatch>();
@@ -46,7 +58,22 @@ export default function MainLayout({ children }: LayoutProps) {
   return (
     <main className="relative z-10">
       {/* Apply blur to children when isCarVerfügbar is true */}
-      <div className={isCarVerfügbar ? "blur-sm" : ""}>{children}</div>
+      <div className={isCarVerfügbar || loading? "blur-sm" : ""}>{children}</div>
+
+      {loading && (
+        <div className="fixed inset-0 z-50 flex justify-center items-center">
+          <div className=" flex items-center gap-5 border-t-transparent rounded-full antialiased">
+            <div className=" flex items-center gap-1 text-3xl text-orange-400">
+              <WiFog className="animate-pulse" />
+              <WiFog className="animate-pulse" />
+              <WiFog className="animate-pulse" />
+            </div>
+            <div>
+              <FaCarSide className="text-orange-400 text-5xl sm:text-[8rem] animate-bounce" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {isCarVerfügbar && (
         <div className="fixed inset-0 flex items-center justify-center z-50 md:w-full">
@@ -70,6 +97,7 @@ export default function MainLayout({ children }: LayoutProps) {
                     setTimeout(() => {
                       router.push(`/fahrzeugvermietung/${storedCarId}`);
                       dispatch(setIsCarVerfügbar(false));
+                      dispatch(setIsLoading(false))
                     }, 2000);
                   }
                 }}
