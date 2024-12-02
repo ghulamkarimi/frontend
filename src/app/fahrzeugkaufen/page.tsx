@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { displayCarBuys } from "../../../feature/reducers/carBuySlice";
+import { displayCarBuys, carBuyCreated, carBuyUpdated, carBuyDeleted } from "../../../feature/reducers/carBuySlice";
 import Link from "next/link";
 import { FaRoad, FaUserTie } from "react-icons/fa6";
 import { BsFillFuelPumpFill } from "react-icons/bs";
@@ -12,23 +12,19 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import FormattedDate from "@/components/FormatesDate";
 import { ICarBuy } from "../../../interface";
+import { socket } from "../../../service";
+import { useDispatch } from "react-redux";
 
 const carCategories = ["Transporter", "PKW", "Wohnwagen"];
 
-
-const page = () => {
+const Page = () => {
     const cars = useSelector(displayCarBuys);
-    console.log(cars);
+    const dispatch = useDispatch();
     const [searchTerm, setSearchTerm] = useState("");
     const [category, setCategory] = useState("All");
-
-    useEffect(() => {
-        const initialCategory = localStorage.getItem('initialCategory') || "All";
-        setCategory(initialCategory);
-    }, []);
-    
     const [filteredCars, setFilteredCars] = useState<ICarBuy[]>([]);
 
+    // Effekt für die Filterung der Autos
     useEffect(() => {
         const filtered = cars.filter((car) => {
             const matchesCategory = category === "All" || car.carCategory === category;
@@ -37,7 +33,43 @@ const page = () => {
         });
         setFilteredCars(filtered);
     }, [cars, category, searchTerm]);
-    
+
+    // Effekt für WebSocket-Verbindung
+    useEffect(() => {
+        socket.connect();
+
+        socket.on("connect", () => {
+            console.log("✅ WebSocket verbunden mit ID:", socket.id);
+        });
+
+        socket.on("carBuyCreated", (newCarBuy: ICarBuy) => {
+            console.log("📩 Neues Fahrzeug erstellt:", newCarBuy);
+            dispatch(carBuyCreated(newCarBuy));
+        });
+
+        socket.on("carBuyUpdated", (updatedCarBuy: ICarBuy) => {
+            console.log("✏️ Fahrzeug aktualisiert:", updatedCarBuy);
+            dispatch(carBuyUpdated({ id: updatedCarBuy._id, changes: updatedCarBuy }));
+        });
+
+        socket.on("carBuyDeleted", (deletedCarBuyId: string) => {
+            console.log("🗑️ Fahrzeug gelöscht mit ID:", deletedCarBuyId);
+            dispatch(carBuyDeleted(deletedCarBuyId));
+        });
+
+        socket.on("disconnect", () => {
+            console.log("❌ WebSocket-Verbindung getrennt.");
+        });
+
+        return () => {
+            socket.off("carBuyCreated");
+            socket.off("carBuyUpdated");
+            socket.off("carBuyDeleted");
+            socket.off("connect");
+            socket.off("disconnect");
+            socket.disconnect();
+        };
+    }, [dispatch]);
 
     return (
         <div className="pt-4">
@@ -77,12 +109,12 @@ const page = () => {
                                     alt="Car Image"
                                     className="w-full h-60 object-cover rounded-t-lg"
                                 />
-
-
                             </CardHeader>
                             <CardContent className="flex flex-col gap-2">
                                 <CardTitle className="text-gray-600">{car?.carTitle}</CardTitle>
                                 <p className="text-lg font-semibold">Preis: {car?.carPrice}</p>
+
+                                
                                 <div className="grid grid-cols-3 gap-4 pt-4">
                                     <span className="cardInfoSell">
                                         <FaRoad className="cardInfoSellIcon" />
@@ -129,4 +161,4 @@ const page = () => {
         </div>
     );
 };
-export default page;
+export default Page;

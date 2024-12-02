@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { IChangePassword, TAppointment, TCarRent, TUser } from '../interface';
 import axiosJWT from './axiosJwt';
-
+import { io, Socket } from 'socket.io-client';
 const SERVER_URL = 'http://localhost:7001';
+
+export const socket: Socket = io(SERVER_URL, {
+    autoConnect: false, // Automatisches Verbinden vermeiden, bis es explizit verlangt wird
+  });
 
 
 export const userRegister = (user: TUser) => {

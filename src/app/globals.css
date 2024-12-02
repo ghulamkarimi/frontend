@@ -9,8 +9,10 @@
 
 
 .even-bg > :nth-child(even) {
-  @apply bg-orange-500;
+  @apply bg-orange-500 rounded-lg py-1 px-1;
 }
+
+
 
 .text-shadow {
   text-shadow: 1px 3px 4px #000000;
@@ -99,7 +101,7 @@
   @apply text-gray-600 flex items-center gap-2 text-[8px] lg:text-[8px] xl:text-[12px] font-bold
 }
 .cardInfoSellIcon {
-  @apply text-orange-500 text-[8px] lg:text-[10px] 
+  @apply text-orange-500 text-[14px] lg:text-[16px] xl:text-[18px]
 }
 
 .inputRegister {

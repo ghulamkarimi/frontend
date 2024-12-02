@@ -3,6 +3,7 @@ import {
     createEntityAdapter,
     createSlice,
     EntityState,
+    PayloadAction,
 } from "@reduxjs/toolkit";
 import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload, deleteAccount, requestPasswordReset, confirmEmailVerificationCode } from '../../service/index';
 import { RootState } from "../store/store";
@@ -19,6 +20,7 @@ interface IUserState {
     file: File | null;
     userInfo: IUserInfo;
     message?: string;
+   
 }
 
 const userAdapter = createEntityAdapter<IUser, string>({
@@ -174,7 +176,16 @@ const userSlice = createSlice({
             state.userInfo = initialState.userInfo;
             state.token = "";
             state.userId = "";
-        }
+        },
+        // Benutzer aktualisieren
+        userUpdated: (state, action: PayloadAction<{ id: string; updatedUser: IUser }>) => {
+            const { id, updatedUser } = action.payload;
+            userAdapter.updateOne(state, {
+                id,
+                changes: updatedUser,
+            });
+        },
+          
     },
     extraReducers: (builder) => {
         builder
@@ -241,7 +252,7 @@ const userSlice = createSlice({
               });
     }
 });
-
+export const { userUpdated, clearUserInfos } = userSlice.actions;
 export const { selectAll: displayUsers, selectById: displayUserById } = userAdapter.getSelectors((state: RootState) => state.users);
 export const { setToken, setUserInfo } = userSlice.actions;
 

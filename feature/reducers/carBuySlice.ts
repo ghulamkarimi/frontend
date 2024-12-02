@@ -1,7 +1,7 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState} from "@reduxjs/toolkit";
 import { ICarBuy, TBuy } from "../../interface";
-import { RootState } from "../store/store";
-import { getCarBuys } from '../../service/index';
+import { AppDispatch, RootState } from "../store/store";
+import { getCarBuys, socket } from '../../service/index';
 
 interface carBuyState {
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -35,7 +35,11 @@ export const fetchCarBuys = createAsyncThunk("carBuys/fetchCarBuys", async () =>
 const carBuySlice = createSlice({
     name: 'carBuy',
     initialState,
-    reducers: {},
+    reducers: {
+        carBuyCreated: carBuyAdapter.addOne,
+        carBuyUpdated: carBuyAdapter.updateOne,
+        carBuyDeleted: carBuyAdapter.removeOne,
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchCarBuys.pending, (state, action) => {
@@ -54,5 +58,22 @@ const carBuySlice = createSlice({
            
     }
 })
+
+export const { carBuyCreated, carBuyUpdated, carBuyDeleted } = carBuySlice.actions;
 export const { selectAll: displayCarBuys, selectById: displayCarBuyById } = carBuyAdapter.getSelectors<RootState>((state) => state.carBuys);
 export default carBuySlice.reducer;
+
+// WebSocket-Ereignisse abonnieren und Aktionen dispatchen
+export const subscribeToSocketEvents = (dispatch: AppDispatch) => {
+    socket.on('carBuyCreated', (newCarBuy: ICarBuy) => {
+        dispatch(carBuyCreated(newCarBuy));
+    });
+
+    socket.on('carBuyUpdated', (updatedCarBuy: ICarBuy) => {
+        dispatch(carBuyUpdated({ id: updatedCarBuy._id, changes: updatedCarBuy }));
+    });
+
+    socket.on('carBuyDeleted', (deletedCarBuyId: string) => {
+        dispatch(carBuyDeleted(deletedCarBuyId));
+    });
+}

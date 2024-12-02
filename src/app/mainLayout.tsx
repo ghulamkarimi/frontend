@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Wichtig, da clientseitige Hooks verwendet werden
 
 import { useRouter } from "next/navigation";
 import "./globals.css";
@@ -13,10 +13,12 @@ import {
   setIsPremiumDetailsActive,
 } from "../../feature/reducers/carRentSlice";
 import { AiOutlineClose } from "react-icons/ai";
-
 import { useState, useEffect } from "react";
 import { FaCarSide, FaCheck } from "react-icons/fa6";
 import { WiFog } from "react-icons/wi";
+import { subscribeToSocketEvents } from '../../feature/reducers/offerSlice'; // Passe den Pfad an
+import { AppDispatch } from '../../feature/store/store';
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -31,7 +33,8 @@ export default function MainLayout({ children }: LayoutProps) {
     isPremiumDetailsActive,
     loading,
   } = useSelector((state: RootState) => state.carRent);
-  const dispatch = useDispatch();
+  
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const [storedCarId, setStoredCarId] = useState<string | null>(null);
@@ -45,7 +48,12 @@ export default function MainLayout({ children }: LayoutProps) {
         dispatch(setCarId(carId));
       }
     }
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    // WebSocket-Ereignisse abonnieren
+    subscribeToSocketEvents(dispatch);
+  }, [dispatch]);
 
   return (
     <main className="relative z-10">
