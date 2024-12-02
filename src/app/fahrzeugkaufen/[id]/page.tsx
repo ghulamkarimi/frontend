@@ -19,15 +19,16 @@ import 'react-medium-image-zoom/dist/styles.css';
 import { socket } from "../../../../service";
 
 const Page = () => {
+
     const dispatch = useDispatch<AppDispatch>();
     const { id: carId } = useParams();
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
             // Daten abrufen
             dispatch(fetchCarBuys()).then(() => {
-                setLoading(false); 
+                setLoading(false);
             });
 
             // WebSocket verbinden
@@ -147,6 +148,8 @@ const Page = () => {
                     </span>
                 </div>
                 <div className="flex flex-col gap-6">
+
+
                     <span className="flex items-center gap-2 md:gap-4">
                         <IoMdSpeedometer className="text-orange-500 text-xs md:text-4xl" />
                         <span className="font-bold">
@@ -154,13 +157,17 @@ const Page = () => {
                             <p className="text-[8px] md:text-sm lg:text-base">{singleCar?.carHorsePower} PS</p>
                         </span>
                     </span>
+
                     <span className="flex items-center gap-2 md:gap-4">
                         <FaCalendarAlt className="text-orange-500 text-xs md:text-4xl" />
                         <span className="font-bold">
-                            <p className="text-gray-600 text-[8px] md:text-sm lg:text-base">Erstzulassung</p>
-                            <FormattedDate date={singleCar?.carFirstRegistrationDay} />
+                            <p className="text-gray-600 text-[8px] md:text-sm lg:text-base">Erstzul</p>
+                            <span className="text-gray-600 text-[8px] md:text-sm lg:text-base">
+                                <FormattedDate date={singleCar?.carFirstRegistrationDay} />
+                            </span>
                         </span>
                     </span>
+
                 </div>
                 <div className="flex flex-col gap-6">
                     <span className="flex items-center gap-2 md:gap-4">
@@ -185,7 +192,20 @@ const Page = () => {
                 <div className="border my-2" />
                 <div className="flex flex-col gap-3 even-bg">
                     <p>Fahrzeugzustand: {singleCar?.carAccidentFree ? "Unbeschädigt" : "Beschädigt"}</p>
-                    {/* Weitere Fahrzeugdetails hier */}
+                    <p>Farbe: {singleCar?.carColor}</p>
+                    <p>Category: {singleCar?.carCategory} </p>
+                    <p>CO2-Emission: {singleCar?.carEuroNorm}</p>
+                    <p>Getriebe: {singleCar?.carGearbox}</p>
+                    <p>Umweltplakette: {singleCar?.carHorsePower}</p>
+                    <p>Letzte Inspektion: <FormattedDate date={singleCar?.carTechnicalInspection} /></p>
+                    <p>KM Stand: {singleCar?.carKilometers}</p>
+                    <p>Klima: {singleCar?.carAirConditioning ? "ja" : "nein"}</p>
+                    <p>Navigation: {singleCar?.carNavigation ? "ja" : "nein"}</p>
+                    <p>Parksensoren: {singleCar?.carParkAssist ? "ja" : "nein"}</p>
+                    <p>Sitzplätze: {singleCar?.carSeat}</p>
+                    <p>Motor: {singleCar?.carMotor}</p>
+                    <p>Unfallfrei: {singleCar?.damagedCar ? "ja" : "nein"}</p>
+
                 </div>
             </div>
 

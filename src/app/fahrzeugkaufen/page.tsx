@@ -113,6 +113,8 @@ const Page = () => {
                             <CardContent className="flex flex-col gap-2">
                                 <CardTitle className="text-gray-600">{car?.carTitle}</CardTitle>
                                 <p className="text-lg font-semibold">Preis: {car?.carPrice}</p>
+
+                                
                                 <div className="grid grid-cols-3 gap-4 pt-4">
                                     <span className="cardInfoSell">
                                         <FaRoad className="cardInfoSellIcon" />

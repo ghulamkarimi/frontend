@@ -65,7 +65,7 @@ const OfferCards = () => {
                         <img
                             src={offer?.imageUrl}
                             alt={offer?.title}
-                            className="w-full h-56 object-cover rounded-lg mb-4"
+                            className="w-full h-62 object-cover rounded-lg mb-4"
                         />
                         <h2 className="text-3xl font-bold text-orange-500 mt-4 flex justify-between items-center">
                             {offer?.title}
