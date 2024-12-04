@@ -1,6 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from "@reduxjs/toolkit";
 import { IAppointment } from "../../interface";
-import {  getAllsAppointment } from "../../service";
+import {  createAppointment, getAllsAppointment } from "../../service";
 import { AppDispatch, RootState } from "../store/store";
 import { socket } from "../../service";
 
@@ -30,6 +30,16 @@ export const fetchAppointments = createAsyncThunk("appointments/fetchAppointment
     }
 })
 
+export const createAppointmentApi = createAsyncThunk("appointments/createAppointmentApi", async (appointment: IAppointment) => {
+    try {
+        const response = await createAppointment(appointment);
+        return response.data;
+    } catch (error: any) {
+        return error?.response?.data?.message || "Error creating appointment";
+        
+    }
+});
+
 const appointmentSlice = createSlice({
     name: 'appointment',
     initialState,
@@ -50,6 +60,10 @@ const appointmentSlice = createSlice({
             .addCase(fetchAppointments.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message as string || "Error fetching appointments";
+            })
+            .addCase(createAppointmentApi.fulfilled, (state, action) => {
+                appointmentAdapter.addOne(state, action.payload);
+                
             })
     }
 })

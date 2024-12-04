@@ -106,7 +106,7 @@ export const getAllsAppointment = () => {
     return axios.get(url);
   };
 
-  export const createAppointmentApi = (appointment: TAppointment) => {
+  export const createAppointment = (appointment: TAppointment) => {
     const url = `${SERVER_URL}/appointment/create`;
     return axios.post(url, appointment);
   }

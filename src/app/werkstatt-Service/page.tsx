@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAppointments, displayAppointments } from "../../../feature/reducers/appointmentSlice";
+import { fetchAppointments, displayAppointments, createAppointmentApi } from "../../../feature/reducers/appointmentSlice";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { RootState, AppDispatch } from "../../../feature/store/store";
 import { IAppointment } from "../../../interface";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { NotificationService } from "../../../service/NotificationService";
 
 type CalendarValue = Date | Date[] | null;
 
@@ -116,9 +117,15 @@ const UserCalendar: React.FC = () => {
         comment: Yup.string(),
     });
 
-    const handleSubmit = (values: typeof initialValues) => {
+    const handleSubmit = async (values: typeof initialValues, { resetForm }: { resetForm: () => void }) => {
         console.log("Form data submitted:", values);
-        // Sende die Daten an das Backend oder speichere sie
+       try {
+        const response = await dispatch (createAppointmentApi(values as IAppointment)).unwrap();
+        NotificationService.success(response.message || "Appointment created successfully");
+        resetForm()
+       } catch (error:any) {
+        NotificationService.error(error?.response?.data?.message || "Error creating appointment");
+       }
     };
 
     return (
