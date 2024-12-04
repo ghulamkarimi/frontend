@@ -57,20 +57,39 @@ const UserCalendar: React.FC = () => {
     const availableTimes = ["07:30", "09:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00"];
 
     const renderTimeButtons = () => {
+        const now = new Date();
+        const isToday = selectedDate
+            ? now.toDateString() === selectedDate.toDateString()
+            : false;
+    
         return availableTimes.map((time) => {
+            // Split time into hours and minutes
+            const [hours, minutes] = time.split(":").map(Number);
+            
+            // Create a Date object for the selected time
+            const timeDate = new Date(selectedDate || now);
+            timeDate.setHours(hours, minutes, 0, 0);
+            
+            // Check if the time is already booked or blocked
             const isBookedOrBlocked = items.some((appointment: IAppointment) => {
                 const appointmentDate = formatDate(new Date(appointment.date));
                 const isSameDate = appointmentDate === formattedSelectedDate;
                 const isSameTime = appointment.time.padStart(5, "0") === time;
                 return isSameDate && isSameTime && appointment.isBookedOrBlocked;
             });
-
+    
+            // Check if the time is in the past (for today's date)
+            const isPastTime = isToday && timeDate < now;
+    
             return (
                 <button
                     key={time}
-                    className={`px-4 py-2 m-2 rounded-lg text-white ${isBookedOrBlocked ? "bg-red-500 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
-                        }`}
-                    disabled={isBookedOrBlocked}
+                    className={`px-4 py-2 m-2 rounded-lg text-white ${
+                        isBookedOrBlocked || isPastTime
+                            ? "bg-red-500 cursor-not-allowed"
+                            : "bg-green-500 hover:bg-green-600"
+                    }`}
+                    disabled={isBookedOrBlocked || isPastTime}
                     onClick={() => {
                         setSelectedTime(time || "");
                     }}
@@ -80,6 +99,7 @@ const UserCalendar: React.FC = () => {
             );
         });
     };
+    
 
     const initialValues: Omit<IAppointment, "_id" | "isBookedOrBlocked"> = {
         service: "",
