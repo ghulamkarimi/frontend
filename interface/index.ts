@@ -94,11 +94,16 @@ export interface  IAppointment {
     _id: string
     service: string;
     date: string;
-    fullName: string;
+    time: string;
+    firstName: string;
+    lastName: string;
     email: string;
     phone: string;
-    notes: string;
+    comment: string;
     licensePlate: string;
+    hsn: string;
+    tsn: string;
+    isBookedOrBlocked: boolean;
 }
 
 export type TAppointment = Partial<IAppointment>;

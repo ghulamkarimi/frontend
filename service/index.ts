@@ -101,10 +101,15 @@ export const getOffers = () => {
 
 // Appointment
 
-export const createAppointment = (appointment: TAppointment) => {
-    const url = `${SERVER_URL}/appointment`;
+export const getAllsAppointment = () => {
+    const url = `${SERVER_URL}/appointment/all`;
+    return axios.get(url);
+  };
+
+  export const createAppointmentApi = (appointment: TAppointment) => {
+    const url = `${SERVER_URL}/appointment/create`;
     return axios.post(url, appointment);
-}
+  }
 
 // SchutzPacket
 

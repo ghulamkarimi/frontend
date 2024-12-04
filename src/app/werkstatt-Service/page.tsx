@@ -1,218 +1,104 @@
-"use client";
-import HomeCarouselHero from "@/components/carousel/HomeCarouselHero";
-import OfferCards from "@/components/offer/OfferCards";
-import { useFormik } from "formik";
-import { useEffect, useState } from "react";
-import * as Yup from 'yup';
-import { NotificationService } from "../../../service/NotificationService";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../feature/store/store";
-import { createAppointmentApi } from "../../../feature/reducers/workshopSlice";
+"use client"
 
-const WorkshopBookingPage = () => {
-    const [minDate, setMinDate] = useState("");
-    const [maxDate, setMaxDate] = useState("");
-    const dispatch = useDispatch<AppDispatch>();
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAppointments } from '../../../feature/reducers/appointmentSlice';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import { RootState, AppDispatch } from '../../../feature/store/store';
+import { IAppointment } from '../../../interface';
 
-    const formSchema = Yup.object({
-        fullName: Yup.string()
-            .required('Required')
-            .matches(/^[A-Za-z\s]+$/, "Only alphabets and spaces are allowed in name"),
-        email: Yup.string().email('Invalid email address').required('Required'),
-        phone: Yup.string()
-            .required('Required')
-            .matches(/^[\d+]+$/, "Only numbers and + sign are allowed in phone"),
-        date: Yup.date().required('Required'),
-        notes: Yup.string().required('Required'),
-        service: Yup.string().required('Required'),
-        licensePlate: Yup.string().required('Required')
+// Typ von Value importieren
+type CalendarValue = Date | Date[] | null;
+
+const UserCalendar: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { status } = useSelector((state: RootState) => state.appointments);
+  const items = useSelector((state: RootState) => state.appointments.ids.map(id => state.appointments.entities[id]));
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  // Setze isClient auf true, um sicherzustellen, dass der Kalender nur auf dem Client angezeigt wird
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Hole Termine, sobald die Komponente gemountet wird
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchAppointments());
+    }
+  }, [status, dispatch]);
+
+  const handleDateChange = (value: CalendarValue) => {
+    console.log('Selected Date:', value);
+    if (value instanceof Date) {
+      setSelectedDate(value);
+    } else if (Array.isArray(value)) {
+      setSelectedDate(value[0]);
+    } else {
+      setSelectedDate(null);
+    }
+  };
+
+  const availableTimes = [
+    "07:30", "09:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00"
+  ];
+
+  const renderTimeButtons = () => {
+    console.log("Appointments Items:", items);
+    return availableTimes.map((time) => {
+      const formattedSelectedDate = selectedDate ? selectedDate.toISOString().split('T')[0] : null;
+
+      // Debugging: Logge die relevanten Werte für die Prüfung
+      console.log("Checking time:", time, "on date:", formattedSelectedDate);
+
+      const isBookedOrBlocked = items.some(
+        (appointment: IAppointment) =>
+          appointment?.date === formattedSelectedDate &&
+          appointment?.time === time &&
+          appointment?.isBookedOrBlocked
+      );
+
+      console.log("Time:", time, "isBookedOrBlocked:", isBookedOrBlocked);
+
+      return (
+        <button
+          key={time}
+          style={{
+            backgroundColor: isBookedOrBlocked ? '#dc3545' : '#28a745',
+            color: '#ffffff',
+            padding: '10px 20px',
+            margin: '10px',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: isBookedOrBlocked ? 'not-allowed' : 'pointer',
+          }}
+          disabled={isBookedOrBlocked}
+        >
+          {time}
+        </button>
+      );
     });
+  };
 
-    const formik = useFormik({
-        initialValues: {
-            fullName: "",
-            email: "",
-            phone: "",
-            date: "",
-            service: "",
-            licensePlate: "",
-            notes: ""
-        },
-        validationSchema: formSchema,
-        onSubmit: async (values, {resetForm}) => {
-            try {
-                await dispatch(createAppointmentApi(values)).unwrap();
-                NotificationService.success('Termin erfolgreich gebucht! Sie erhalten eine Bestätigung per E-Mail.');
-                resetForm();
-            } catch (error: any) {
-                console.error('Fehler:', error);  // Ausgabe des gesamten Fehlerobjekts
-                const errorMessage = error?.message || "Ein unbekannter Fehler ist aufgetreten";
-                NotificationService.error(errorMessage);
-            }
-        }
-    });
+  if (!isClient) {
+    return null; // Verhindere die Server-seitige Darstellung des Kalenders
+  }
 
-    useEffect(() => {
-        const today = new Date();
-        const min = today.toISOString().split("T")[0];
-        const oneMonthLater = new Date(today);
-        oneMonthLater.setDate(today.getDate() + 30);
-        const max = oneMonthLater.toISOString().split("T")[0];
-        setMinDate(min);
-        setMaxDate(max);
-    }, []);
-
-    return (
-        <div className="min-h-screen pt-8">
-            <div className="max-w-4xl mx-auto py-12 px-6 bg-gradient-to-r from-slate-400 via-slate-500 to-gray-400 shadow-lg rounded-lg">
-                <h1 className="text-center text-4xl font-bold text-gray-800 mb-6">
-                    Jetzt Werkstatttermin buchen
-                </h1>
-                <p className="text-center font-bold pb-2">… und bequem nach dem Service in der Werkstatt bezahlen.</p>
-                <p className="text-center mb-10">
-                    Vereinbaren Sie jetzt einen Termin und lassen Sie sich von unseren Experten helfen.
-                </p>
-                <form onSubmit={formik.handleSubmit} className="space-y-6">
-                    <div>
-                        <select
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
-                            name="service"
-                            value={formik.values.service}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        >
-                            <option value="">Gewünschte Service</option>
-                            <option value="Reifen Montage">Reifen Montage</option>
-                            <option value="Radwecseln">Radwecseln</option>
-                            <option value="Ölwechsel">Ölwechsel</option>
-                            <option value="Sonstiges">Sonstiges</option>
-                        </select>
-                        {formik.errors.service && formik.touched.service && (
-                            <div className="text-red-500 text-sm">{formik.errors.service}</div>
-                        )}
-                    </div>
-                    <div>
-                        <label htmlFor="fullName" className="block text-gray-700 font-semibold">
-                            Vollständiger Name
-                        </label>
-                        <input
-                            id="fullName"
-                            name="fullName"
-                            type="text"
-                            value={formik.values.fullName}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
-                            placeholder="Max Mustermann"
-                        />
-                        {formik.errors.fullName && formik.touched.fullName && (
-                            <div className="text-red-500 text-sm">{formik.errors.fullName}</div>
-                        )}
-                    </div>
-                    <div>
-                        <label htmlFor="licensePlate" className="block text-gray-700 font-semibold">
-                            Kennzeichen
-                        </label>
-                        <input
-                            id="licensePlate"
-                            name="licensePlate"
-                            type="text"
-                            value={formik.values.licensePlate}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
-                            placeholder="M-XX 1234"
-                        />
-                        {formik.errors.licensePlate && formik.touched.licensePlate && (
-                            <div className="text-red-500 text-sm">{formik.errors.licensePlate}</div>
-                        )}
-                    </div>
-                    <div>
-                        <label htmlFor="email" className="block text-gray-700 font-semibold">
-                            E-Mail-Adresse
-                        </label>
-                        <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
-                            placeholder="beispiel@domain.com"
-                        />
-                        {formik.errors.email && formik.touched.email && (
-                            <div className="text-red-500 text-sm">{formik.errors.email}</div>
-                        )}
-                    </div>
-                    <div>
-                        <label htmlFor="phone" className="block text-gray-700 font-semibold">
-                            Telefonnummer
-                        </label>
-                        <input
-                            id="phone"
-                            name="phone"
-                            type="tel"
-                            value={formik.values.phone}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
-                            placeholder="+49 123 456 789"
-                        />
-                        {formik.errors.phone && formik.touched.phone && (
-                            <div className="text-red-500 text-sm">{formik.errors.phone}</div>
-                        )}
-                    </div>
-                    <div>
-                        <label htmlFor="date" className="block text-gray-700 font-semibold">
-                            Wunschtermin
-                        </label>
-                        <input
-                            id="date"
-                            name="date"
-                            type="date"
-                            min={minDate}
-                            max={maxDate}
-                            value={formik.values.date}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
-                        />
-                        {formik.errors.date && formik.touched.date && (
-                            <div className="text-red-500 text-sm">{formik.errors.date}</div>
-                        )}
-                    </div>
-                    <div>
-                        <label htmlFor="notes" className="block text-gray-700 font-semibold">
-                            Bemerkungen
-                        </label>
-                        <textarea
-                            id="notes"
-                            name="notes"
-                            value={formik.values.notes}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-orange-500"
-                            placeholder="Zusätzliche Informationen zum Termin..."
-                        />
-                        {formik.errors.notes && formik.touched.notes && (
-                            <div className="text-red-500 text-sm">{formik.errors.notes}</div>
-                        )}
-                    </div>
-                    <div className="text-center">
-                        <button
-                            type="submit"
-                            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition duration-300"
-                        >
-                            Termin buchen
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <OfferCards />
-            <HomeCarouselHero />
-        </div>
-    );
+  return (
+    <div>
+      <h1>Benutzerfreundlicher Kalender</h1>
+      <div className="calendar-container">
+        <Calendar onChange={(value) => handleDateChange(value as CalendarValue)} value={selectedDate} />
+      </div>
+      <div className="time-buttons mt-4">
+        <h3>Verfügbare Uhrzeiten für den {selectedDate?.toLocaleDateString()}:</h3>
+        {renderTimeButtons()}
+      </div>
+    </div>
+  );
 };
 
-export default WorkshopBookingPage;
+export default UserCalendar;
