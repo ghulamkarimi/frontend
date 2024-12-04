@@ -8,6 +8,41 @@
 @tailwind utilities;
 
 
+
+.calendar-container {
+  display: flex;
+  justify-content: center;
+}
+
+.time-buttons button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.time-buttons button:hover {
+  background-color: #218838;
+}
+
+.time-buttons button:disabled {
+  background-color: #dc3545;
+  cursor: not-allowed;
+}
+
+h1, h3 {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+
+
+
+
+
 .even-bg > :nth-child(even) {
   @apply bg-orange-500 rounded-lg py-1 px-1;
 }
