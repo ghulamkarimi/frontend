@@ -48,29 +48,31 @@ const UserCalendar: React.FC = () => {
 
   const renderTimeButtons = () => {
     console.log("Appointments Items: ", items);
+  
     return availableTimes.map((time) => {
       const isBookedOrBlocked = items.some((appointment: IAppointment) => {
-        // Konvertiere appointment.date in dasselbe Format wie formattedSelectedDate, um den Vergleich zu erleichtern
-        const appointmentDate = new Date(appointment.date).toISOString().split('T')[0]; // Datum zu YYYY-MM-DD formatieren
-
+        // Konvertiere appointment.date und selectedDate in lokales Datum
+        const appointmentDate = new Date(appointment.date).toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
+        const selectedDateFormatted = new Date(selectedDate!).toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
+  
         // Formatierung der Zeit: 7:30 -> 07:30
         const formattedAppointmentTime = appointment?.time.padStart(5, '0');
-
-        console.log(`Comparing appointment.date: ${appointmentDate} with selected date: ${formattedSelectedDate}`);
-        
-        const isSameDate = appointmentDate === formattedSelectedDate;
+  
+        console.log(`Comparing appointment.date: ${appointmentDate} with selected date: ${selectedDateFormatted}`);
+  
+        const isSameDate = appointmentDate === selectedDateFormatted;
         const isSameTime = formattedAppointmentTime === time;
         const isBlocked = appointment?.isBookedOrBlocked;
-
+  
         console.log(
           `Time: ${time}, isSameDate: ${isSameDate}, isSameTime: ${isSameTime}, isBookedOrBlocked: ${isBlocked}`
         );
-
+  
         return isSameDate && isSameTime && isBlocked;
       });
-
+  
       console.log(`Button for time ${time} isBookedOrBlocked: ${isBookedOrBlocked}`);
-
+  
       return (
         <button
           key={time}
@@ -90,7 +92,7 @@ const UserCalendar: React.FC = () => {
       );
     });
   };
-
+  
   return (
     <div>
       <h1>Benutzerfreundlicher Kalender</h1>
