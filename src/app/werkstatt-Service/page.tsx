@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAppointments, displayAppointments } from '../../../feature/reducers/appointmentSlice';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { RootState, AppDispatch } from '../../../feature/store/store'; // Adjust the import path as needed
+import { RootState, AppDispatch } from '../../../feature/store/store';
 import { IAppointment } from '../../../interface';
 
 // Typ von Value importieren
@@ -14,7 +14,6 @@ type CalendarValue = Date | Date[] | null;
 const UserCalendar: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { status } = useSelector((state: RootState) => state.appointments);
-  // Verwende den memoisierten Selector, um alle Termine zu holen
   const items = useSelector((state: RootState) => displayAppointments(state));
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -29,16 +28,9 @@ const UserCalendar: React.FC = () => {
   // Formatierte Version des ausgewählten Datums
   useEffect(() => {
     if (selectedDate) {
-      const formattedDate = new Intl.DateTimeFormat('de-DE', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
-        .format(selectedDate)
-        .split('.')
-        .reverse()
-        .join('-'); // Formatiert das Datum zu "YYYY-MM-DD"
+      const formattedDate = selectedDate.toISOString().split('T')[0]; // Datum zu YYYY-MM-DD formatieren
       setFormattedSelectedDate(formattedDate);
+      console.log("Formatted Selected Date:", formattedDate);
     }
   }, [selectedDate]);
 
@@ -57,18 +49,25 @@ const UserCalendar: React.FC = () => {
   const renderTimeButtons = () => {
     console.log("Appointments Items: ", items);
     return availableTimes.map((time) => {
-      const isBookedOrBlocked = items.some(
-        (appointment: IAppointment) => {
-          const isSameDate = appointment?.date === formattedSelectedDate;
-          const isSameTime = appointment?.time === time;
-          const isBlocked = appointment?.isBookedOrBlocked;
+      const isBookedOrBlocked = items.some((appointment: IAppointment) => {
+        // Konvertiere appointment.date in dasselbe Format wie formattedSelectedDate, um den Vergleich zu erleichtern
+        const appointmentDate = new Date(appointment.date).toISOString().split('T')[0]; // Datum zu YYYY-MM-DD formatieren
 
-          console.log(`Checking time: ${time} on date: ${formattedSelectedDate}`);
-          console.log(`Time: ${time} isSameDate: ${isSameDate} isSameTime: ${isSameTime} isBookedOrBlocked: ${isBlocked}`);
+        // Formatierung der Zeit: 7:30 -> 07:30
+        const formattedAppointmentTime = appointment?.time.padStart(5, '0');
 
-          return isSameDate && isSameTime && isBlocked;
-        }
-      );
+        console.log(`Comparing appointment.date: ${appointmentDate} with selected date: ${formattedSelectedDate}`);
+        
+        const isSameDate = appointmentDate === formattedSelectedDate;
+        const isSameTime = formattedAppointmentTime === time;
+        const isBlocked = appointment?.isBookedOrBlocked;
+
+        console.log(
+          `Time: ${time}, isSameDate: ${isSameDate}, isSameTime: ${isSameTime}, isBookedOrBlocked: ${isBlocked}`
+        );
+
+        return isSameDate && isSameTime && isBlocked;
+      });
 
       console.log(`Button for time ${time} isBookedOrBlocked: ${isBookedOrBlocked}`);
 
