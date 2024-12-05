@@ -143,9 +143,7 @@ const UserCalendar: React.FC = () => {
         const response = await dispatch (createAppointmentApi(values as IAppointment)).unwrap();
         NotificationService.success(response.message || "Appointment created successfully");
         resetForm()
-        setSelectedDate(null);
-        setFormattedSelectedDate(null);
-        setSelectedTime(null);
+      
        } catch (error:any) {
         NotificationService.error(error?.response?.data?.message || "Error creating appointment");
        }
