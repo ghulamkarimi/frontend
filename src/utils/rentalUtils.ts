@@ -2,12 +2,18 @@ import { useDispatch } from 'react-redux';
 import { setSelectedSchutzPackage } from '../../feature/reducers/carRentSlice';
 
 
+
+
+
+
 export const calculateRentalDays = (pickupDate: string, pickupTime: string, returnDate: string, returnTime: string) => {
-  // Clean up the time strings by removing the "Uhr" or any non-numeric characters
+  
+  
+ 
   const cleanedPickupTime = pickupTime ? pickupTime.replace(/[^0-9:]/g, '') : '';
   const cleanedReturnTime = returnTime ? returnTime.replace(/[^0-9:]/g, '') : '';
 
-  // If either cleaned time is still empty, return NaN
+
   if (!cleanedPickupTime || !cleanedReturnTime) {
     console.error('Invalid pickupTime or returnTime values');
     return NaN;
@@ -50,39 +56,6 @@ export const calculateRentalDays = (pickupDate: string, pickupTime: string, retu
 
   return rentalDays; // return rentalDays if it's more than 3 hours
 };
-
-
-
-
-
-
-
-  
-
-
-  export const getDailyRateByPackage = (packet: string): number => {
-    switch (packet) {
-      case "Medium":
-        return 11.4; 
-      case "Premium":
-        return 14.5; 
-      case "Basic":
-      default:
-        return 1; 
-    }
-  };
-  
-  
- 
-  export const calculatePriceSchutzPacket = (
-    packet: string,
-    rentalDays: number
-  ): string => {
-    const dailyRate = getDailyRateByPackage(packet); 
-    const totalPrice = dailyRate * rentalDays; 
-    return totalPrice.toFixed(2); 
-  };
-  
 
 
 

@@ -77,13 +77,13 @@ const Page = () => {
   const toggleDetails = (packet: string) => {
     if (packet === "Basic")
       dispatch(setIsBasicDetailsActive(!isBasicDetailsActive));
-    console.log("packet", packet);
+  
     if (packet === "Medium")
       dispatch(setIsMediumDetailsActive(!isMediumDetailsActive));
-    console.log("packet", packet);
+  
     if (packet === "Premium")
       dispatch(setIsPremiumDetailsActive(!isPremiumDetailsActive));
-    console.log("packet", packet);
+    
   };
 
   const rentalDays = calculateRentalDays(pickupDate!, pickupTime!,returnDate!,returnTime!);
@@ -134,6 +134,7 @@ const Page = () => {
           </p>
           <button
             onClick={() => {
+              localStorage.setItem("rentalDays",String(rentalDays))
               router.push(`/reservation/${carRentId}`);
             }}
             className=" col-span-3 px-6 py-3 bg-yellow-500 rounded-md"
@@ -154,7 +155,7 @@ const Page = () => {
               key={schutzPacket._id}
               name={schutzPacket?.name}
               deductible={schutzPacket?.deductible}
-              dailyRate={rentalDays}
+              dailyRate={schutzPacket?.dailyRate}
               features={schutzPacket?.features || []}
               isSelected={selectedSchutzPacket === schutzPacket?.name}
               onSelect={() => handleSelectPacket(schutzPacket?.name)}

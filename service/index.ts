@@ -112,3 +112,17 @@ export const allSchutzPacket = () => {
     const url = `${SERVER_URL}/schutzPacket/getAllSchutzPacket`;
     return axios.get(url);
 }
+
+
+
+// Paypal Payment
+
+export const createPayPalOrder = async (orderDetails: any) => {
+      const url = `${SERVER_URL}/payment/create-payment`;
+      const response = await  axios.post (url,orderDetails);
+      return {
+        approvalUrl: response.data.approvalUrl,
+        orderId: response.data.orderId,
+      };
+ 
+}

@@ -7,6 +7,7 @@ interface ISchutzPacketSate {
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   schutzPacketId:string | null ;
+  
 }
 
 const schutzPacketAdapter = createEntityAdapter<ISchutzPacket, string>({

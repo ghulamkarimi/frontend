@@ -4,7 +4,7 @@ import RentalLocationCard from "@/components/cards/RentalLocationCard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../feature/store/store";
 import {
-  calculatePriceSchutzPacket,
+ 
   calculateRentalDays,
 } from "@/utils/rentalUtils";
 import { useParams } from "next/navigation";
@@ -28,7 +28,7 @@ const page = () => {
     pickupTime,
     returnDate,
     returnTime,
-   
+    selectedSchutzPacket
   } = useSelector((state: RootState) => state.carRent);
   const getOneCar = useSelector((state: RootState) =>
     getRentCarById(state, carRentId! as string)
@@ -114,7 +114,7 @@ const page = () => {
               <img
                 className=" px-2 rounded-md w-full"
                 src={getOneCar?.carImage}
-                alt={getOneCar.carImage}
+                alt={getOneCar?.carImage}
               />
             </div>
             <div className="w-full flex flex-wrap gap-6 mt-3">
@@ -161,10 +161,12 @@ const page = () => {
               <div className=" flex items-center justify-between">
                 <p>Schutzpakete & Extras</p>
                 <p>
-                  {calculatePriceSchutzPacket(
-                    localStorage.getItem("packet")!,
-                    rentalDays
-                  )}{" "}
+                 
+                   {selectedSchutzPacket === "Medium"
+                    ? `${calculateGesamtePriceSchutzPacket(11.1)} €`
+                    : selectedSchutzPacket === "Premium"
+                    ? `${calculateGesamtePriceSchutzPacket(14.2)} €`
+                    : "Inklusive"}
                  €
                 </p>
               </div>

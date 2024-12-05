@@ -5,10 +5,12 @@ import {
   EntityState,
 } from "@reduxjs/toolkit";
 import { ICarRent } from "../../interface";
-import { getCarRent, getOneCarById } from "../../service";
+import { createPayPalOrder, getCarRent, getOneCarById } from "../../service";
 import { RootState } from "../store/store";
+import { AxiosResponse } from "axios";
 
 export interface ICarRentState {
+  orderDetails: null,
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   carId: string | null;
@@ -73,6 +75,22 @@ export const getCarRentByIdApi = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return error.message;
+    }
+  }
+);
+
+export const createPayPalOrderApi = createAsyncThunk< 
+  PayPalOrderResponse, 
+  { amount: string; customerEmail: string; carId: string; userId: string }, 
+  { rejectValue: PayPalOrderError } 
+>(
+  'carRent/paypalPayment',
+  async (orderDetails, { rejectWithValue }) => {
+    try {
+      const response = await createPayPalOrder(orderDetails);
+      return response; 
+    } catch (error:any) {
+      return rejectWithValue(error.response?.data || 'Unbekannter Fehler');
     }
   }
 );
@@ -147,6 +165,18 @@ const carRentSlice = createSlice({
       .addCase(getCarRentByIdApi.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "failed to get all car";
+      })
+
+      .addCase(createPayPalOrderApi.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(createPayPalOrderApi.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.orderDetails = action.payload;
+      })
+      .addCase(createPayPalOrderApi.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "failed to Order "
       });
   },
 });
