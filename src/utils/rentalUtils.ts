@@ -8,8 +8,6 @@ import { setSelectedSchutzPackage } from '../../feature/reducers/carRentSlice';
 
 export const calculateRentalDays = (pickupDate: string, pickupTime: string, returnDate: string, returnTime: string) => {
   
-  
- 
   const cleanedPickupTime = pickupTime ? pickupTime.replace(/[^0-9:]/g, '') : '';
   const cleanedReturnTime = returnTime ? returnTime.replace(/[^0-9:]/g, '') : '';
 

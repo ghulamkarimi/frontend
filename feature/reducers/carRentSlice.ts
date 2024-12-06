@@ -47,11 +47,12 @@ const initialState: ICarRentState & EntityState<ICarRent, string> =
     loading:false,
     selectedSchutzPacket: "Basic",
     rentalDays: 0,
-    pickupDate: "",
-    pickupTime: "",
-    returnDate: "",
-    returnTime: "",
+    pickupDate: null,
+    pickupTime: null,
+    returnDate: null,
+    returnTime: null,
     pickupLocation: null,
+    orderDetails: null,
     age: null,
   });
 

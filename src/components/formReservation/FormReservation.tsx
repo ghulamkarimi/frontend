@@ -1,36 +1,65 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../feature/store/store";
 import { getRentCarById } from "../../../feature/reducers/carRentSlice";
+import { createReservationApi } from "../../../feature/reducers/reservationSlice";
+import { NotificationService } from "../../../service/NotificationService";
+import { TReservation } from "../../../interface";
+import FahrerDetails from "./FahrerDetails";
+import PayPalSection from "./PayPalSection";
 
-const FormReservation = () => {
-  const { id: carRentId } = useParams();
+const FormReservation = ({
+  
+}) => {
+  const { id: carRentIdRaw } = useParams();
+  const carRentId =
+    typeof carRentIdRaw === "string" ? carRentIdRaw : carRentIdRaw?.[0] || "";
+
+  const userId = localStorage.getItem("userId") || "";
+  console.log("carRentId", carRentId);
   const dispatch = useDispatch<AppDispatch>();
 
-
-  const rentalDays = localStorage.getItem("rentalDays")
+  const rentalDays = localStorage.getItem("rentalDays");
   const getOneCar = useSelector((state: RootState) =>
     getRentCarById(state, carRentId! as string)
   );
-  const [isVerified, setIsVerified] = useState(false);
+
+  const [step, setStep] = useState(1); 
+  const router = useRouter();  
+
+  const pickupDate= localStorage.getItem("pickupDate")|| ""
+     const returnDate= localStorage.getItem("returnDate")|| ""
+     const pickupTime = localStorage.getItem("pickupTime")|| ""
+     const returnTime = localStorage.getItem("returnTime")|| ""
+
   const [loading, setLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
-  const [email, setEmail] = useState("khalil.haouas@gmail.com"); // Zustand für die E-Mail
 
+  const gesamtPrice = localStorage.getItem("gesamtPreice") || "";
   const formSchema = Yup.object({
     vorname: Yup.string().required("Vorname ist erforderlich"),
     nachname: Yup.string().required("Nachname ist erforderlich"),
     geburtsdatum: Yup.string()
       .required("Geburtsdatum ist erforderlich")
-      .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Geburtsdatum muss im Format TT/MM/JJJJ sein"),
-    email: Yup.string().required("Email-Adresse ist erforderlich").email("Ungültige Email-Adresse"),
+      .matches(
+        /^\d{4}-\d{2}-\d{2}$/,
+        "Geburtsdatum muss im Format JJJJ-MM-TT sein"
+      ),
+
+    email: Yup.string()
+      .required("Email-Adresse ist erforderlich")
+      .email("Ungültige Email-Adresse"),
     telefonnummer: Yup.string()
       .required("Telefonnummer ist erforderlich")
       .matches(/^\d+$/, "Telefonnummer darf nur Zahlen enthalten"),
+    adresse: Yup.string().required("Adresse ist erforderlich"),
+    postalCode: Yup.string()
+      .required("Postleitzahl ist erforderlich")
+      .matches(/^\d{5}$/, "Postleitzahl muss 5 Ziffern lang sein"),
+    stadt: Yup.string().required("Stadt ist erforderlich"),
   });
 
   const formik = useFormik({
@@ -38,16 +67,30 @@ const FormReservation = () => {
       vorname: "",
       nachname: "",
       geburtsdatum: "",
-      email: email, // E-Mail aus dem Zustand setzen
+      email: "",
       telefonnummer: "",
+      adresse: "",
+      postalCode: "",
+      stadt: "",
+      gesamtPrice,
+      carRentId: carRentId || "",
+      userId: userId || "",
+      pickupDate: pickupDate || "",
+      returnDate: returnDate || "",
+      pickupTime: pickupTime || "",
+      returnTime: returnTime || "",
     },
     validationSchema: formSchema,
-    onSubmit: (values) => {
-      if (!isVerified) {
-        alert("Bitte bestätigen Sie Ihre Identität über PayPal.");
-        return;
+    onSubmit: async (values: TReservation) => {
+      try {
+        console.log("value", values);
+        const response = await dispatch(createReservationApi(values)).unwrap();
+        localStorage.setItem("email",values.email||"")
+        NotificationService.success(response.message);
+        setStep(2);
+      } catch (error: any) {
+        NotificationService.error(error.message);
       }
-      alert(`Buchung erfolgreich abgeschlossen! Ihre Email: ${values.email}`);
     },
   });
 
@@ -57,8 +100,8 @@ const FormReservation = () => {
       const gesamtPreis = localStorage.getItem("gesamtPreice") || "0.00";
       const carRentId = localStorage.getItem("carRentId");
       const userId = localStorage.getItem("userId");
-
-      console.log("Form values:", formik.values); 
+  const email = localStorage.getItem("email")
+      console.log("Form values:", formik.values);
       console.log("gesamtPreis", gesamtPreis);
       console.log("carRentId", carRentId);
       console.log("userId", userId);
@@ -68,20 +111,25 @@ const FormReservation = () => {
         throw new Error("Fehlende Daten für die Bestellung");
       }
 
-      const response = await fetch("http://localhost:7001/payment/createOrder", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: gesamtPreis,
-          customerEmail: email, // Die E-Mail aus dem Zustand verwenden
-          carId: carRentId,
-          userId: userId,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:7001/payment/createOrder",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: gesamtPreis,
+            customerEmail: email,
+            carId: carRentId,
+            userId: userId,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Fehler bei der Erstellung der Bestellung.");
+        throw new Error(
+          errorData.message || "Fehler bei der Erstellung der Bestellung."
+        );
       }
 
       const orderData = await response.json();
@@ -105,88 +153,43 @@ const FormReservation = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-
+  
       const result = await response.json();
-      if (response.ok && result.message === "Zahlung erfolgreich abgeschlossen!") {
-        setIsVerified(true);
-        alert(`Zahlung erfolgreich abgeschlossen! Bestell-ID: ${orderID}`);
+  
+      // Überprüfen, ob die Zahlung erfolgreich war, indem wir den Status prüfen und nicht nur die Nachricht
+      if (response.ok && result.message && result.message.includes("Zahlung erfolgreich abgeschlossen!")) {
+        // Zahlung war erfolgreich
+        NotificationService.success(`Zahlung erfolgreich abgeschlossen! Bestell-ID: ${orderID}`);
+        router.push("/fahrzeugvermietung");  
       } else {
+        // Fehlerbehandlung für unerwartete Ergebnisse
         throw new Error(result.message || "Zahlung konnte nicht abgeschlossen werden.");
       }
+      
     } catch (error) {
+      // Fehlerbehandlung, wenn die Anfrage fehlschlägt
       setPaymentError(error.message || "Fehler bei der Zahlungsabwicklung.");
       console.error("Fehler bei der Zahlungsabwicklung:", error);
     } finally {
       setLoading(false);
     }
   };
+  
+  
+  
 
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Reservierungsformular</h1>
-      <form onSubmit={formik.handleSubmit} className="space-y-6">
-        <section className="p-4 bg-gray-200 rounded-md">
-          <h2 className="font-bold text-xl mb-3">1. Fahrer-Details</h2>
-          {["vorname", "nachname", "geburtsdatum", "email", "telefonnummer"].map((field) => (
-            <div key={field} className="mb-4">
-              <label
-                className="block font-medium mb-1 capitalize"
-                htmlFor={field}
-              >
-                {field}*
-              </label>
-              <input
-                id={field}
-                name={field}
-                type="text"
-                placeholder={field === "geburtsdatum" ? "TT/MM/JJJJ" : ""}
-                className="w-full border-2 rounded-md p-3"
-                onChange={formik.handleChange} 
-                onBlur={formik.handleBlur}
-                value={formik.values[field]}
-              />
-              {formik.touched[field] && formik.errors[field] && (
-                <div className="text-red-500 text-sm">{formik.errors[field]}</div>
-              )}
-            </div>
-          ))}
-        </section>
-
-        <section className="p-4 bg-gray-200 rounded-md">
-          <h2 className="font-bold text-xl mb-3">2. Identitätsprüfung</h2>
-          <PayPalScriptProvider options={{ "client-id": "AbEcs8NfNF1i7uraUy-uhPwhvANzzKrKXbUGQtqkFFNG5A-97e0lmHZqrnLnx1VciiyTGGiEzXlXCuwl", currency: "EUR" }}>
-            <PayPalButtons
-              style={{ layout: "vertical" }}
-              createOrder={createOrderHandler} 
-              onApprove={onApproveHandler}
-              onError={(err) => {
-                setPaymentError("Fehler bei der PayPal-Zahlung: " + err.message);
-                console.error("PayPal Fehler:", err);
-              }}
-            />
-          </PayPalScriptProvider>
-          {isVerified ? (
-            <div className="mt-4 text-green-600 font-medium">
-              Zahlung erfolgreich bestätigt!
-            </div>
-          ) : (
-            <div className="mt-4 text-red-600 font-medium">
-              Bitte führen Sie die Zahlung durch.
-            </div>
-          )}
-          {paymentError && <div className="mt-4 text-red-500 font-medium">{paymentError}</div>}
-        </section>
-
-        <button
-          type="submit"
-          className={`w-full text-white font-medium py-3 rounded-md ${
-            isVerified ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
-          }`}
-          disabled={!isVerified || loading}
-        >
-          {loading ? "Buchung wird verarbeitet..." : "Weiter mit der Buchung "}
-        </button>
-      </form>
+      {step === 1 && <FahrerDetails formik={formik} />}
+      {step === 2 && (
+        <PayPalSection
+          createOrderHandler={createOrderHandler}
+          onApproveHandler={onApproveHandler}
+          paymentError={paymentError}
+          setPaymentError={setPaymentError}
+        />
+      )}
     </div>
   );
 };

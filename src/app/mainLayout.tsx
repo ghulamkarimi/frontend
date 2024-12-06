@@ -1,20 +1,16 @@
-"use client"; // Wichtig, da clientseitige Hooks verwendet werden
+"use client"; 
 
 import { useRouter } from "next/navigation";
 import "./globals.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../feature/store/store";
 import {
-  setCarId,
-  setIsBasicDetailsActive,
+  setCarId, 
   setIsCarVerfügbar,
   setIsLoading,
-  setIsMediumDetailsActive,
-  setIsPremiumDetailsActive,
 } from "../../feature/reducers/carRentSlice";
-import { AiOutlineClose } from "react-icons/ai";
-import { useState, useEffect } from "react";
-import { FaCarSide, FaCheck } from "react-icons/fa6";
+import {  useEffect } from "react";
+import { FaCarSide } from "react-icons/fa6";
 import { WiFog } from "react-icons/wi";
 import { subscribeToSocketEvents } from '../../feature/reducers/offerSlice'; // Passe den Pfad an
 import { AppDispatch } from '../../feature/store/store';
@@ -37,13 +33,13 @@ export default function MainLayout({ children }: LayoutProps) {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const [storedCarId, setStoredCarId] = useState<string | null>(null);
+  const carId = localStorage.getItem("carRentId");
 
   useEffect(() => {
-    // Zugriff auf `localStorage` nur im Browser
+   
     if (typeof window !== "undefined") {
-      const carId = localStorage.getItem("carRentId");
-      setStoredCarId(carId);
+      
+
       if (carId) {
         dispatch(setCarId(carId));
       }
@@ -51,7 +47,7 @@ export default function MainLayout({ children }: LayoutProps) {
   }, [dispatch]);
 
   useEffect(() => {
-    // WebSocket-Ereignisse abonnieren
+    
     subscribeToSocketEvents(dispatch);
   }, [dispatch]);
 
@@ -92,10 +88,10 @@ export default function MainLayout({ children }: LayoutProps) {
             <div className="flex py-4 justify-center gap-4 mt-4">
               <button
                 onClick={() => {
-                  if (storedCarId) {
+                  if (carId) {
                     localStorage.setItem("totalPrice", totalPrice.toString());
                     setTimeout(() => {
-                      router.push(`/fahrzeugvermietung/${storedCarId}`);
+                      router.push(`/fahrzeugvermietung/${carId}`);
                       dispatch(setIsCarVerfügbar(false));
                       dispatch(setIsLoading(false))
                     }, 2000);
@@ -106,7 +102,10 @@ export default function MainLayout({ children }: LayoutProps) {
                 Weiter mit diesem Fahrzeug
               </button>
               <button
-                onClick={() => dispatch(setIsCarVerfügbar(false))}
+                onClick={() => 
+                  {dispatch(setIsLoading(false))
+                  dispatch(setIsCarVerfügbar(false))}
+                }
                 className="border-2 border-orange-400 text-orange-400 font-bold px-6 py-2 rounded-md"
               >
                 Ein anderes Fahrzeug auswählen

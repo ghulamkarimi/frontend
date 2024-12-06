@@ -50,8 +50,8 @@ const CarSearch = () => {
   const handleAgeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setRentalDetails({age:Number(event.target.value)}));
   };
-
-
+  const [isSearchComplete, setIsSearchComplete] = useState(false);
+  const [showPrice, setShowPrice] = useState(false);
 
   useEffect(() => {
     if (pickupDate) localStorage.setItem("pickupDate", pickupDate);
@@ -92,8 +92,9 @@ const CarSearch = () => {
       );
       return;
     }
-  
+    setIsSearchComplete(true);
     dispatch(setIsLoading(true));
+    setShowPrice(true)
   
     setTimeout(() => {
       const pickupDateTime = new Date(pickupDate);
@@ -274,7 +275,7 @@ const CarSearch = () => {
       )}
 
       <div className=" w-full">
-        <CarCard availableCars={availableCars}  />
+        <CarCard availableCars={availableCars} isSearchComplete={isSearchComplete} showPrice={showPrice}/>
       </div>
     </div>
   );

@@ -74,7 +74,7 @@ const page = () => {
     return (dailyRate * rentalDays).toFixed(2);
   };
 
- 
+
 
 
 
@@ -105,7 +105,12 @@ const page = () => {
       </div>
       <div className=" w-full flex lg:flex-row flex-col-reverse ">
        <div className=" lg:w-3/6 xl:w-4/6">
-        <FormReservation/>
+        <FormReservation
+       returnDate={returnDate}
+       pickupDate={pickupDate}
+       returnTime={returnTime}
+       pickupTime={pickupTime}
+        />
        </div>
         <div className=" mb-4 px-2 lg:w-3/6 xl:w-2/6">
           <div>
