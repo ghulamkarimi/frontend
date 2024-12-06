@@ -111,7 +111,11 @@ const Page = () => {
                                 />
                             </CardHeader>
                             <CardContent className="flex flex-col gap-2">
-                                <CardTitle className="text-gray-600">{car?.carTitle}</CardTitle>
+                                <span className="flex justify-between py-2">
+                                <CardTitle className="text-gray-600 flex justify-between">{car?.carTitle} </CardTitle>
+                                <p className="font-bold text-orange-500">Fahrzeug-ID:{" "}{car?.carIdentificationNumber}</p>
+                                </span>
+                               
                                 <p className="text-lg font-semibold">Preis: {car?.carPrice}</p>
 
                                 

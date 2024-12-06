@@ -14,6 +14,7 @@ export interface IUser {
     refreshToken: string | null;
     verificationCode: string;
     isAccountVerified: boolean;
+    customerNumber : string;
 }
 
 export interface IUserInfo {
@@ -23,6 +24,7 @@ export interface IUserInfo {
     profile_photo: string;
     email: string;
     isAdmin: boolean;
+    customerNumber : string;
     isAccountVerified?: boolean;
     exp: number;
     iat: number;
@@ -36,6 +38,7 @@ export interface ICarBuy {
     carPrice: string;
     owner: number;
     isSold: boolean;
+    carIdentificationNumber: string;
     carFirstRegistrationDay: string;
     carImages:string[];
     carDescription: string;
