@@ -5,7 +5,7 @@ import {
     EntityState,
     PayloadAction,
 } from "@reduxjs/toolkit";
-import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload, deleteAccount, requestPasswordReset, confirmEmailVerificationCode } from '../../service/index';
+import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload,requestPasswordReset, confirmEmailVerificationCode } from '../../service/index';
 import { RootState } from "../store/store";
 import { IUser, IUserInfo, TUser } from "../../interface";
 import { IChangePassword } from "../../interface";
@@ -99,17 +99,7 @@ export const changePasswordApi = createAsyncThunk(
         }
     }
 );
-export const deleteAccountApi = createAsyncThunk(
-    "user/deleteAccount",
-    async (confirmDelete: boolean, { rejectWithValue }) => {
-        try {
-            const response = await deleteAccount(confirmDelete);
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data?.message || "Fehler beim Löschen des Kontos");
-        }
-    }
-);
+ 
 
 export const requestPasswordResetApi = createAsyncThunk(
     "user/requestPasswordResetApi",
@@ -231,10 +221,7 @@ const userSlice = createSlice({
                 state.status = "succeeded";
                 state.error = null;
             })
-            .addCase(deleteAccountApi.fulfilled, (state) => {
-                state.status = "succeeded";
-                state.error = null;
-            })
+         
             .addCase(requestPasswordResetApi.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.message = action.payload.message; 

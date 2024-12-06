@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../feature/store/store";
-import { userLogoutApi, deleteAccountApi } from "../../../feature/reducers/userSlice";
+import { userLogoutApi} from "../../../feature/reducers/userSlice";
 import { NotificationService } from "../../../service/NotificationService";
 import { MdLogout } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -14,6 +14,7 @@ const LogoutComponent = () => {
   const handleLogout = async () => {
     try {
       await dispatch(userLogoutApi()).unwrap();
+      
       NotificationService.success("Erfolgreich abgemeldet!");
       router.push("/home");
     } catch (error) {
@@ -21,29 +22,7 @@ const LogoutComponent = () => {
     }
   };
 
-  const handleDeleteAccount = async () => {
-    const confirmDelete = window.confirm(
-      "Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
-    try {
-      await dispatch(deleteAccountApi(true)).unwrap();
-      NotificationService.success("Ihr Konto wurde erfolgreich gelöscht.");
-      router.push("/home");
-    } catch (error) {
-      NotificationService.error(
-        "Fehler beim Löschen des Kontos. Bitte versuchen Sie es erneut."
-      );
-    }
-  };
-
-  const handleCancel = () => {
-    router.back(); // Zurück zur vorherigen Seite
-  };
+ 
 
   return (
     <div className="flex items-center justify-center py-10 ">
@@ -63,15 +42,9 @@ const LogoutComponent = () => {
           >
             Abmelden
           </button>
+          
           <button
-            onClick={handleDeleteAccount}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors flex items-center justify-center gap-2"
-          >
-            <AiOutlineDelete className="text-xl" />
-            Konto löschen
-          </button>
-          <button
-            onClick={handleCancel}
+            onClick={() => router.push("/")}
             className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
           >
             Abbrechen

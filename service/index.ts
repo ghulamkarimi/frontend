@@ -54,13 +54,7 @@ export const changePasswordWithEmail = (passwordData: IChangePassword) => {
     const url = `${SERVER_URL}/user/changePasswordWithEmail`;
     return axios.put(url, passwordData);
 };
-
-export const deleteAccount = (confirmDelete: boolean) => {
-    const url = `${SERVER_URL}/user/deleteAccount`;
-    return axiosJWT.delete(url, {
-        data: { confirmDelete }, // Sende die Bestätigung mit
-    });
-};
+ 
 
 export const requestPasswordReset =(email: string) => {
     const url = `${SERVER_URL}/user/requestPasswordReset`;
