@@ -11,9 +11,19 @@ import { TReservation } from "../../../interface";
 import FahrerDetails from "./FahrerDetails";
 import PayPalSection from "./PayPalSection";
 
-const FormReservation = ({
-  
-}) => {
+interface FormReservationProps {
+  returnDate: string | null;
+  pickupDate: string | null;
+  returnTime: string | null;
+  pickupTime: string | null;
+}
+
+const FormReservation: React.FC<FormReservationProps> = ({
+  returnDate,
+  pickupDate,
+  returnTime,
+  pickupTime,
+}) =>{
   const { id: carRentIdRaw } = useParams();
   const carRentId =
     typeof carRentIdRaw === "string" ? carRentIdRaw : carRentIdRaw?.[0] || "";
@@ -30,10 +40,10 @@ const FormReservation = ({
   const [step, setStep] = useState(1); 
   const router = useRouter();  
 
-  const pickupDate= localStorage.getItem("pickupDate")|| ""
-     const returnDate= localStorage.getItem("returnDate")|| ""
-     const pickupTime = localStorage.getItem("pickupTime")|| ""
-     const returnTime = localStorage.getItem("returnTime")|| ""
+  const pickupDateLocal = localStorage.getItem("pickupDate") || "";
+  const returnDateLocal = localStorage.getItem("returnDate") || "";
+  const pickupTimeLocal = localStorage.getItem("pickupTime") || "";
+  const returnTimeLocal = localStorage.getItem("returnTime") || "";
 
   const [loading, setLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -75,10 +85,10 @@ const FormReservation = ({
       gesamtPrice,
       carRentId: carRentId || "",
       userId: userId || "",
-      pickupDate: pickupDate || "",
-      returnDate: returnDate || "",
-      pickupTime: pickupTime || "",
-      returnTime: returnTime || "",
+      pickupDate: pickupDateLocal || "",
+      returnDate: returnDateLocal || "",
+      pickupTime: pickupTimeLocal || "",
+      returnTime: returnTimeLocal || "",
     },
     validationSchema: formSchema,
     onSubmit: async (values: TReservation) => {
@@ -134,7 +144,7 @@ const FormReservation = ({
 
       const orderData = await response.json();
       return orderData.orderId;
-    } catch (error) {
+    } catch (error:any) {
       setPaymentError(error.message || "Fehler bei der Bestellung.");
       console.error("Fehler bei der Bestellung:", error);
     } finally {
@@ -142,7 +152,7 @@ const FormReservation = ({
     }
   };
 
-  const onApproveHandler = async (data) => {
+  const onApproveHandler = async (data:any) => {
     setLoading(true);
     try {
       const { orderID, payerID } = data;
@@ -166,7 +176,7 @@ const FormReservation = ({
         throw new Error(result.message || "Zahlung konnte nicht abgeschlossen werden.");
       }
       
-    } catch (error) {
+    } catch (error:any) {
       // Fehlerbehandlung, wenn die Anfrage fehlschlägt
       setPaymentError(error.message || "Fehler bei der Zahlungsabwicklung.");
       console.error("Fehler bei der Zahlungsabwicklung:", error);

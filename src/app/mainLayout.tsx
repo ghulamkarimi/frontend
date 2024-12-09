@@ -44,7 +44,7 @@ export default function MainLayout({ children }: LayoutProps) {
         dispatch(setCarId(carId));
       }
     }
-  }, [dispatch]);
+  }, [dispatch,carId]);
 
   useEffect(() => {
     

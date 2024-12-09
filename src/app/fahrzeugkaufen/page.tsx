@@ -14,6 +14,7 @@ import FormattedDate from "@/components/FormatesDate";
 import { ICarBuy } from "../../../interface";
 import { socket } from "../../../service";
 import { useDispatch } from "react-redux";
+import Image from "next/image";
 
 const carCategories = ["Transporter", "PKW", "Wohnwagen"];
 
@@ -104,7 +105,7 @@ const Page = () => {
                     filteredCars.map((car) => (
                         <Card key={car?._id} className="p-4 border rounded-lg shadow hover:shadow-lg transition-shadow duration-300 bg-white">
                             <CardHeader>
-                                <img
+                                <Image
                                     src={car?.carImages[0]}
                                     alt="Car Image"
                                     className="w-full h-60 object-cover rounded-t-lg"
