@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../feature/store/store";
 import { getRentCarById, setTotalPrice } from "../../../feature/reducers/carRentSlice";
 import { useEffect } from "react";
+import { getSchutzPacketById } from "../../../feature/reducers/schutzPacketSlice";
 
 
 
@@ -31,7 +32,9 @@ const RentalLocationCard = ({
         selectedSchutzPacket,age,pickupLocation,totalPrice
       } = useSelector((state: RootState) => state.carRent);
 
-    
+      const {schutzPacketId} = useSelector((state:RootState)=>state.schutzPacket)
+
+    const getOneSchutzPacket = useSelector((state:RootState)=>getSchutzPacketById(state,schutzPacketId || ""))
 const dispatch = useDispatch()
 const getOneCar = useSelector((state:RootState)=>getRentCarById(state,carRentId))
 

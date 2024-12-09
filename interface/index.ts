@@ -1,21 +1,22 @@
-
 export interface IUser {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    isAdmin: boolean;
-    phone: string;
-    profile_photo: string;
-    token: string | null;
-    accessToken: string | null;
-    refreshToken: string | null;
-    verificationCode: string;
-    isAccountVerified: boolean;
-    customerNumber : string;
+
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  isAdmin: boolean;
+  phone: string;
+  profile_photo: string;
+  token: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
+  verificationCode: string;
+  isAccountVerified: boolean;
 }
+
+
 
 export interface IUserInfo {
     userId: string;
@@ -28,6 +29,7 @@ export interface IUserInfo {
     isAccountVerified?: boolean;
     exp: number;
     iat: number;
+
 }
 export type TUser = Partial<IUser>;
 
@@ -38,7 +40,6 @@ export interface ICarBuy {
     carPrice: string;
     owner: number;
     isSold: boolean;
-    carIdentificationNumber: string;
     carFirstRegistrationDay: string;
     carImages:string[];
     carDescription: string;
@@ -58,40 +59,42 @@ export interface ICarBuy {
     carTechnicalInspection: Date;
     carCategory: string;
     userId: string;
+    createdAt: string;
+    carIdentificationNumber: string;
 }
 
 export type TBuy = Partial<ICarBuy>;
 
-
 export interface ICarRent {
-    _id?: string;
-    user?: string;
-    carName : string ;
-    carImage : string ;
-    carAC: boolean;
-    carGear : string ;
-    carPrice : string ;
-    carDoors : string ;
-    carPeople : string ;
-    isBooked : boolean ;
-    createdAt:string ;
-    updatedAt?: string;
-    bookedSlots: Array<{ start: string; end: string }>;
-    totalPrice?: number;
+  _id?: string;
+  user?: string;
+  carName: string;
+  carImage: string;
+  carAC: boolean;
+  carGear: string;
+  carPrice: string;
+  carDoors: string;
+  carPeople: string;
+  isBooked: boolean;
+  createdAt: string;
+  updatedAt?: string;
+  bookedSlots: Array<{ start: string; end: string }>;
+  totalPrice?: number;
 }
 
-export type TCarRent = Partial<ICarRent>
+export type TCarRent = Partial<ICarRent>;
 
 export interface IOffer {
-    _id: string;
-    title: string;
-    description: string;
-    imageUrl: string;
-    oldPrice: string;    
-    newPrice: string;    
-    discountPercentage: string;
-    userId: string;
+  _id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  oldPrice: string;
+  newPrice: string;
+  discountPercentage: string;
+  userId: string;
 }
+
 
 export interface  IAppointment {
     _id: string
@@ -107,24 +110,44 @@ export interface  IAppointment {
     hsn: string;
     tsn: string;
     isBookedOrBlocked: boolean;
+ 
 }
 
 export type TAppointment = Partial<IAppointment>;
 
-
 export interface ISchutzPacket {
-    _id: string;           
-    name: string;           
-    deductible: number;    
-    dailyRate: number;      
-    features: string[];     
-    user: string;           
-  }
-
-  export interface IChangePassword {
-    email: string; 
-    password: string;
-    currentPassword?: string;
-    newPassword: string; 
-    confirmPassword: string; 
+  _id: string;
+  name: string;
+  deductible: number;
+  dailyRate: number;
+  features: string[];
+  user: string;
 }
+
+export interface IChangePassword {
+  email: string;
+  password: string;
+  currentPassword?: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface IReservation {
+  _id: string;
+  vorname: string;
+  nachname: string;
+  geburtsdatum: string;
+  email: string;
+  telefonnummer: string;
+  adresse: string;
+  postalCode: string;
+  stadt: string;
+  pickupDate?: string;
+  returnDate?: string;
+  pickupTime?: string;
+  returnTime?: string;
+  gesamtPrice: string;
+  carRentId?: string | undefined;
+  userId?: string;
+}
+export type TReservation = Partial<IReservation>;

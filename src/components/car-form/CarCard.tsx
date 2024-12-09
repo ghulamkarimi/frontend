@@ -1,4 +1,4 @@
-import { FaCarSide, FaCheckCircle, FaUserTie } from "react-icons/fa";
+import { FaCheckCircle, FaUserTie } from "react-icons/fa";
 import {
   Card,
   CardContent,
@@ -14,21 +14,27 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { ICarRent } from "../../../interface";
 import { useSelector } from "react-redux";
-import { getAllRentCars, setIsCarVerfügbar, setIsLoading } from "../../../feature/reducers/carRentSlice";
+import {
+  getAllRentCars,
+  setIsCarVerfügbar,
+  setIsLoading,
+} from "../../../feature/reducers/carRentSlice";
 import { useState } from "react";
 import { CiCircleInfo } from "react-icons/ci";
-import { WiFog } from "react-icons/wi";
 import { useDispatch } from "react-redux";
 import { calculateRentalDays } from "@/utils/rentalUtils";
 import { RootState } from "../../../feature/store/store";
 
 interface ICarCardProps {
   availableCars: ICarRent[];
-  
+  isSearchComplete: boolean;
+  showPrice: boolean;
 }
 
 const CarCard = ({
-  availableCars, 
+  availableCars,
+  isSearchComplete,
+  showPrice,
 }: ICarCardProps) => {
   const [loading, setLoading] = useState(false);
   const [detailsVisibility, setDetailsVisibility] = useState<{
@@ -37,20 +43,22 @@ const CarCard = ({
 
   const rentCars = useSelector(getAllRentCars);
   const router = useRouter();
-const dispatch = useDispatch()
-const totalPrice = parseFloat(localStorage.getItem("carRentId") || "0");
-const toggleDetails = (carId: string) => {
+  const dispatch = useDispatch();
+  const totalPrice = parseFloat(localStorage.getItem("carRentId") || "0");
+  const toggleDetails = (carId: string) => {
     setDetailsVisibility((prevState) => ({
       ...prevState,
       [carId]: !prevState[carId],
     }));
   };
-const {pickupDate,pickupTime,returnDate,returnTime} = useSelector((state:RootState)=>state.carRent)
+  const { pickupDate, pickupTime, returnDate, returnTime } = useSelector(
+    (state: RootState) => state.carRent
+  );
 
-const rentalDays = pickupTime && returnTime && pickupDate && returnDate
-  ? calculateRentalDays(pickupDate, pickupTime, returnDate, returnTime)
-  : 0;
-
+  const rentalDays =
+    pickupTime && returnTime && pickupDate && returnDate
+      ? calculateRentalDays(pickupDate, pickupTime, returnDate, returnTime)
+      : 0;
 
   const handleSelectCar = (carId: string) => {
     setLoading(true);
@@ -61,8 +69,6 @@ const rentalDays = pickupTime && returnTime && pickupDate && returnDate
       setLoading(false);
     }, 3000);
   };
-  const carId = localStorage.getItem("carRentId");
-
 
   return (
     <div>
@@ -132,14 +138,17 @@ const rentalDays = pickupTime && returnTime && pickupDate && returnDate
 
                 <CardFooter className="pt-6">
                   <div className="text-white flex flex-col gap-4">
-                    <p className={ `flex flex-col gap-2`}>
+                    <p className={`flex flex-col gap-2`}>
                       <span className=" text-red-500">
-                      {rentalDays 
-                          ? `${new Intl.NumberFormat("de-DE", {
-                              style: "currency",
-                              currency: "EUR",
-                            }).format(Number(car.carPrice) * rentalDays)} / ${rentalDays} Tage`
-                          : "Datum Wählen bitte "}
+                        {showPrice === true ?
+                          (rentalDays &&
+                             `${new Intl.NumberFormat("de-DE", {
+                                style: "currency",
+                                currency: "EUR",
+                              }).format(
+                                Number(car.carPrice) * rentalDays
+                              )} / ${rentalDays} Tage`
+                            ): "Datum Wählen bitte"}
                       </span>
                       <span className="cardInfoSell">
                         <TbManualGearboxFilled className="cardInfoSellIcon" />
@@ -148,14 +157,17 @@ const rentalDays = pickupTime && returnTime && pickupDate && returnDate
                     </p>
                     <button
                       onClick={() => {
-                       
-                        dispatch(setIsLoading(true))
+                        dispatch(setIsLoading(true));
+
                         setTimeout(() => {
                           handleSelectCar(car._id!);
-                          
+                          console.log();
                         }, 2000);
                       }}
-                      className="bg-orange-500 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors py-2"
+                      disabled={!isSearchComplete}
+                      className="
+                       disabled:bg-gray-300 disabled:cursor-not-allowed
+                      bg-orange-500 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors py-2"
                     >
                       Auswählen
                     </button>
