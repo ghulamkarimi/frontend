@@ -170,3 +170,9 @@ export const createReservation = (reservation: TReservation) => {
     },
   });
 };
+
+
+export const  getReservation = ()=>{
+  const url = `${SERVER_URL}/reservation/get-reservation`
+  return axios.get(url)
+  }
