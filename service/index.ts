@@ -60,12 +60,16 @@ export const changePasswordWithEmail = (passwordData: IChangePassword) => {
   return axios.put(url, passwordData);
 };
 
+
 export const deleteAccount = (confirmDelete: boolean) => {
   const url = `${SERVER_URL}/user/deleteAccount`;
   return axiosJWT.delete(url, {
     data: { confirmDelete }, // Sende die Bestätigung mit
   });
 };
+
+ 
+
 
 export const requestPasswordReset = (email: string) => {
   const url = `${SERVER_URL}/user/requestPasswordReset`;
@@ -108,10 +112,17 @@ export const getOffers = () => {
 
 // Appointment
 
-export const createAppointment = (appointment: TAppointment) => {
-  const url = `${SERVER_URL}/appointment`;
-  return axios.post(url, appointment);
-};
+
+export const getAllsAppointment = () => {
+    const url = `${SERVER_URL}/appointment/all`;
+    return axios.get(url);
+  };
+
+  export const createAppointment = (appointment: TAppointment) => {
+    const url = `${SERVER_URL}/appointment/create`;
+    return axios.post(url, appointment);
+  }
+
 
 // SchutzPacket
 

@@ -19,11 +19,17 @@ import 'react-medium-image-zoom/dist/styles.css';
 import { socket } from "../../../../service";
 
 const Page = () => {
-
+    const [colorIndex, setColorIndex] = useState(0);
+    const colors = ["text-black", "text-white"];
     const dispatch = useDispatch<AppDispatch>();
     const { id: carId } = useParams();
     const [loading, setLoading] = useState(true);
-
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
+        }, 3000); // Wechsel alle 3 Sekunden
+        return () => clearInterval(interval); // Aufräumen bei Komponentendemontage
+      }, []);
     useEffect(() => {
         if (typeof window !== 'undefined') {
             // Daten abrufen
@@ -113,8 +119,11 @@ const Page = () => {
                 <h2 className="text-xl text-center">Keine Bilder verfügbar</h2>
             )}
 
+            <p className="my-2 font-bold">Bitte teilen Sie uns bei Interesse stets die Fahrzeug-ID mit, damit wir Ihnen schnell und effizient weiterhelfen können. Vielen Dank!</p>
             <div className="w-full max-w-[90%] md:max-w-[700px] lg:max-w-[900px] flex flex-col sm:flex-row justify-around bg-orange-500 my-2 rounded-lg px-4 py-2 gap-4">
+
                 <div className="flex flex-col gap-1 justify-center text-center sm:text-left text-sm md:text-base lg:text-lg">
+                    <p className={`font-bold  ${colors[colorIndex]}`}>Fahrzeug-ID: {singleCar?.carIdentificationNumber}</p>
                     <p className="font-bold">{singleCar?.carTitle}</p>
                     <p className="font-bold">Preis: {singleCar?.carPrice}</p>
                 </div>

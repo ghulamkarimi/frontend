@@ -3,7 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer, { fetchUsers, setToken } from "../reducers/userSlice";
 import appReducer from "../reducers/appSlice";
 import offerReducer, { fetchOffers } from "../reducers/offerSlice";
-import workshopReducer from "../reducers/workshopSlice";
+import appointmentReducer ,{fetchAppointments} from "../reducers/appointmentSlice";
 import carBuyReducer, { fetchCarBuys } from "../reducers/carBuySlice";
 import schutzPacket, { fetchAllSchutzPacketApi } from "../reducers/schutzPacketSlice"
 import carRentReducer, { getRentCarApi } from "../reducers/carRentSlice"
@@ -25,7 +25,7 @@ export const store = configureStore({
     carRent: carRentReducer,
     carBuys: carBuyReducer,
     offer: offerReducer,
-    workshop: workshopReducer,
+    appointments: appointmentReducer,
     schutzPacket: schutzPacket
 
   },
@@ -61,6 +61,7 @@ store.dispatch(getRentCarApi())
 store.dispatch(fetchCarBuys());
 store.dispatch(fetchOffers());
 store.dispatch(fetchAllSchutzPacketApi())
+store.dispatch(fetchAppointments())
 
 
 export type RootState = ReturnType<typeof store.getState>;

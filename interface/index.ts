@@ -1,4 +1,5 @@
 export interface IUser {
+
   _id: string;
   firstName: string;
   lastName: string;
@@ -15,45 +16,51 @@ export interface IUser {
   isAccountVerified: boolean;
 }
 
+
+
 export interface IUserInfo {
-  userId: string;
-  firstName: string;
-  lastName: string;
-  profile_photo: string;
-  email: string;
-  isAdmin: boolean;
-  isAccountVerified?: boolean;
-  exp: number;
-  iat: number;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    profile_photo: string;
+    email: string;
+    isAdmin: boolean;
+    customerNumber : string;
+    isAccountVerified?: boolean;
+    exp: number;
+    iat: number;
+
 }
 export type TUser = Partial<IUser>;
 
 export interface ICarBuy {
-  _id: string;
-  carTitle: string;
-  carId: string;
-  carPrice: string;
-  owner: number;
-  isSold: boolean;
-  carFirstRegistrationDay: string;
-  carImages: string[];
-  carDescription: string;
-  carKilometers: string;
-  carColor: string;
-  carAirConditioning: boolean;
-  carSeat: string;
-  damagedCar: boolean;
-  carNavigation: boolean;
-  carParkAssist: boolean;
-  carAccidentFree: boolean;
-  carGearbox: string;
-  carMotor: string;
-  carHorsePower: string;
-  carEuroNorm: string;
-  fuelType: string;
-  carTechnicalInspection: Date;
-  carCategory: string;
-  userId: string;
+    _id: string;
+    carTitle: string;
+    carId: string;
+    carPrice: string;
+    owner: number;
+    isSold: boolean;
+    carFirstRegistrationDay: string;
+    carImages:string[];
+    carDescription: string;
+    carKilometers: string;
+    carColor: string;
+    carAirConditioning: boolean;
+    carSeat: string;
+    damagedCar: boolean;
+    carNavigation: boolean;
+    carParkAssist: boolean;
+    carAccidentFree: boolean;
+    carGearbox: string;
+    carMotor: string;
+    carHorsePower: string;
+    carEuroNorm: string;
+    fuelType: string;
+    carTechnicalInspection: Date;
+    carCategory: string;
+    userId: string;
+    createdAt: string;
+    carIdentificationNumber: string;
 }
 
 export type TBuy = Partial<ICarBuy>;
@@ -88,15 +95,22 @@ export interface IOffer {
   userId: string;
 }
 
-export interface IAppointment {
-  _id: string;
-  service: string;
-  date: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  notes: string;
-  licensePlate: string;
+
+export interface  IAppointment {
+    _id: string
+    service: string;
+    date: string;
+    time: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    comment: string;
+    licensePlate: string;
+    hsn: string;
+    tsn: string;
+    isBookedOrBlocked: boolean;
+ 
 }
 
 export type TAppointment = Partial<IAppointment>;
