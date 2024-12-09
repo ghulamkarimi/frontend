@@ -7,10 +7,10 @@ import {
 import { ICarRent } from "../../interface";
 import { createPayPalOrder, getCarRent, getOneCarById } from "../../service";
 import { RootState } from "../store/store";
-import { AxiosResponse } from "axios";
+
 
 export interface ICarRentState {
-  orderDetails: null,
+  orderDetails: { amount: string; customerEmail: string; carId: string; userId: string } | null,
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   carId: string | null;
@@ -81,17 +81,17 @@ export const getCarRentByIdApi = createAsyncThunk(
 );
 
 export const createPayPalOrderApi = createAsyncThunk< 
-  PayPalOrderResponse, 
-  { amount: string; customerEmail: string; carId: string; userId: string }, 
-  { rejectValue: PayPalOrderError } 
+
+  { amount: string; customerEmail: string; carId: string; userId: string }
+
 >(
   'carRent/paypalPayment',
-  async (orderDetails, { rejectWithValue }) => {
+  async (orderDetails) => {
     try {
       const response = await createPayPalOrder(orderDetails);
       return response; 
     } catch (error:any) {
-      return rejectWithValue(error.response?.data || 'Unbekannter Fehler');
+      return(error.response?.data || 'Unbekannter Fehler');
     }
   }
 );
@@ -103,24 +103,7 @@ const carRentSlice = createSlice({
     setCarId: (state, action) => {
       state.carId = action.payload;
     },
-    setRentalDetails: (state, action) => {
-      const {
-        rentalDays,
-        pickupDate,
-        pickupTime,
-        returnDate,
-        returnTime,
-        pickupLocation,
-        age,
-      } = action.payload;
-      state.rentalDays = action.payload.rentalDays ?? state.rentalDays;
-      state.pickupDate = action.payload.pickupDate ?? state.pickupDate;
-      state.pickupTime = action.payload.pickupTime ?? state.pickupTime;
-      state.returnDate = action.payload.returnDate ?? state.returnDate;
-      state.returnTime = action.payload.returnTime ?? state.returnTime;
-      state.pickupLocation = action.payload.pickupLocation ?? state.pickupLocation;
-      state.age = action.payload.age ?? state.age;
-    },
+ 
     setTotalPrice: (state, action) => {
       state.totalPrice = action.payload;
     },
@@ -190,7 +173,6 @@ export const {
   setIsMediumDetailsActive,
   setIsPremiumDetailsActive,
   setSelectedSchutzPackage,
-  setRentalDetails,
   setIsLoading
 } = carRentSlice.actions;
 

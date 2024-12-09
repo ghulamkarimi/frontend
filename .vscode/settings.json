@@ -9,6 +9,7 @@
         "Fahrzeug",
         "fahrzeugkaufen",
         "Fahrzeugvermietung",
+        "Fehler",
         "formik",
         "Formularwerte",
         "geburtsdatum",
@@ -28,6 +29,8 @@
         "telefonnummer",
         "Testnachricht",
         "toastify",
+        "Unbekannter",
+        "Verfügbar",
         "vorname",
         "Werkstatt"
     ],
