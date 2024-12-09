@@ -14,6 +14,7 @@ export interface IUser {
   refreshToken: string | null;
   verificationCode: string;
   isAccountVerified: boolean;
+  customerNumber: string;
 }
 
 
@@ -109,6 +110,7 @@ export interface  IAppointment {
     licensePlate: string;
     hsn: string;
     tsn: string;
+    userId?: string;
     isBookedOrBlocked: boolean;
  
 }
