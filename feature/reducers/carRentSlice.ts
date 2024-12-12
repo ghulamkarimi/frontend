@@ -10,7 +10,9 @@ import { RootState } from "../store/store";
 
 
 export interface ICarRentState {
-  orderDetails: { amount: string; customerEmail: string; carId: string; userId: string } | null,
+
+  orderDetails: { amount: string; customerEmail: string; carId: string; userId: string } | null;
+
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   carId: string | null;
@@ -82,7 +84,9 @@ export const getCarRentByIdApi = createAsyncThunk(
 
 export const createPayPalOrderApi = createAsyncThunk< 
 
-  { amount: string; customerEmail: string; carId: string; userId: string }
+
+  { amount: string; customerEmail: string; carId: string; userId: string } 
+ 
 
 >(
   'carRent/paypalPayment',
@@ -91,7 +95,9 @@ export const createPayPalOrderApi = createAsyncThunk<
       const response = await createPayPalOrder(orderDetails);
       return response; 
     } catch (error:any) {
-      return(error.response?.data || 'Unbekannter Fehler');
+
+      return (error.response?.data || 'Unbekannter Fehler');
+
     }
   }
 );

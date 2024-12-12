@@ -1,8 +1,12 @@
 
 
 
-const FahrerDetails = ({ formik }: { formik: any }) => (
-    <form onSubmit={formik.handleSubmit} className="space-y-6">
+
+
+const FahrerDetails = ({ formik }: { formik: any }) => {
+
+    return (
+      <form onSubmit={formik.handleSubmit} className="space-y-6">
       <section className="p-4 bg-gray-200 rounded-md">
         <h2 className="font-bold text-xl mb-3">1. Fahrer-Details</h2>
         {["vorname", "nachname", "geburtsdatum", "email", "telefonnummer", "adresse", "postalCode", "stadt"].map((field) => (
@@ -34,7 +38,9 @@ const FahrerDetails = ({ formik }: { formik: any }) => (
         >
           Weiter zu PayPal
         </button>
+        
       </section>
     </form>
-  );
+    )
+};
 export default  FahrerDetails

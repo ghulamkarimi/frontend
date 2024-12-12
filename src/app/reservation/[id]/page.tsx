@@ -96,16 +96,19 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex lg:flex-row flex-col-reverse">
-        <div className="lg:w-3/6 xl:w-4/6">
-          <FormReservation
-            returnDate={returnDate}
-            pickupDate={pickupDate}
-            returnTime={returnTime}
-            pickupTime={pickupTime}
-          />
-        </div>
-        <div className="mb-4 px-2 lg:w-3/6 xl:w-2/6">
+
+      <div className=" w-full flex lg:flex-row flex-col-reverse ">
+       <div className=" lg:w-3/6 xl:w-4/6">
+        <FormReservation
+       returnDate={returnDate }
+       pickupDate={pickupDate}
+       returnTime={returnTime}
+       pickupTime={pickupTime}
+        />
+       </div>
+        <div className=" mb-4 px-2 lg:w-3/6 xl:w-2/6">
+
+     
           <div>
             <div>
               <h1 className="text-sm font-bold mb-3">{getOneCar?.carName}</h1>

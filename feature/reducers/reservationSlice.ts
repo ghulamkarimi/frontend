@@ -7,7 +7,9 @@ import { RootState } from "../store/store";
 export interface IReservationState{
     status: "idle" | "loading" | "succeeded" | "failed";
     error: string | null;
-    reservationId:string | undefined
+
+    reservationId:string | null
+
 }
 
 
@@ -27,7 +29,9 @@ export const getReservationApi = createAsyncThunk("/reservation/getReservationAp
 try {
     const response = await getReservation()
     console.log("responseReservation",response.data)
+
     return response.data
+
 
 } catch (error:any) {
     return error.message
@@ -39,6 +43,9 @@ export const createReservationApi = createAsyncThunk("/reservation/createReserva
 )=>{
 try {
     const response = await createReservation(formData)
+    console.log("responseReservationCreate",response.data)
+     localStorage.setItem("storedReservationId",response.data.reservation._id)
+
     return response.data;
 } catch (error:any) {
     throw error.response.data.message;
@@ -59,7 +66,9 @@ extraReducers:(builder)=>{
     })
     builder.addCase(getReservationApi.fulfilled,(state,action)=>{
         state.status="succeeded",
-        reservationAdapter.setOne(state,action.payload.reservation)
+
+        reservationAdapter.setMany(state,action.payload.reservation)
+
     })
     builder.addCase(getReservationApi.rejected,(state,action)=>{
         state.status="failed",

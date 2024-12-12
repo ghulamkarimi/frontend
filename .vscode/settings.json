@@ -1,11 +1,15 @@
 {
     "cSpell.words": [
+        "Abhol",
+        "Abholdatum",
         "ablaufdatum",
+        "adresse",
         "angebote",
         "Anzeigen",
         "Autovermietung",
         "Bestätigen",
         "Buchung",
+        "Fahrer",
         "Fahrzeug",
         "fahrzeugkaufen",
         "Fahrzeugvermietung",
@@ -13,6 +17,7 @@
         "formik",
         "Formularwerte",
         "geburtsdatum",
+        "gesamt",
         "Ihre",
         "kartennummer",
         "kaufen",
@@ -21,18 +26,29 @@
         "Lightbox",
         "nachname",
         "neuigkeiten",
+        "Postleitzahl",
         "reduxjs",
+        "Reservierungsformular",
+        "Rückgabedatum",
+        "Rückgabeort",
         "Schutz",
         "SchutzPaket",
         "sicherheitscode",
+        "Sprendlingen",
+        "stadt",
         "tailwindcss",
         "telefonnummer",
         "Testnachricht",
         "toastify",
+
+        "Uhrzeit",
+
         "Unbekannter",
         "Verfügbar",
+
         "vorname",
-        "Werkstatt"
+        "Werkstatt",
+        "Zahlen"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#ff6433",
