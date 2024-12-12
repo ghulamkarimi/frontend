@@ -49,7 +49,7 @@ function useMediaQuery(query: string) {
                         </div>
 
                         <div className="flex items-center gap-4 my-4 cursor-pointer">
-                            <p className="text-xl">Let's talk!</p>
+                            <p className="text-xl">Lets talk!</p>
                             <FaPhoneFlip className="text-xl text-yellow-500 animate-bounce" />
                         </div>
 

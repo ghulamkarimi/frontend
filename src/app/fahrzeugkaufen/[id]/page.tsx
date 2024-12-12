@@ -17,6 +17,7 @@ import Zoom from 'react-medium-image-zoom';
 import "react-multi-carousel/lib/styles.css";
 import 'react-medium-image-zoom/dist/styles.css';
 import { socket } from "../../../../service";
+import Image from "next/image";
 
 const Page = () => {
     const [colorIndex, setColorIndex] = useState(0);
@@ -26,45 +27,36 @@ const Page = () => {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const interval = setInterval(() => {
-          setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
+            setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
         }, 3000); // Wechsel alle 3 Sekunden
         return () => clearInterval(interval); // Aufräumen bei Komponentendemontage
-      }, []);
+    }, []);
+
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            // Daten abrufen
-            dispatch(fetchCarBuys()).then(() => {
-                setLoading(false);
-            });
+        socket.connect();
+        socket.on("connect", () => {
+            console.log("✅ WebSocket verbunden mit ID:", socket.id);
+        });
+        socket.on("carBuyUpdated", (updatedCar) => {
+            if (updatedCar._id === carId) {
+                console.log("✏️ Fahrzeug aktualisiert mit ID in singleCar:", updatedCar);
+                dispatch(carBuyUpdated({ id: updatedCar._id, changes: updatedCar }));
+            }
+        });
+        return () => {
+            socket.off("carBuyUpdated");
+            socket.off("connect");
+            socket.disconnect();
+        };
+    }, [carId, dispatch]);
 
-            // WebSocket verbinden
-            socket.connect();
-            socket.on("connect", () => {
-                console.log("✅ WebSocket verbunden mit ID:", socket.id);
-            });
-
-            // Aktualisiertes Fahrzeug abfangen und in Redux speichern
-            socket.on("carBuyUpdated", (updatedCar) => {
-                if (updatedCar._id === carId) {
-                    console.log("✏️ Fahrzeug aktualisiert mit ID in singleCar:", updatedCar);
-                    dispatch(carBuyUpdated({ id: updatedCar._id, changes: updatedCar }));
-                }
-            });
-
-            // WebSocket-Verbindung trennen bei Komponentendemontage
-            return () => {
-                socket.off("carBuyUpdated");
-                socket.off("connect");
-                socket.disconnect();
-            };
-        }
-    }, [dispatch, carId]);
-
+    const singleCar = useSelector((state: RootState) => displayCarBuyById(state, carId as string));
+    
     if (!carId) {
         return <h1 className="text-2xl md:text-4xl text-center">Ungültige Fahrzeug-ID</h1>;
     }
 
-    const singleCar = useSelector((state: RootState) => displayCarBuyById(state, carId as string));
+ 
 
     if (loading) {
         return <h1 className="text-2xl md:text-4xl text-center">Daten werden geladen...</h1>;
@@ -107,10 +99,12 @@ const Page = () => {
                 >
                     {singleCar?.carImages?.map((image, index) => (
                         <Zoom key={index}>
-                            <img
+                            <Image
                                 className="w-full h-[600px] object-cover"
                                 src={image}
                                 alt={singleCar?.carTitle || "Car Image"}
+                                width={1920}
+                                height={1080}
                             />
                         </Zoom>
                     ))}

@@ -147,6 +147,7 @@ const initialState: IUserState & EntityState<IUser, string> =
             password: "",
             confirmPassword: "",
             isAdmin: false,
+            customerNumber: "",
             exp: 0,
             iat: 0,
         },

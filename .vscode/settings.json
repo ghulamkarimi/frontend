@@ -13,6 +13,7 @@
         "Fahrzeug",
         "fahrzeugkaufen",
         "Fahrzeugvermietung",
+        "Fehler",
         "formik",
         "Formularwerte",
         "geburtsdatum",
@@ -39,7 +40,12 @@
         "telefonnummer",
         "Testnachricht",
         "toastify",
+
         "Uhrzeit",
+
+        "Unbekannter",
+        "Verfügbar",
+
         "vorname",
         "Werkstatt",
         "Zahlen"

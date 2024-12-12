@@ -17,7 +17,7 @@ const UserCalendar: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { status } = useSelector((state: RootState) => state.appointments);
     const items = useSelector((state: RootState) => displayAppointments(state));
-
+    const userId= localStorage.getItem("userId");
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [formattedSelectedDate, setFormattedSelectedDate] = useState<string | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -113,6 +113,7 @@ const UserCalendar: React.FC = () => {
         licensePlate: "",
         hsn: "",
         tsn: "",
+        ...(userId && { userId }),
     };
 
     const validationSchema = Yup.object({
@@ -138,8 +139,10 @@ const UserCalendar: React.FC = () => {
     });
 
     const handleSubmit = async (values: typeof initialValues, { resetForm }: { resetForm: () => void }) => {
+
         console.log("Form data submitted:", values);
        try {
+        const payload = userId ? { ...values, userId } : values;
         const response = await dispatch (createAppointmentApi(values as IAppointment)).unwrap();
         NotificationService.success(response.message || "Appointment created successfully");
         resetForm()

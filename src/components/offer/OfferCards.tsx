@@ -4,11 +4,12 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { displayOffers, offerCreated, offerUpdated, offerDeleted } from "../../../feature/reducers/offerSlice";
 import { socket } from "../../../service"; // Importiere die WebSocket-Instanz
+import { useRouter } from "next/navigation";
 
 const OfferCards = () => {
     const dispatch = useDispatch();
     const offers = useSelector(displayOffers) || [];
-
+    const router = useRouter();
     useEffect(() => {
         // WebSocket-Verbindung herstellen
         socket.connect();
@@ -59,13 +60,14 @@ const OfferCards = () => {
             <div className="flex flex-wrap place-content-center gap-6">
                 {offers.map((offer, index) => (
                     <div
+                    onClick={()=> router.push('/werkstatt-service')}
                         key={offer?._id || index} // Fallback zu `index`, falls `_id` fehlt
                         className="offerCarte bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-lg p-5 w-full sm:w-[400px] max-w-sm transform hover:scale-105"
                     >
                         <img
                             src={offer?.imageUrl}
                             alt={offer?.title}
-                            className="w-full h-62 object-cover rounded-lg mb-4"
+                            className="w-full h-64 object-cover rounded-lg mb-4"
                         />
                         <h2 className="text-3xl font-bold text-orange-500 mt-4 flex justify-between items-center">
                             {offer?.title}

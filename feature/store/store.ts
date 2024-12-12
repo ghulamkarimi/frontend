@@ -1,4 +1,3 @@
-
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer, { fetchUsers, setToken } from "../reducers/userSlice";
 import appReducer from "../reducers/appSlice";

@@ -36,8 +36,10 @@ export default function MainLayout({ children }: LayoutProps) {
   useEffect(() => {
     // Zugriff auf `localStorage` nur im Browser
 
+
     dispatch(setCarId(storedCarId));
   }, [storedCarId]);
+
 
   const getOneSchutzPacket = useSelector((state: RootState) =>
     getSchutzPacketById(state, schutzPacketId!)
