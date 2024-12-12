@@ -12,17 +12,14 @@ import {
   setIsMediumDetailsActive,
   setIsPremiumDetailsActive,
   setRentalDetails,
- 
+  setSelectedSchutzPackage,
 } from "../../../../feature/reducers/carRentSlice";
 
 import PackageOption from "@/components/cards/PackageOption";
 import RentalLocationCard from "@/components/cards/RentalLocationCard";
-import {
+import { calculateRentalDays, useSelectPacket } from "@/utils/rentalUtils";
+import { getAllSchutzPacket, setSchutzPacketId } from "../../../../feature/reducers/schutzPacketSlice";
 
-  calculateRentalDays,
-  useSelectPacket,
-} from "@/utils/rentalUtils";
-import { getAllSchutzPacket } from "../../../../feature/reducers/schutzPacketSlice";
 
 const Page = () => {
   const { id: carRentId } = useParams();
@@ -46,7 +43,7 @@ const Page = () => {
   const storedTotalPrice = parseFloat(
     localStorage.getItem("totalPrice") || "0"
   );
-  console.log("allSchutzPaket",allSchutzPaket)
+  console.log("allSchutzPaket", allSchutzPaket);
 
   useEffect(() => {}, [storedTotalPrice]);
 
@@ -72,26 +69,71 @@ const Page = () => {
   const formattedPickupTime = pickupTime || "Zeit nicht verfügbar";
   const formattedReturnTime = returnTime || "Zeit nicht verfügbar";
 
-  const handleSelectPacket = useSelectPacket();
+  const handleSelectPacket = (packet: string, schutzPacketId: string) => {
+    const schutzPacket = allSchutzPaket.find(
+      (packet) => packet._id === schutzPacketId
+    );
+
+    if (!schutzPacket) return "0.00";
+
+    dispatch(setSchutzPacketId(schutzPacketId));
+    dispatch(setSelectedSchutzPackage(packet));
+    localStorage.setItem("packet", packet);
+    localStorage.setItem("schutzPacketId", schutzPacketId);
+    const gesamtPrice = calculateGesamtePriceSchutzPacket(schutzPacketId);
+    localStorage.setItem("PriceSchutz", JSON.stringify([{ id: schutzPacketId, price: gesamtPrice }]));
+
+  };
+
+
+
+  const rentalDays = calculateRentalDays(
+    pickupDate!,
+    pickupTime!,
+    returnDate!,
+    returnTime!
+  );
+
+  const calculateGesamtePriceSchutzPacket = (schutzPacketId: string) => {
+    const schutzPacket = allSchutzPaket.find(
+      (packet) => packet._id === schutzPacketId
+    );
+
+    if (!schutzPacket) return "0.00";
+
+    let localPriceArray = [];
+    const dailyRate = schutzPacket.dailyRate;
+    const gesamtPrice = (dailyRate * rentalDays).toFixed(2);
+
+    // Speichern des Schutzpakets-IDs und des Preises als Array im localStorage
+    const priceArray = { id: schutzPacketId, price: gesamtPrice };
+    localPriceArray.push(priceArray);
+    localStorage.setItem("PriceSchutz", JSON.stringify(localPriceArray));
+
+    console.log("dailyRate", dailyRate);
+    console.log("gesamtPrice", gesamtPrice);
+
+    return gesamtPrice;
+  };
+  
+  
 
   const toggleDetails = (packet: string) => {
     if (packet === "Basic")
       dispatch(setIsBasicDetailsActive(!isBasicDetailsActive));
+    dispatch(setSchutzPacketId(localStorage.getItem("SchutzPacketId")))
   
+
     if (packet === "Medium")
       dispatch(setIsMediumDetailsActive(!isMediumDetailsActive));
-  
+    dispatch(setSchutzPacketId(localStorage.getItem("SchutzPacketId")))
+
+
     if (packet === "Premium")
       dispatch(setIsPremiumDetailsActive(!isPremiumDetailsActive));
-    
+    dispatch(setSchutzPacketId(localStorage.getItem("SchutzPacketId")))
+  
   };
-
-  const rentalDays = calculateRentalDays(pickupDate!, pickupTime!,returnDate!,returnTime!);
-
-  const calculateGesamtePriceSchutzPacket = (dailyRate: number) => {
-    return (dailyRate * rentalDays).toFixed(2);
-  };
- 
 
   return (
     <div className=" m-2">
@@ -115,17 +157,18 @@ const Page = () => {
             <span className=" font-bold text-xl">
               {(() => {
                 const basePrice = Number(getOneCar?.carPrice) * rentalDays;
-                let protectionPrice = 0;
 
-                if (localStorage.getItem("packet") === "Medium") {
-                  protectionPrice = parseFloat(
-                    calculateGesamtePriceSchutzPacket(11.1)
-                  );
-                } else if (localStorage.getItem("packet") === "Premium") {
-                  protectionPrice = parseFloat(
-                    calculateGesamtePriceSchutzPacket(14.2)
-                  );
-                }
+                // Aktuelles Schutzpaket aus dem lokalen Speicher
+                const selectedPacketName = localStorage.getItem("packet");
+                const selectedPacket = allSchutzPaket.find(
+                  (packet) => packet.name === selectedPacketName
+                );
+
+                const protectionPrice = selectedPacket
+                  ? parseFloat(
+                      calculateGesamtePriceSchutzPacket(selectedPacket._id)
+                    )
+                  : 0;
 
                 const totalPrice = basePrice + protectionPrice;
                 return `${totalPrice.toFixed(2)} €`;
@@ -134,7 +177,7 @@ const Page = () => {
           </p>
           <button
             onClick={() => {
-              localStorage.setItem("rentalDays",String(rentalDays))
+              localStorage.setItem("rentalDays", String(rentalDays));
               router.push(`/reservation/${carRentId}`);
             }}
             className=" col-span-3 px-6 py-3 bg-yellow-500 rounded-md"
@@ -148,27 +191,31 @@ const Page = () => {
           <h1 className=" font-bold text-xl xl:text-2xl   ">Schutzpakete</h1>
         </div>
 
-      
         <div className=" w-full flex flex-col lg:flex-row ">
-        {allSchutzPaket.map((schutzPacket) => (
-            <PackageOption
-              key={schutzPacket._id}
-              name={schutzPacket?.name}
-              deductible={schutzPacket?.deductible}
-              dailyRate={schutzPacket?.dailyRate}
-              features={schutzPacket?.features || []}
-              isSelected={selectedSchutzPacket === schutzPacket?.name}
-              onSelect={() => handleSelectPacket(schutzPacket?.name)}
-              onToggleDetails={() => toggleDetails(schutzPacket?.name)}
-              isDetailsActive={
-                schutzPacket.name === "Basic"
-                  ? isBasicDetailsActive
-                  : schutzPacket.name === "Medium"
-                  ? isMediumDetailsActive
-                  : isPremiumDetailsActive
-              }
-              gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(schutzPacket?.dailyRate)}
-            />
+          {allSchutzPaket.map((schutzPacket) => (
+           <PackageOption
+           key={schutzPacket._id}
+           name={schutzPacket?.name}
+           deductible={schutzPacket?.deductible}
+           dailyRate={schutzPacket?.dailyRate}
+           features={schutzPacket?.features || []}
+           isSelected={selectedSchutzPacket === schutzPacket?.name}
+           onSelect={() => handleSelectPacket(schutzPacket?.name,schutzPacket?._id)}
+           onToggleDetails={() => toggleDetails(schutzPacket?.name)}
+           isDetailsActive={
+             schutzPacket.name === "Basic"
+               ? isBasicDetailsActive
+               : schutzPacket.name === "Medium"
+               ? isMediumDetailsActive
+               : isPremiumDetailsActive
+           }
+           gesamteSchutzPrice={calculateGesamtePriceSchutzPacket(schutzPacket._id)
+            //price={gesamteSchutzPrice}
+
+            
+           }
+         />
+         
           ))}
         </div>
       </div>

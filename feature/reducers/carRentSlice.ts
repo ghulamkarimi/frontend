@@ -7,10 +7,10 @@ import {
 import { ICarRent } from "../../interface";
 import { createPayPalOrder, getCarRent, getOneCarById } from "../../service";
 import { RootState } from "../store/store";
-import { AxiosResponse } from "axios";
+
 
 export interface ICarRentState {
-  orderDetails: null,
+  orderDetails: { amount: string; customerEmail: string; carId: string; userId: string } | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   carId: string | null;
@@ -81,17 +81,17 @@ export const getCarRentByIdApi = createAsyncThunk(
 );
 
 export const createPayPalOrderApi = createAsyncThunk< 
-  PayPalOrderResponse, 
-  { amount: string; customerEmail: string; carId: string; userId: string }, 
-  { rejectValue: PayPalOrderError } 
+
+  { amount: string; customerEmail: string; carId: string; userId: string } 
+ 
 >(
   'carRent/paypalPayment',
-  async (orderDetails, { rejectWithValue }) => {
+  async (orderDetails) => {
     try {
       const response = await createPayPalOrder(orderDetails);
       return response; 
     } catch (error:any) {
-      return rejectWithValue(error.response?.data || 'Unbekannter Fehler');
+      return (error.response?.data || 'Unbekannter Fehler');
     }
   }
 );

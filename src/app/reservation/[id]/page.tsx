@@ -10,7 +10,6 @@ import {
 import { useParams } from "next/navigation";
 import {
   getRentCarById,
-  setIsBasicDetailsActive,
   setRentalDetails,
 } from "../../../../feature/reducers/carRentSlice";
 import { useEffect } from "react";
@@ -106,7 +105,7 @@ const page = () => {
       <div className=" w-full flex lg:flex-row flex-col-reverse ">
        <div className=" lg:w-3/6 xl:w-4/6">
         <FormReservation
-       returnDate={returnDate}
+       returnDate={returnDate }
        pickupDate={pickupDate}
        returnTime={returnTime}
        pickupTime={pickupTime}

@@ -4,6 +4,7 @@ import userReducer, { fetchUsers, setToken } from "../reducers/userSlice";
 import appReducer from "../reducers/appSlice";
 import offerReducer, { fetchOffers } from "../reducers/offerSlice";
 import appointmentReducer ,{fetchAppointments} from "../reducers/appointmentSlice";
+import reservationSlice, { getReservationApi } from "../reducers/reservationSlice"
 import carBuyReducer, { fetchCarBuys } from "../reducers/carBuySlice";
 import schutzPacket, { fetchAllSchutzPacketApi } from "../reducers/schutzPacketSlice"
 import carRentReducer, { getRentCarApi } from "../reducers/carRentSlice"
@@ -26,7 +27,8 @@ export const store = configureStore({
     carBuys: carBuyReducer,
     offer: offerReducer,
     appointments: appointmentReducer,
-    schutzPacket: schutzPacket
+    schutzPacket: schutzPacket,
+    reservation:reservationSlice
 
   },
   middleware: (getDefaultMiddleware) =>
@@ -62,6 +64,7 @@ store.dispatch(fetchCarBuys());
 store.dispatch(fetchOffers());
 store.dispatch(fetchAllSchutzPacketApi())
 store.dispatch(fetchAppointments())
+store.dispatch(getReservationApi())
 
 
 export type RootState = ReturnType<typeof store.getState>;

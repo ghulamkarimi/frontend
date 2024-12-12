@@ -149,5 +149,6 @@ export interface IReservation {
   gesamtPrice: string;
   carRentId?: string | undefined;
   userId?: string;
+  reservationId?: string;
 }
 export type TReservation = Partial<IReservation>;
