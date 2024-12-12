@@ -1,6 +1,8 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { FaCheck } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {  setGesamtSchutzInfo } from "../../../feature/reducers/appSlice";
+import { RootState } from "../../../feature/store/store";
 
 
 interface PackageOptionProps {
@@ -29,11 +31,13 @@ const PackageOption = ({
  
 }: PackageOptionProps) => {
   const dispatch = useDispatch();
-
-
+  const { gesamteSchutzInfo } = useSelector(
+    (state: RootState) => state.app
+  );
+console.log("gesamtePrice",gesamteSchutzPrice)
 
   return (
-    <div className="w-full flex xl:flex-row flex-col items-center justify-center">
+    <div  className="w-full flex xl:flex-row flex-col items-center justify-center">
       <div className="w-full px-2 mt-2">
         <fieldset
           className={`border-2 ${
@@ -81,7 +85,20 @@ const PackageOption = ({
             </button>
             {/* Select Button */}
             <button
-              onClick={onSelect}
+              onClick={()=>{
+                onSelect()
+           
+                  dispatch(setGesamtSchutzInfo({
+                    name:name,
+                    deductible:deductible,
+                    dailyRate:dailyRate,
+                    features:features,
+                    gesamtPrice:gesamteSchutzPrice
+                  }))
+               
+              }
+              
+              }
               className={`px-6 py-2 rounded-md ${
                 isSelected ? "bg-gray-300" : "bg-orange-400 text-black"
               } `}

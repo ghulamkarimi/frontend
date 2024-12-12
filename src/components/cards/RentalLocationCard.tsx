@@ -17,6 +17,7 @@ interface RentalLocationCardProps {
   calculateGesamtePriceSchutzPacket: (schutzPacketId: string) => string;
 }
 
+
 const RentalLocationCard = ({
   formattedPickupDate,
   formattedPickupTime,
@@ -28,6 +29,9 @@ const RentalLocationCard = ({
 }: RentalLocationCardProps) => {
   const { selectedSchutzPacket, age, pickupLocation, totalPrice } = useSelector(
     (state: RootState) => state.carRent
+  );
+  const { gesamteSchutzInfo } = useSelector(
+    (state: RootState) => state.app
   );
 
   const schutzPacketId = localStorage.getItem("SchutzPacketId");
@@ -41,28 +45,7 @@ const RentalLocationCard = ({
     getRentCarById(state, carRentId)
   );
 
-  useEffect(() => {
-    const basePrice = Number(getOneCar?.carPrice || 0) * rentalDays;
-    let protectionPrice = 0;
-
-    if (localStorage.getItem("packet") === "Medium") {
-        
-      protectionPrice = rentalDays * getOneSchutzPacket?.dailyRate;
-
-    } else if ( localStorage.getItem("packet") === "Premium") {
- 
-        localStorage.setItem("selectedSchutzPacket","Premium")
-      protectionPrice = rentalDays * getOneSchutzPacket?.dailyRate;
-    }
-
-    const calculatedTotalPrice = basePrice + protectionPrice;
-    dispatch(setTotalPrice(calculatedTotalPrice));
-
-    // Store in localStorage
-    localStorage.setItem("gesamtPreice", calculatedTotalPrice.toFixed(2));
-
-  }, [getOneCar, rentalDays, selectedSchutzPacket]);
-
+  
 
   return (
     <div>
@@ -117,7 +100,7 @@ const RentalLocationCard = ({
           </div>
           <div className="grid grid-cols-2 items-center gap-2 mt-2">
             <div className="col-span-1">
-              <p className="font-bold text-xl"> {getOneSchutzPacket?.name || "Inklusive"}</p>
+              <p className="font-bold text-xl"> {gesamteSchutzInfo?.name || "Inklusive"}</p>
               <span>Inklusive</span>
             </div>
             <div className="col-span-1 flex items-center gap-2">
@@ -126,12 +109,7 @@ const RentalLocationCard = ({
                 <p className="font-bold text-sm"> Extra</p>
                 <span>
                   <span>
-                    {selectedSchutzPacket === "Medium" ||
-                    selectedSchutzPacket === "Premium"
-                      ? `${calculateGesamtePriceSchutzPacket(
-                          getOneSchutzPacket?._id
-                        )} €`
-                      : "Inklusive"}
+                 {gesamteSchutzInfo.gesamtPrice}
                   </span>
                 </span>
               </div>
@@ -147,9 +125,8 @@ const RentalLocationCard = ({
           </div>
           <div className="flex flex-col gap-4 mt-2 font-bold text-xl">
             <p>Gesamtpreis</p>
-            <p className="text-xl font-extrabold">{`${totalPrice.toFixed(
-              2
-            )} €`}</p>
+            <p className="text-xl font-extrabold"> {(Number(getOneCar?.carPrice) * Number(rentalDays) + Number(gesamteSchutzInfo.gesamtPrice)).toFixed(2)} € 
+             </p>
           </div>
         </div>
       </div>
